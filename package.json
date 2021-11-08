@@ -16,8 +16,7 @@
     "precommit": "npm test && npm run precise-commits",
     "cz": "git-cz",
     "semantic-release": "semantic-release",
-    "test": "npm run build && jest",
-    "travis-deploy-once": "travis-deploy-once"
+    "test": "npm run build && jest"
   },
   "main": "lib/index.js",
   "bin": "bin/index.js",
@@ -53,7 +52,6 @@
     "prettier": "^1.10.2",
     "rimraf": "^3.0.2",
     "semantic-release": "^12.2.4",
-    "travis-deploy-once": "^4.3.3",
     "ts-jest": "^22.0.1",
     "typescript": "^2.6.2"
   },
