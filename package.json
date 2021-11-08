@@ -3,6 +3,9 @@
   "version": "0.0.0-development",
   "description": "precise-commits",
   "author": "James Henry <james@henry.sc>",
+  "contributors": [
+    "Daniel Cassidy <mail@danielcassidy.me.uk>"
+  ],
   "homepage": "https://github.com/softwareventures/precise-commits",
   "bugs": "https://github.com/softwareventures/precise-commits/issues",
   "repository": "github:softwareventures/precise-commits",
