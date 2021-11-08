@@ -13,10 +13,10 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "precise-commits": "node bin/index.js",
-    "precommit": "npm test && npm run precise-commits",
+    "precommit": "yarn test && yarn precise-commits",
     "cz": "git-cz",
     "semantic-release": "semantic-release",
-    "test": "npm run build && jest"
+    "test": "yarn build && jest"
   },
   "main": "lib/index.js",
   "bin": "bin/index.js",
