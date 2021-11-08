@@ -1,1 +1,3 @@
-*.json
+/lib
+/tmp
+/test/fixtures

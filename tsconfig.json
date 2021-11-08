@@ -16,19 +16,11 @@
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
     "declaration": true,
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "es2016"
-    ]
+    "types": ["node"],
+    "lib": ["es2016"]
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"],
   "compileOnSave": false,
   "buildOnSave": false,
   "atom": {
