@@ -1,24 +1,36 @@
 {
   "name": "precise-commits",
   "version": "0.0.0-development",
-  "main": "lib/index.js",
-  "author": "James Henry <james@henry.sc>",
   "description": "precise-commits",
+  "author": "James Henry <james@henry.sc>",
+  "repository": "JamesHenry/precise-commits",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf lib/ && tsc",
+    "precise-commits": "node bin/index.js",
+    "precommit": "npm test && npm run precise-commits",
+    "cz": "git-cz",
+    "semantic-release": "semantic-release",
+    "test": "npm run build && jest",
+    "travis-deploy-once": "travis-deploy-once"
+  },
+  "main": "lib/index.js",
+  "bin": "bin/index.js",
   "files": [
     "bin",
     "lib"
   ],
-  "bin": "bin/index.js",
-  "repository": "JamesHenry/precise-commits",
-  "license": "MIT",
-  "scripts": {
-    "test": "npm run build && jest",
-    "build": "rimraf lib/ && tsc",
-    "semantic-release": "semantic-release",
-    "precommit": "npm test && npm run precise-commits",
-    "cz": "git-cz",
-    "precise-commits": "node bin/index.js",
-    "travis-deploy-once": "travis-deploy-once"
+  "dependencies": {
+    "diff-match-patch": "^1.0.0",
+    "execa": "^0.9.0",
+    "find-up": "^2.1.0",
+    "glob": "^7.1.2",
+    "ignore": "^3.3.7",
+    "mri": "^1.1.0",
+    "ora": "^1.3.0"
+  },
+  "peerDependencies": {
+    "prettier": ">=1.8.0"
   },
   "devDependencies": {
     "@types/execa": "^0.8.1",
@@ -36,18 +48,6 @@
     "travis-deploy-once": "^4.3.3",
     "ts-jest": "^22.0.1",
     "typescript": "^2.6.2"
-  },
-  "dependencies": {
-    "diff-match-patch": "^1.0.0",
-    "execa": "^0.9.0",
-    "find-up": "^2.1.0",
-    "glob": "^7.1.2",
-    "ignore": "^3.3.7",
-    "mri": "^1.1.0",
-    "ora": "^1.3.0"
-  },
-  "peerDependencies": {
-    "prettier": ">=1.8.0"
   },
   "config": {
     "commitizen": {
