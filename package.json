@@ -13,7 +13,7 @@
   "scripts": {
     "build": "rimraf lib/ && tsc",
     "precise-commits": "node bin/index.js",
-    "precommit": "yarn test && yarn precise-commits",
+    "precommit": "yarn precise-commits",
     "cz": "git-cz",
     "semantic-release": "semantic-release",
     "test": "yarn build && jest"
