@@ -15,6 +15,7 @@
     "precise-commits": "node bin/index.js",
     "precommit": "yarn precise-commits",
     "cz": "git-cz",
+    "lint": "tsc --noEmit && prettier --check .",
     "semantic-release": "semantic-release",
     "test": "yarn build && jest"
   },
