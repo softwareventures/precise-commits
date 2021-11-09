@@ -2,6 +2,7 @@ import {sync as findUpSync} from "find-up";
 import {dirname} from "path";
 
 import {runCommandSync} from "./utils";
+import {hasProperty} from "unknown";
 
 interface DiffIndexFile {
     diffFilterChar: string;
@@ -88,7 +89,11 @@ export function getModifiedFilenames(
              * to. Use the special empty tree hash value instead:
              * https://stackoverflow.com/questions/9765453/is-gits-semi-secret-empty-tree-object-reliable-and-why-is-there-not-a-symbolic
              */
-            if (err.message.includes(`fatal: Needed a single revision`)) {
+            if (
+                hasProperty(err, "message") &&
+                typeof err.message === "string" &&
+                err.message.includes("fatal: Needed a single revision")
+            ) {
                 head = SPECIAL_EMPTY_TREE_COMMIT_HASH;
             } else {
                 throw err;

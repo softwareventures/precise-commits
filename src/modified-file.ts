@@ -1,12 +1,13 @@
 import {readFileSync, writeFileSync} from "fs";
 
 import {
+    calculateCharacterRangesFromLineChanges,
     CharacterRange,
-    extractLineChangeData,
-    calculateCharacterRangesFromLineChanges
+    extractLineChangeData
 } from "./utils";
 import {getDiffForFile} from "./git-utils";
 import {PreciseFormatter} from "./precise-formatter";
+import {assertInstanceOf} from "./unknown";
 
 export interface ModifiedFileConfig {
     fullPath: string;
@@ -41,7 +42,7 @@ export class ModifiedFile {
     /**
      * The final file contents, after we've run the formatter
      */
-    private formattedFileContents: string;
+    private formattedFileContents: string | null = null;
     /**
      * The resolved formatter config which applies to this file
      */
@@ -58,8 +59,8 @@ export class ModifiedFile {
         this.base = base;
         this.head = head;
         this.selectedFormatter = selectedFormatter;
-        this.resolveFileContents();
-        this.resolveFormatterConfig();
+        this.fileContents = readFileSync(this.fullPath, "utf8");
+        this.formatterConfig = this.selectedFormatter.resolveConfig(this.fullPath);
     }
 
     /**
@@ -134,21 +135,7 @@ export class ModifiedFile {
             );
             return {err: null};
         } catch (err) {
-            return {err};
+            return {err: assertInstanceOf(err, Error)};
         }
-    }
-
-    /**
-     * Resolve and cache the relevant file contents.
-     */
-    private resolveFileContents() {
-        this.fileContents = readFileSync(this.fullPath, "utf8");
-    }
-
-    /**
-     * Resolve and cache the relevant formatter config.
-     */
-    private resolveFormatterConfig() {
-        this.formatterConfig = this.selectedFormatter.resolveConfig(this.fullPath);
     }
 }

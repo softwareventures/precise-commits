@@ -4,6 +4,7 @@ import {getModifiedFilenames, resolveNearestGitDirectoryParent} from "./git-util
 import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
 import {ModifiedFile} from "./modified-file";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
+import {assertInstanceOf} from "./unknown";
 
 export type ProcessingStatus = "NOT_UPDATED" | "UPDATED" | "INVALID_FORMATTING";
 
@@ -157,6 +158,6 @@ export function main(
         /**
          * Report any unhandled errors.
          */
-        callbacks.onError(err);
+        callbacks.onError(assertInstanceOf(err, Error));
     }
 }
