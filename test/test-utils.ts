@@ -5,6 +5,7 @@ import {randomBytes} from "crypto";
 import {runCommandSync} from "../src/utils";
 import {AdditionalOptions} from "../lib/index";
 import mkdirp = require("mkdirp");
+import {notNull} from "@softwareventures/nullable";
 
 export interface Fixture {
     fixtureName: string;
@@ -31,11 +32,11 @@ interface CustomPrettierConfig {
     contents: string;
 }
 
-class TmpFile {
+interface TmpFile {
     name: string;
     filename: string;
     directoryPath: string;
-    initialContents?: string;
+    initialContents: string | null;
     stagedContents: string;
     committed: boolean;
     initialCommitSHA: string | null;
@@ -45,7 +46,7 @@ class TmpFile {
 
 export class TestBed {
     private static readonly TMP_DIRECTORY_PATH = join(process.cwd(), "tmp");
-    private TEST_BED_DIRECTORY_PATH: string;
+    private testBedDirectoryPath: string | null = null;
     private fixtureToTmpFile = new Map<Fixture, TmpFile>();
 
     constructor() {
@@ -53,7 +54,7 @@ export class TestBed {
     }
 
     getTmpFileForFixture(fixture: Fixture): TmpFile {
-        return this.fixtureToTmpFile.get(fixture);
+        return notNull(this.fixtureToTmpFile.get(fixture));
     }
 
     prepareFixtureInTmpDirectory(fixture: Fixture): void {
@@ -79,8 +80,8 @@ export class TestBed {
 
     private createUniqueDirectoryForTestBed(): void {
         const dir = this.generateUniqueDirectoryName();
-        this.TEST_BED_DIRECTORY_PATH = join(TestBed.TMP_DIRECTORY_PATH, dir);
-        mkdirp.sync(this.TEST_BED_DIRECTORY_PATH);
+        this.testBedDirectoryPath = join(TestBed.TMP_DIRECTORY_PATH, dir);
+        mkdirp.sync(this.testBedDirectoryPath);
     }
 
     private generateUniqueDirectoryName(): string {
@@ -113,7 +114,7 @@ export class TestBed {
     private createTmpFileForFixture(fixture: Fixture): TmpFile {
         const name = fixture.fixtureName;
         const filename = `${name}${fixture.fileExtension}`;
-        const directoryPath = join(this.TEST_BED_DIRECTORY_PATH, name);
+        const directoryPath = join(this.testBedDirectoryPath, name);
         return {
             name,
             filename,
@@ -189,7 +190,7 @@ export function readFixtures(): Fixture[] {
 
         return {
             fixtureName: name,
-            fileExtension: extname(stagedContentsFileName || committedContentsFileName),
+            fileExtension: extname(notNull(stagedContentsFileName ?? committedContentsFileName)),
             initialContents: !initialContentsFileName
                 ? null
                 : readFileSync(join(fixtureDirPath, initialContentsFileName), "utf8"),

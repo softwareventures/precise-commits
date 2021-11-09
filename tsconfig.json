@@ -16,7 +16,7 @@
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
     "declaration": true,
-    "types": ["node"],
+    "types": ["jest", "node"],
     "lib": ["es2016"]
   },
   "include": ["src/**/*.ts"],

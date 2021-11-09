@@ -1,5 +1,3 @@
-import {readFileSync} from "fs";
-
 import {TestBed, readFixtures} from "./test-utils";
 
 import {ModifiedFile} from "../src/modified-file";

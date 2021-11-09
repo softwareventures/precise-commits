@@ -5,7 +5,7 @@ const fixtures = readFixtures();
 
 describe("preciseFormatterPrettier", () => {
     describe("resolveConfig()", () => {
-        fixtures.forEach(({fixtureName, fileExtension, initialContents, stagedContents}) => {
+        fixtures.forEach(({fixtureName, fileExtension}) => {
             it(fixtureName, () => {
                 const prettierConfig = preciseFormatterPrettier.resolveConfig(
                     `./test/fixtures/${fixtureName}/initial${fileExtension}`
