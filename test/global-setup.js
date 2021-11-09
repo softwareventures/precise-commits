@@ -5,4 +5,4 @@ const mkdirp = require("mkdirp");
  * under test will live, and all the temp files will be
  * created and updated.
  */
-module.exports = () => mkdirp.sync("tmp");
+module.exports = async () => mkdirp("tmp");
