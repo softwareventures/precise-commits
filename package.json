@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "diff-match-patch": "^1.0.0",
-    "execa": "^0.9.0",
+    "execa": "0.11.0",
     "find-up": "^2.1.0",
     "glob": "^7.1.2",
     "ignore": "^3.3.7",
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@softwareventures/nullable": "2.0.0",
     "@softwareventures/prettier-config": "1.0.3",
-    "@types/execa": "^0.8.1",
+    "@types/execa": "0.9.0",
     "@types/find-up": "^2.1.1",
     "@types/jest": "27.0.2",
     "@types/mkdirp": "^1.0.1",
