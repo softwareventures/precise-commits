@@ -155,7 +155,7 @@ export function main(
         callbacks.onComplete(totalFiles);
     } catch (err) {
         /**
-         * Report and unhandled errors.
+         * Report any unhandled errors.
          */
         callbacks.onError(err);
     }
