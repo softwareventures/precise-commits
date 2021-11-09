@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import {diff_match_patch as DiffMatchPatch} from "diff-match-patch";
 import {extname, join} from "path";
 import {Options as PrettierOptions, getSupportInfo, format, resolveConfig, check} from "prettier";
 
@@ -6,7 +7,6 @@ import {PreciseFormatter} from "../precise-formatter";
 import {CharacterRange} from "../utils";
 
 const ignore = require("ignore");
-const DiffMatchPatch = require("diff-match-patch");
 const dmp = new DiffMatchPatch();
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
