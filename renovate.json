@@ -1,3 +1,4 @@
 {
-  "extends": ["@softwareventures:app"]
+  "extends": ["@softwareventures:app"],
+  "includeForks": true
 }
