@@ -30,7 +30,7 @@ jobs:
           node-version: ${{matrix.node-version}}
       - run: yarn
       - name: Configure git credentials
-        uses: OleksiyRudenko/gha-git-credentials@v2
+        uses: OleksiyRudenko/gha-git-credentials@v2.1
         with:
           global: true
           token: '${{secrets.GITHUB_TOKEN}}'
