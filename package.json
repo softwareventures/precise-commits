@@ -45,6 +45,7 @@
   "devDependencies": {
     "@softwareventures/nullable": "2.0.0",
     "@softwareventures/prettier-config": "1.0.3",
+    "@softwareventures/semantic-release-config": "2.0.0",
     "@types/diff-match-patch": "1.0.32",
     "@types/find-up": "^2.1.1",
     "@types/jest": "27.0.2",
@@ -81,5 +82,8 @@
       "js",
       "json"
     ]
+  },
+  "release": {
+    "extends": "@softwareventures/semantic-release-config"
   }
 }

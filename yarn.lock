@@ -640,6 +640,13 @@
   dependencies:
     tslib "1.14.1"
 
+"@softwareventures/semantic-release-config@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/semantic-release-config/-/semantic-release-config-2.0.0.tgz#7eafffd91a232314994223dba32cd5b099b141b4"
+  integrity sha512-KD57OY1zCIzGExlqEQG4hzAiWAOtF/H74JgML8UoJRWaRFRVHafHDTTdcU3IIOpaItrysWtfH1zCnPtuuB6ZSg==
+  dependencies:
+    tslib "2.3.0"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -4043,7 +4050,7 @@ optionator@^0.8.1:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-ora@5:
+ora@5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/ora/-/ora-5.4.1.tgz#1b2678426af4ac4a509008e5e4ac9e9959db9e18"
   integrity sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==
