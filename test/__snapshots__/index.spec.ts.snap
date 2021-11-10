@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`precise-commits main() brand-new-json-file 1`] = `
+exports[`@softwareventures/precise-commits main() brand-new-json-file 1`] = `
 "{
   \\"foo\\": true
 }
 "
 `;
 
-exports[`precise-commits main() brand-new-jsx-file 1`] = `
+exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
 "function HelloWorld({greeting = \\"hello\\", greeted = '\\"World\\"', silent = false, onMouseOver}) {
     if (!greeting) {
         return null;
@@ -34,13 +34,13 @@ exports[`precise-commits main() brand-new-jsx-file 1`] = `
 "
 `;
 
-exports[`precise-commits main() empty-javascript-file 1`] = `
+exports[`@softwareventures/precise-commits main() empty-javascript-file 1`] = `
 "var greeting = \\"hello\\";
 var audience = \\"world\\";
 "
 `;
 
-exports[`precise-commits main() formatting-would-affect-total-line-count 1`] = `
+exports[`@softwareventures/precise-commits main() formatting-would-affect-total-line-count 1`] = `
 "  var untouchedUglyLine     =      10
 
 function myfunc(a, b, c) {
@@ -51,7 +51,7 @@ var newStatement = true;
 "
 `;
 
-exports[`precise-commits main() multiple-updated-lines-javascript-file 1`] = `
+exports[`@softwareventures/precise-commits main() multiple-updated-lines-javascript-file 1`] = `
 "var     untouchedUglyLines1 = ''
 function TouchedFunctionSignature({
   greeting = \\"Hello\\",
@@ -61,7 +61,7 @@ function TouchedFunctionSignature({
      const newlyAddedUglyLine = true;"
 `;
 
-exports[`precise-commits main() single-updated-line-typescript 1`] = `
+exports[`@softwareventures/precise-commits main() single-updated-line-typescript 1`] = `
 "const a = true
 const b = true;"
 `;
