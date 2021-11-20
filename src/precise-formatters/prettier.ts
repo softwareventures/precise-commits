@@ -73,10 +73,8 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
                 fileContents,
                 format(fileContents, {
                     ...config,
-                    ...{
-                        rangeStart: characterRange.rangeStart,
-                        rangeEnd: characterRange.rangeEnd
-                    }
+                    rangeStart: characterRange.rangeStart,
+                    rangeEnd: characterRange.rangeEnd
                 })
             );
             patches = [...patches, ...dmp.patch_make(fileContents, diffs)];
