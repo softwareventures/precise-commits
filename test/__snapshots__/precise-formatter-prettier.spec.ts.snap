@@ -94,6 +94,7 @@ Object {
 
 exports[`preciseFormatterPrettier resolveConfig() multiple-updated-lines-javascript-file 1`] = `
 Object {
+  "endOfLine": "auto",
   "filepath": "./test/fixtures/multiple-updated-lines-javascript-file/initial.js",
   "semi": true,
   "singleQuote": false,

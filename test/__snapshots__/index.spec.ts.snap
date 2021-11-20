@@ -58,7 +58,7 @@ function TouchedFunctionSignature({
   greeted = '\\"Mars\\"',
   silent = false
 }) {}
-     const newlyAddedUglyLine = true;"
+      const newlyAddedUglyLine = true;"
 `;
 
 exports[`@softwareventures/precise-commits main() single-updated-line-typescript 1`] = `
