@@ -34,22 +34,22 @@ export function extractLineChangeData(diffData: string) {
         additions: []
     };
     lineChanges.forEach(lineChange => {
-        const d = lineChange.match(/(@@ )(-\d+,?\d*)( )(\+\d+,?\d*)( @@)/);
+        const d = lineChange.match(/(@@ )-(\d+,?\d*)( )\+(\d+,?\d*)( @@)/);
         if (!d) {
             throw new Error("The detected line change data could be not be parsed");
         }
-        const [removalStartLine, noOfLinesRemoved = 1] = d[2].split(",");
-        const [additionStartLine, noOfLinesAdded = 1] = d[4].split(",");
+        const [removalStartLine, noOfLinesRemoved = 1] = d[2].split(",").map(s => parseInt(s, 10));
+        const [additionStartLine, noOfLinesAdded = 1] = d[4].split(",").map(s => parseInt(s, 10));
         if (noOfLinesRemoved > 0) {
             lineChangeData.removals.push({
-                start: +removalStartLine.replace("-", ""),
-                noOfLines: +noOfLinesRemoved
+                start: removalStartLine,
+                noOfLines: noOfLinesRemoved
             });
         }
         if (noOfLinesAdded > 0) {
             lineChangeData.additions.push({
-                start: +additionStartLine.replace("+", ""),
-                noOfLines: +noOfLinesAdded
+                start: additionStartLine,
+                noOfLines: noOfLinesAdded
             });
         }
     });
