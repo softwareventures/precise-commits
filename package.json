@@ -11,14 +11,14 @@
   "repository": "github:softwareventures/precise-commits",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf lib/ && tsc",
     "precise-commits": "node bin/index.js",
     "precommit": "yarn precise-commits",
+    "prepare": "rimraf lib && tsc",
     "cz": "git-cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
     "semantic-release": "semantic-release",
-    "test": "yarn build && jest"
+    "test": "yarn && jest"
   },
   "main": "lib/index.js",
   "bin": "bin/index.js",

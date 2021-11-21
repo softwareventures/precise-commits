@@ -36,7 +36,6 @@ jobs:
           token: "${{secrets.GITHUB_TOKEN}}"
       - run: yarn test
       - run: yarn lint
-      - run: yarn build
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
