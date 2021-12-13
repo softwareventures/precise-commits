@@ -10,7 +10,7 @@ interface DiffIndexFile {
 }
 
 export function resolveNearestGitDirectoryParent(workingDirectory: string) {
-    const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory});
+    const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory, type: "directory"});
     if (!gitDirectoryPath) {
         throw new Error("No .git directory found");
     }
