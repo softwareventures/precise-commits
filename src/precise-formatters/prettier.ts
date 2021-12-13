@@ -13,7 +13,7 @@ let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
 getSupportInfo().languages.forEach(language => {
     PRETTIER_SUPPORTED_FILE_EXTENSIONS = [
         ...PRETTIER_SUPPORTED_FILE_EXTENSIONS,
-        ...language.extensions
+        ...(language.extensions ?? [])
     ];
 });
 

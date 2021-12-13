@@ -1022,10 +1022,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/prettier@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-1.10.0.tgz#5abf1ec0a6e904fe2490cc2068f36a38e4a63c42"
-  integrity sha512-mjEM5uxPvMYg8LLcnmHzMy2G7HFRv7aQtcKslpmHg8SIIQutnLpLfps+1soV2YBlVBFrskR+F6I+nBI9NTh49w==
+"@types/prettier@2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.4.2.tgz#4c62fae93eb479660c3bd93f9d24d561597a8281"
+  integrity sha512-ekoj4qOQYp7CvjX8ZDBgN86w3MqQhLE1hczEJbEIjgFEumDy+na/4AJAbLXfgEWFNB2pKadM5rPFtuSGMWK7xA==
 
 "@types/prettier@^2.1.5":
   version "2.4.1"
