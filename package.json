@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@softwareventures/nullable": "2.0.0",
-    "@softwareventures/prettier-config": "1.0.3",
+    "@softwareventures/prettier-config": "2.0.0",
     "@softwareventures/semantic-release-config": "2.0.0",
     "@softwareventures/tsconfig": "5.1.0",
     "@types/diff-match-patch": "1.0.32",

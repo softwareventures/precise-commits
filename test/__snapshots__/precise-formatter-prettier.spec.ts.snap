@@ -3,12 +3,12 @@
 exports[`preciseFormatterPrettier resolveConfig() brand-new-json-file 1`] = `
 Object {
   "arrowParens": "avoid",
+  "bracketSameLine": false,
   "bracketSpacing": false,
   "endOfLine": "auto",
   "filepath": "./test/fixtures/brand-new-json-file/initial.json",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": false,
   "printWidth": 100,
   "proseWrap": "always",
@@ -26,12 +26,12 @@ Object {
 exports[`preciseFormatterPrettier resolveConfig() brand-new-jsx-file 1`] = `
 Object {
   "arrowParens": "avoid",
+  "bracketSameLine": false,
   "bracketSpacing": false,
   "endOfLine": "auto",
   "filepath": "./test/fixtures/brand-new-jsx-file/initial.jsx",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": false,
   "printWidth": 100,
   "proseWrap": "always",
@@ -49,12 +49,12 @@ Object {
 exports[`preciseFormatterPrettier resolveConfig() empty-javascript-file 1`] = `
 Object {
   "arrowParens": "avoid",
+  "bracketSameLine": false,
   "bracketSpacing": false,
   "endOfLine": "auto",
   "filepath": "./test/fixtures/empty-javascript-file/initial.js",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": false,
   "printWidth": 100,
   "proseWrap": "always",
@@ -72,12 +72,12 @@ Object {
 exports[`preciseFormatterPrettier resolveConfig() formatting-would-affect-total-line-count 1`] = `
 Object {
   "arrowParens": "avoid",
+  "bracketSameLine": false,
   "bracketSpacing": false,
   "endOfLine": "auto",
   "filepath": "./test/fixtures/formatting-would-affect-total-line-count/initial.js",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": false,
   "printWidth": 100,
   "proseWrap": "always",
@@ -105,12 +105,12 @@ Object {
 exports[`preciseFormatterPrettier resolveConfig() single-updated-line-typescript 1`] = `
 Object {
   "arrowParens": "avoid",
+  "bracketSameLine": false,
   "bracketSpacing": false,
   "endOfLine": "auto",
   "filepath": "./test/fixtures/single-updated-line-typescript/initial.ts",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": false,
   "printWidth": 100,
   "proseWrap": "always",
