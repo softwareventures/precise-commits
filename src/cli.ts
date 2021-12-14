@@ -5,18 +5,20 @@ import mri = require("mri");
 import glob = require("glob");
 import {main} from ".";
 import {notNull} from "@softwareventures/nullable";
+import {hasProperty} from "unknown";
+import {isArray} from "@softwareventures/array";
 
 const LIBRARY_NAME = "precise-commits";
-const config = mri(process.argv.slice(2));
+const config = mri<unknown>(process.argv.slice(2));
 
 /**
  * If the user provided one or more glob patterns to match against, ensure that there are
  * applicable files available
  */
 let filesWhitelist: string[] | null = null;
-if (config.whitelist) {
+if (hasProperty(config, "whitelist")) {
     filesWhitelist = [];
-    if (Array.isArray(config.whitelist)) {
+    if (isArray(config.whitelist)) {
         config.whitelist.forEach(entry => {
             filesWhitelist = [...notNull(filesWhitelist), ...glob.sync(String(entry))];
         });
@@ -35,27 +37,39 @@ if (config.whitelist) {
  * If the user specifies at least one SHA, perform some validation and
  * apply some defaults
  */
-if (config.base || config.head) {
-    if (!config.base) {
+let base: string | null = null;
+let head: string | null = null;
+if (hasProperty(config, "base") || hasProperty(config, "head")) {
+    if (!hasProperty(config, "base") || config.base == null) {
         console.error(
             `Error: When giving a value of --head, you must also give a value for --base`
         );
         process.exit(1);
     }
-    if (!config.head) {
+
+    if (hasProperty(config, "head") && config.head != null) {
+        head = String(config.head);
+    } else {
         /**
          * If the user only specified `--base`, set the value of `--head` to be "HEAD"
          */
-        config.head = "HEAD";
+        head = "HEAD";
     }
+
+    base = String(config.base);
 }
 
+const checkOnly = hasProperty(config, "check-only") ? Boolean(config["check-only"]) : false;
+const formatter = hasProperty(config, "formatter")
+    ? String(config.formatter ?? "prettier")
+    : "prettier";
+
 const options = {
-    checkOnly: config["check-only"] || false,
+    checkOnly,
     filesWhitelist,
-    base: config.base || null,
-    head: config.head || null,
-    formatter: config.formatter || "prettier"
+    base,
+    head,
+    formatter
 };
 
 const primarySpinner = ora(` Running ${LIBRARY_NAME}...`);
