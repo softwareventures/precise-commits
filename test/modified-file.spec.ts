@@ -2,7 +2,7 @@ import {TestBed, readFixtures} from "./test-utils";
 
 import {ModifiedFile} from "../src/modified-file";
 import {preciseFormatterPrettier} from "../src/precise-formatters/prettier";
-import {resolveNearestGitDirectoryParent} from "../src/git-utils";
+import {resolveNearestGitDirectoryParent, workingTree} from "../src/git-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;
@@ -21,7 +21,7 @@ describe("ModifiedFile", () => {
                     fullPath: tmpFile.path,
                     gitDirectoryParent: resolveNearestGitDirectoryParent(tmpFile.directoryPath),
                     base: tmpFile.initialCommitSHA,
-                    head: tmpFile.updatedCommitSHA,
+                    head: tmpFile.updatedCommitSHA ?? workingTree,
                     selectedFormatter: preciseFormatterPrettier
                 });
                 expect(modifiedFile.isAlreadyFormatted()).toEqual(false);

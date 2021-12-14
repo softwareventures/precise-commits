@@ -4,7 +4,8 @@ import {TestBed, readFixtures} from "./test-utils";
 import {
     getDiffForFile,
     resolveNearestGitDirectoryParent,
-    getModifiedFilenames
+    getModifiedFilenames,
+    index
 } from "../src/git-utils";
 
 const fixtures = readFixtures();
@@ -47,7 +48,7 @@ describe("git-utils", () => {
                     resolveNearestGitDirectoryParent(tmpFile.directoryPath),
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
-                    tmpFile.updatedCommitSHA
+                    tmpFile.updatedCommitSHA ?? index
                 );
                 expect(diff).toMatchSnapshot();
             });
