@@ -1,4 +1,4 @@
-import {isAbsolute, join, relative, sep} from "path";
+import {isAbsolute, join, relative} from "path";
 
 import {getModifiedFilenames, resolveNearestGitDirectoryParent} from "./git-utils";
 import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
@@ -79,7 +79,6 @@ export function main(
             .map(path => join(gitDirectoryParent, path))
             .map(path => relative(workingDirectory, path))
             .filter(path => !isAbsolute(path))
-            .filter(path => path !== ".." && !path.startsWith(`..${sep}`))
             .filter(selectedFormatter.hasSupportedFileExtension)
             .filter(generateFilesWhitelistPredicate(options.filesWhitelist))
             .filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory));
