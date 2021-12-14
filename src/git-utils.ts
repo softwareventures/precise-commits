@@ -17,21 +17,52 @@ export function resolveNearestGitDirectoryParent(workingDirectory: string) {
     return dirname(gitDirectoryPath);
 }
 
+export const index = Symbol("index");
+export const workingTree = Symbol("working-tree");
+
 export function getDiffForFile(
     gitDirectoryParent: string,
     fullPath: string,
     base: string | null,
-    head: string | null
+    head: string | typeof index | typeof workingTree
 ): string {
-    if (base && head) {
+    if (head === index) {
+        if (base == null) {
+            return runCommandSync(
+                "git",
+                ["diff", "--unified=0", "--cached", "--", fullPath],
+                gitDirectoryParent
+            ).stdout;
+        } else {
+            return runCommandSync(
+                "git",
+                ["diff", "--unified=0", "--cached", base, "--", fullPath],
+                gitDirectoryParent
+            ).stdout;
+        }
+    } else if (head === workingTree) {
+        if (base == null) {
+            return runCommandSync(
+                "git",
+                ["diff", "--unified=0", "--", fullPath],
+                gitDirectoryParent
+            ).stdout;
+        } else {
+            return runCommandSync(
+                "git",
+                ["diff", "--unified=0", base, "--", fullPath],
+                gitDirectoryParent
+            ).stdout;
+        }
+    } else if (base == null) {
+        throw new Error("Invalid argument");
+    } else {
         return runCommandSync(
             "git",
             ["diff", "--unified=0", base, head, fullPath],
             gitDirectoryParent
         ).stdout;
     }
-    return runCommandSync("git", ["diff", "--unified=0", "--cached", fullPath], gitDirectoryParent)
-        .stdout;
 }
 
 /**

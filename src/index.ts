@@ -1,6 +1,11 @@
 import {isAbsolute, join, relative} from "path";
 
-import {getModifiedFilenames, resolveNearestGitDirectoryParent} from "./git-utils";
+import {
+    getModifiedFilenames,
+    index,
+    resolveNearestGitDirectoryParent,
+    workingTree
+} from "./git-utils";
 import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
 import {ModifiedFile} from "./modified-file";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
@@ -90,68 +95,79 @@ export function main(
         /**
          * Process each file synchronously.
          */
-        modifiedFilenames.forEach((filename, index) => {
-            callbacks.onBegunProcessingFile(filename, index, totalFiles);
-            /**
-             * Read the modified file contents and resolve the relevant formatter.
-             */
-            const modifiedFile = new ModifiedFile({
-                fullPath: join(workingDirectory, filename),
-                gitDirectoryParent,
-                base: options.base,
-                head: options.head,
-                selectedFormatter
-            });
-            /**
-             * To avoid unnecessary issues with 100% valid files producing issues when parts
-             * of them are reformatted in isolation, we first check the whole file to see if
-             * it is already formatted. This could also allow us to skip unnecessary git diff
-             * analysis work.
-             */
-            if (modifiedFile.isAlreadyFormatted()) {
-                return callbacks.onFinishedProcessingFile(filename, index, "NOT_UPDATED");
-            }
-            /**
-             * Calculate what character ranges have been affected in the modified file.
-             * If any of the analysis threw an error for any reason, it will be returned
-             * from the method so we can handle it here.
-             */
-            const {err} = modifiedFile.calculateModifiedCharacterRanges();
-            if (err) {
-                if (err.message === NO_LINE_CHANGE_DATA_ERROR) {
-                    return callbacks.onFinishedProcessingFile(filename, index, "NOT_UPDATED");
+        modifiedFilenames.forEach((filename, fileIndex) => {
+            callbacks.onBegunProcessingFile(filename, fileIndex, totalFiles);
+            const heads = options.head == null ? ([index, workingTree] as const) : [options.head];
+            for (const head of heads) {
+                /**
+                 * Read the modified file contents and resolve the relevant formatter.
+                 */
+                const modifiedFile = new ModifiedFile({
+                    fullPath: join(workingDirectory, filename),
+                    gitDirectoryParent,
+                    base: options.base,
+                    head,
+                    selectedFormatter
+                });
+                /**
+                 * To avoid unnecessary issues with 100% valid files producing issues when parts
+                 * of them are reformatted in isolation, we first check the whole file to see if
+                 * it is already formatted. This could also allow us to skip unnecessary git diff
+                 * analysis work.
+                 */
+                if (modifiedFile.isAlreadyFormatted()) {
+                    return callbacks.onFinishedProcessingFile(filename, fileIndex, "NOT_UPDATED");
                 }
                 /**
-                 * Unexpected error, bubble up to the main onError handler
+                 * Calculate what character ranges have been affected in the modified file.
+                 * If any of the analysis threw an error for any reason, it will be returned
+                 * from the method so we can handle it here.
                  */
-                throw err;
-            }
-            /**
-             * "CHECK ONLY MODE"
-             */
-            if (options.checkOnly) {
-                if (!modifiedFile.hasValidFormattingForCharacterRanges()) {
-                    return callbacks.onFinishedProcessingFile(
-                        filename,
-                        index,
-                        "INVALID_FORMATTING"
-                    );
-                } else {
-                    return callbacks.onFinishedProcessingFile(filename, index, "NOT_UPDATED");
+                const {err} = modifiedFile.calculateModifiedCharacterRanges();
+                if (err) {
+                    if (err.message === NO_LINE_CHANGE_DATA_ERROR) {
+                        return callbacks.onFinishedProcessingFile(
+                            filename,
+                            fileIndex,
+                            "NOT_UPDATED"
+                        );
+                    }
+                    /**
+                     * Unexpected error, bubble up to the main onError handler
+                     */
+                    throw err;
                 }
+                /**
+                 * "CHECK ONLY MODE"
+                 */
+                if (options.checkOnly) {
+                    if (!modifiedFile.hasValidFormattingForCharacterRanges()) {
+                        return callbacks.onFinishedProcessingFile(
+                            filename,
+                            fileIndex,
+                            "INVALID_FORMATTING"
+                        );
+                    } else {
+                        return callbacks.onFinishedProcessingFile(
+                            filename,
+                            fileIndex,
+                            "NOT_UPDATED"
+                        );
+                    }
+                }
+                /**
+                 * "FORMAT MODE"
+                 */
+                modifiedFile.formatCharacterRangesWithinContents();
+                if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
+                    return callbacks.onFinishedProcessingFile(filename, fileIndex, "NOT_UPDATED");
+                }
+                /**
+                 * Write the file back to disk and report.
+                 */
+                modifiedFile.updateFileOnDisk();
             }
-            /**
-             * "FORMAT MODE"
-             */
-            modifiedFile.formatCharacterRangesWithinContents();
-            if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
-                return callbacks.onFinishedProcessingFile(filename, index, "NOT_UPDATED");
-            }
-            /**
-             * Write the file back to disk and report.
-             */
-            modifiedFile.updateFileOnDisk();
-            return callbacks.onFinishedProcessingFile(filename, index, "UPDATED");
+            return callbacks.onFinishedProcessingFile(filename, fileIndex, "UPDATED");
         });
         /**
          * Report that all files have finished processing.

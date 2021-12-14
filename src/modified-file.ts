@@ -5,27 +5,30 @@ import {
     CharacterRange,
     extractLineChangeData
 } from "./utils";
-import {getDiffForFile} from "./git-utils";
+import {getDiffForFile, index, workingTree} from "./git-utils";
 import {PreciseFormatter} from "./precise-formatter";
 import {assertInstanceOf} from "./unknown";
 import {notNull} from "@softwareventures/nullable";
+import {relative, sep, posix} from "path";
+import execa = require("execa");
 
 export interface ModifiedFileConfig {
     fullPath: string;
     gitDirectoryParent: string;
     base: string | null;
-    head: string | null;
+    head: string | typeof index | typeof workingTree;
     selectedFormatter: PreciseFormatter<any>;
 }
 
 export class ModifiedFile {
     private fullPath: string;
+    private pathInGit: string;
     /**
      * An optional commit SHA pair which will be used to inform how the git
      * commands are run. E.g. `git diff`
      */
     private base: string | null;
-    private head: string | null;
+    private head: string | typeof index | typeof workingTree;
     /**
      * The chosen formatter to be run on the modified file.
      */
@@ -56,11 +59,23 @@ export class ModifiedFile {
 
     constructor({fullPath, gitDirectoryParent, base, head, selectedFormatter}: ModifiedFileConfig) {
         this.fullPath = fullPath;
+        this.pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
         this.gitDirectoryParent = gitDirectoryParent;
         this.base = base;
         this.head = head;
         this.selectedFormatter = selectedFormatter;
-        this.fileContents = readFileSync(this.fullPath, "utf8");
+        this.fileContents =
+            head === workingTree
+                ? readFileSync(this.fullPath, "utf8")
+                : head === index
+                ? execa.sync("git", ["show", `:0:${this.pathInGit}`], {
+                      cwd: gitDirectoryParent,
+                      stripFinalNewline: false
+                  }).stdout
+                : execa.sync("git", ["show", `${head}:${this.pathInGit}`], {
+                      cwd: gitDirectoryParent,
+                      stripFinalNewline: false
+                  }).stdout;
         this.formatterConfig = this.selectedFormatter.resolveConfig(this.fullPath);
     }
 
@@ -107,7 +122,37 @@ export class ModifiedFile {
      * Write the updated file contents back to disk.
      */
     updateFileOnDisk(): void {
-        writeFileSync(this.fullPath, notNull(this.formattedFileContents));
+        if (this.head === index) {
+            const hash = execa.sync(
+                "git",
+                ["hash-object", "-w", "--path", this.fullPath, "--stdin"],
+                {
+                    cwd: this.gitDirectoryParent,
+                    input: notNull(this.formattedFileContents)
+                }
+            ).stdout;
+            const mode = execa
+                .sync("git", ["ls-files", "--stage", "--", this.fullPath], {
+                    cwd: this.gitDirectoryParent
+                })
+                .stdout.split(" ")?.[0];
+            if (mode == null) {
+                throw new Error("Can't find file in git index");
+            }
+            execa.sync(
+                "git",
+                [
+                    "update-index",
+                    "--add",
+                    "--replace",
+                    "--cacheinfo",
+                    `100644,${hash},${this.pathInGit}`
+                ],
+                {cwd: this.gitDirectoryParent}
+            );
+        } else {
+            writeFileSync(this.fullPath, notNull(this.formattedFileContents));
+        }
     }
 
     /**
