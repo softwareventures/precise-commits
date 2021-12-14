@@ -1,7 +1,6 @@
 {
   "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
-    "target": "es5",
     "noUnusedParameters": true,
     "allowUnreachableCode": true,
     "removeComments": true,
@@ -11,7 +10,6 @@
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
     "types": ["jest", "node"],
-    "lib": ["es2016"],
     "downlevelIteration": false,
     "forceConsistentCasingInFileNames": false,
     "importHelpers": false,
