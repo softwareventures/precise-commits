@@ -17,15 +17,15 @@ let filesWhitelist: string[] | null = null;
 if (config.whitelist) {
     filesWhitelist = [];
     if (Array.isArray(config.whitelist)) {
-        config.whitelist.forEach(() => {
-            filesWhitelist = [...notNull(filesWhitelist), ...glob.sync(config.whitelist)];
+        config.whitelist.forEach(entry => {
+            filesWhitelist = [...notNull(filesWhitelist), ...glob.sync(String(entry))];
         });
     } else {
-        filesWhitelist = glob.sync(config.whitelist);
+        filesWhitelist = glob.sync(String(config.whitelist));
     }
     if (!filesWhitelist || !filesWhitelist.length) {
         console.error(
-            `Error: No files match the glob pattern(s) you provided for --whitelist -> "${config.pattern}"`
+            `Error: No files match the glob pattern(s) you provided for --whitelist -> "${config.whitelist}"`
         );
         process.exit(1);
     }
