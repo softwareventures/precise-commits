@@ -10,7 +10,6 @@
     "outDir": "./lib",
     "types": ["jest", "node"],
     "downlevelIteration": false,
-    "forceConsistentCasingInFileNames": false,
     "importHelpers": false,
     "resolveJsonModule": false
   },
