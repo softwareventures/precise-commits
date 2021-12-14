@@ -1,7 +1,6 @@
 {
   "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
-    "allowUnreachableCode": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
