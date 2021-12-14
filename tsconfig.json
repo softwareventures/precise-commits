@@ -1,13 +1,8 @@
 {
+  "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "strict": true,
-    "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": true,
     "removeComments": true,
     "sourceMap": false,
@@ -15,9 +10,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
-    "declaration": true,
     "types": ["jest", "node"],
-    "lib": ["es2016"]
+    "lib": ["es2016"],
+    "downlevelIteration": false,
+    "forceConsistentCasingInFileNames": false,
+    "importHelpers": false,
+    "inlineSources": false,
+    "resolveJsonModule": false,
+    "stripInternal": false
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],

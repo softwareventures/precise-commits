@@ -914,6 +914,11 @@
   dependencies:
     tslib "2.3.0"
 
+"@softwareventures/tsconfig@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/tsconfig/-/tsconfig-5.1.0.tgz#bee139d5e6fccf5237fa7dbcdbf8ac7d12ac33d0"
+  integrity sha512-D85kPab/iU9SKQRPi76eBnLa060kJEvI+M6PLzdfuq1nS+G7020NORHf5Lr6boLzxVe/PXNywTSUzbkslDkSrg==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
