@@ -114,7 +114,7 @@ export class TestBed {
     private createTmpFileForFixture(fixture: Fixture): TmpFile {
         const name = fixture.fixtureName;
         const filename = `${name}${fixture.fileExtension}`;
-        const directoryPath = join(this.testBedDirectoryPath, name);
+        const directoryPath = join(notNull(this.testBedDirectoryPath), name);
         return {
             name,
             filename,
@@ -142,7 +142,7 @@ export class TestBed {
     }
 
     private createAndCommitTmpFileOnDisk(tmpFile: TmpFile): void {
-        writeFileSync(tmpFile.path, tmpFile.initialContents);
+        writeFileSync(tmpFile.path, notNull(tmpFile.initialContents));
         runCommandSync("git", ["add", tmpFile.path], tmpFile.directoryPath);
         runCommandSync(
             "git",
@@ -196,7 +196,7 @@ export function readFixtures(): Fixture[] {
                 : readFileSync(join(fixtureDirPath, initialContentsFileName), "utf8"),
             stagedContents: stagedContentsFileName
                 ? readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8")
-                : readFileSync(join(fixtureDirPath, committedContentsFileName), "utf8"),
+                : readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8"),
             committed: !!committedContentsFileName,
             customPrettierConfig: !prettierConfigFileName
                 ? null
