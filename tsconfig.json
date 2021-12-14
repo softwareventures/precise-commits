@@ -2,8 +2,7 @@
   "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
     "outDir": "./lib",
-    "types": ["jest", "node"],
-    "importHelpers": false
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*.ts"]
 }
