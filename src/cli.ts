@@ -1,29 +1,24 @@
 #!/usr/bin/env node
 
-"use strict";
+import ora = require("ora");
+import mri = require("mri");
+import glob = require("glob");
+import {main} from ".";
+import {notNull} from "@softwareventures/nullable";
 
-/**
- * CLI output
- */
-const ora = require("ora");
-const mri = require("mri");
-const glob = require("glob");
-
-const LIBRARY_NAME = require("../package.json").name;
-const main = require("../lib").main;
-
+const LIBRARY_NAME = "precise-commits";
 const config = mri(process.argv.slice(2));
 
 /**
  * If the user provided one or more glob patterns to match against, ensure that there are
  * applicable files available
  */
-let filesWhitelist = null;
+let filesWhitelist: string[] | null = null;
 if (config.whitelist) {
     filesWhitelist = [];
     if (Array.isArray(config.whitelist)) {
-        config.whitelist.forEach(pattern => {
-            filesWhitelist = [...filesWhitelist, ...glob.sync(config.whitelist)];
+        config.whitelist.forEach(() => {
+            filesWhitelist = [...notNull(filesWhitelist), ...glob.sync(config.whitelist)];
         });
     } else {
         filesWhitelist = glob.sync(config.whitelist);
@@ -32,7 +27,7 @@ if (config.whitelist) {
         console.error(
             `Error: No files match the glob pattern(s) you provided for --whitelist -> "${config.pattern}"`
         );
-        return process.exit(1);
+        process.exit(1);
     }
 }
 
@@ -45,7 +40,7 @@ if (config.base || config.head) {
         console.error(
             `Error: When giving a value of --head, you must also give a value for --base`
         );
-        return process.exit(1);
+        process.exit(1);
     }
     if (!config.head) {
         /**
@@ -65,7 +60,7 @@ const options = {
 
 const primarySpinner = ora(` Running ${LIBRARY_NAME}...`);
 const modifiedFilesSpinner = ora(" Detecting modified files from git...");
-const spinnersByFilename = {};
+const spinnersByFilename = new Map<string, ora.Ora>();
 
 let shouldErrorOut = false;
 
@@ -83,18 +78,21 @@ main(process.cwd(), options, {
         );
     },
     onBegunProcessingFile(filename, index, totalFiles) {
-        spinnersByFilename[filename] = ora()
-            .start()
-            .succeed(` [${index + 1}/${totalFiles}] Processing file: ${filename}`);
+        spinnersByFilename.set(
+            filename,
+            ora()
+                .start()
+                .succeed(` [${index + 1}/${totalFiles}] Processing file: ${filename}`)
+        );
     },
     onFinishedProcessingFile(filename, index, status) {
-        const spinner = spinnersByFilename[filename];
+        const spinner = spinnersByFilename.get(filename);
         switch (status) {
             case "UPDATED":
-                spinner.succeed(`       --> Updated formatting in: ${filename}`);
+                notNull(spinner).succeed(`       --> Updated formatting in: ${filename}`);
                 break;
             case "NOT_UPDATED":
-                spinner.info(`       --> No formatting changes required in: ${filename}`);
+                notNull(spinner).info(`       --> No formatting changes required in: ${filename}`);
                 break;
             case "INVALID_FORMATTING":
                 /**
@@ -103,7 +101,7 @@ main(process.cwd(), options, {
                 if (options.checkOnly) {
                     shouldErrorOut = true;
                 }
-                spinner.fail(`       --> Invalid formatting detected in: ${filename}`);
+                notNull(spinner).fail(`       --> Invalid formatting detected in: ${filename}`);
                 break;
         }
     },

@@ -11,7 +11,7 @@
   "repository": "github:softwareventures/precise-commits",
   "license": "MIT",
   "scripts": {
-    "pre-commit": "node bin/index.js",
+    "pre-commit": "node lib/cli.js",
     "prepare": "husky install && rimraf lib && tsc",
     "cz": "git-cz",
     "fix": "tsc --noEmit && prettier --write .",
@@ -20,9 +20,8 @@
     "test": "yarn && jest"
   },
   "main": "lib/index.js",
-  "bin": "bin/index.js",
+  "bin": "lib/cli.js",
   "files": [
-    "bin",
     "lib"
   ],
   "engines": {
@@ -49,6 +48,7 @@
     "@softwareventures/tsconfig": "5.1.0",
     "@types/diff-match-patch": "1.0.32",
     "@types/find-up": "2.1.1",
+    "@types/glob": "7.2.0",
     "@types/jest": "27.0.3",
     "@types/mkdirp": "1.0.2",
     "@types/node": "16.11.12",
