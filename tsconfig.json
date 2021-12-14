@@ -1,7 +1,6 @@
 {
   "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
-    "noUnusedParameters": true,
     "allowUnreachableCode": true,
     "removeComments": true,
     "pretty": true,
