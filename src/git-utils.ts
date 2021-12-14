@@ -42,11 +42,30 @@ export function getDiffForFile(
         }
     } else if (head === workingTree) {
         if (base == null) {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", "--", fullPath],
-                gitDirectoryParent
-            ).stdout;
+            try {
+                return runCommandSync(
+                    "git",
+                    ["diff", "--unified=0", "HEAD", "--", fullPath],
+                    gitDirectoryParent
+                ).stdout;
+            } catch (err: unknown) {
+                //If there has never been a commit before, there will be no HEAD to compare
+                // to. Use the special empty tree hash value instead:
+                // https://stackoverflow.com/questions/9765453/is-gits-semi-secret-empty-tree-object-reliable-and-why-is-there-not-a-symbolic
+                if (
+                    hasProperty(err, "message") &&
+                    typeof err.message === "string" &&
+                    err.message.includes("fatal: bad revision")
+                ) {
+                    return runCommandSync(
+                        "git",
+                        ["diff", "--unified=0", SPECIAL_EMPTY_TREE_COMMIT_HASH, "--", fullPath],
+                        gitDirectoryParent
+                    ).stdout;
+                } else {
+                    throw err;
+                }
+            }
         } else {
             return runCommandSync(
                 "git",
