@@ -4,7 +4,6 @@
     "noUnusedParameters": true,
     "allowUnreachableCode": true,
     "removeComments": true,
-    "sourceMap": false,
     "pretty": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -13,7 +12,6 @@
     "downlevelIteration": false,
     "forceConsistentCasingInFileNames": false,
     "importHelpers": false,
-    "inlineSources": false,
     "resolveJsonModule": false,
     "stripInternal": false
   },
