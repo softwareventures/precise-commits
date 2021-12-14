@@ -3,7 +3,6 @@
   "compilerOptions": {
     "allowUnreachableCode": true,
     "removeComments": true,
-    "pretty": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
