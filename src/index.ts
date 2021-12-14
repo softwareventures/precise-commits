@@ -1,4 +1,4 @@
-import {join} from "path";
+import {isAbsolute, join, relative, sep} from "path";
 
 import {getModifiedFilenames, resolveNearestGitDirectoryParent} from "./git-utils";
 import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
@@ -76,6 +76,10 @@ export function main(
             options.base,
             options.head
         )
+            .map(path => join(gitDirectoryParent, path))
+            .map(path => relative(workingDirectory, path))
+            .filter(path => !isAbsolute(path))
+            .filter(path => path !== ".." && !path.startsWith(`..${sep}`))
             .filter(selectedFormatter.hasSupportedFileExtension)
             .filter(generateFilesWhitelistPredicate(options.filesWhitelist))
             .filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory));
@@ -93,7 +97,7 @@ export function main(
              * Read the modified file contents and resolve the relevant formatter.
              */
             const modifiedFile = new ModifiedFile({
-                fullPath: join(gitDirectoryParent, filename),
+                fullPath: join(workingDirectory, filename),
                 gitDirectoryParent,
                 base: options.base,
                 head: options.head,
