@@ -8,6 +8,7 @@ import {
 import {getDiffForFile} from "./git-utils";
 import {PreciseFormatter} from "./precise-formatter";
 import {assertInstanceOf} from "./unknown";
+import {notNull} from "@softwareventures/nullable";
 
 export interface ModifiedFileConfig {
     fullPath: string;
@@ -106,7 +107,7 @@ export class ModifiedFile {
      * Write the updated file contents back to disk.
      */
     updateFileOnDisk(): void {
-        writeFileSync(this.fullPath, this.formattedFileContents);
+        writeFileSync(this.fullPath, notNull(this.formattedFileContents));
     }
 
     /**
