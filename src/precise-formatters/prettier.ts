@@ -1,13 +1,10 @@
 import * as fs from "fs";
-import {diff_match_patch as DiffMatchPatch} from "diff-match-patch";
 import ignore from "ignore";
 import {extname, join} from "path";
 import {Options as PrettierOptions, getSupportInfo, format, resolveConfig, check} from "prettier";
 
 import {PreciseFormatter} from "../precise-formatter";
 import {CharacterRange} from "../utils";
-
-const dmp = new DiffMatchPatch();
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
 getSupportInfo().languages.forEach(language => {
@@ -67,20 +64,14 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
     ): string {
-        let patches: any = [];
-        characterRanges.forEach(characterRange => {
-            const diffs = dmp.diff_main(
-                fileContents,
-                format(fileContents, {
-                    ...config,
-                    rangeStart: characterRange.rangeStart,
-                    rangeEnd: characterRange.rangeEnd
-                })
-            );
-            patches = [...patches, ...dmp.patch_make(fileContents, diffs)];
-        });
-        const [formattedContents] = dmp.patch_apply(patches, fileContents);
-        return formattedContents;
+        // Start from the last character range and work backwards so that
+        // we don't have to update character ranges to account for the changes
+        // we've already made.
+        return characterRanges.reduceRight(
+            (fileContents, {rangeStart, rangeEnd}) =>
+                format(fileContents, {...config, rangeStart, rangeEnd}),
+            fileContents
+        );
     },
     /**
      * Generate a predicate function which will return true if the filename

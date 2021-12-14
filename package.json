@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@softwareventures/array": "4.1.3",
-    "diff-match-patch": "1.0.5",
     "execa": "5.1.1",
     "find-up": "5.0.0",
     "glob": "7.2.0",
@@ -47,7 +46,6 @@
     "@softwareventures/prettier-config": "2.0.0",
     "@softwareventures/semantic-release-config": "2.0.0",
     "@softwareventures/tsconfig": "5.1.0",
-    "@types/diff-match-patch": "1.0.32",
     "@types/find-up": "2.1.1",
     "@types/glob": "7.2.0",
     "@types/jest": "27.0.3",
