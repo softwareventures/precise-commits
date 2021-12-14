@@ -6,7 +6,6 @@
     "skipDefaultLibCheck": true,
     "outDir": "./lib",
     "types": ["jest", "node"],
-    "downlevelIteration": false,
     "importHelpers": false
   },
   "include": ["src/**/*.ts"]
