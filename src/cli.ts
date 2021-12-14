@@ -6,7 +6,7 @@ import glob = require("glob");
 import {main} from ".";
 import {notNull} from "@softwareventures/nullable";
 import {hasProperty} from "unknown";
-import {isArray} from "@softwareventures/array";
+import {concatMap, isArray} from "@softwareventures/array";
 
 const LIBRARY_NAME = "precise-commits";
 const config = mri<unknown>(process.argv.slice(2));
@@ -17,11 +17,8 @@ const config = mri<unknown>(process.argv.slice(2));
  */
 let filesWhitelist: string[] | null = null;
 if (hasProperty(config, "whitelist")) {
-    filesWhitelist = [];
     if (isArray(config.whitelist)) {
-        config.whitelist.forEach(entry => {
-            filesWhitelist = [...notNull(filesWhitelist), ...glob.sync(String(entry))];
-        });
+        filesWhitelist = concatMap(config.whitelist, entry => glob.sync(String(entry)));
     } else {
         filesWhitelist = glob.sync(String(config.whitelist));
     }
