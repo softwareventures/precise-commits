@@ -2,7 +2,6 @@
   "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "outDir": "./lib",
     "types": ["jest", "node"],
     "importHelpers": false
