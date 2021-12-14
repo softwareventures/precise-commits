@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import {normalize} from "path";
 import ora = require("ora");
 import mri = require("mri");
 import glob = require("glob");
@@ -28,6 +29,7 @@ if (hasProperty(config, "whitelist")) {
         );
         process.exit(1);
     }
+    filesWhitelist = filesWhitelist.map(normalize);
 }
 
 /**
