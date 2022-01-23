@@ -905,10 +905,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@softwareventures/array@4.5.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@softwareventures/array/-/array-4.5.0.tgz#4225288cf05509020d94ed68fe9a07405af09b91"
-  integrity sha512-Iomdli6UwrCaQ7a5kYLTGOz7TQmJ/vI0uBG8qBe3AvHB2wZoMGb9O2zSmVzW0H/SeVzJc3CdOMPhKqXSBezbfA==
+"@softwareventures/array@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/array/-/array-5.0.0.tgz#c87d8c7e63484d38e74b9e629e37b7e901ca28ab"
+  integrity sha512-ndHuStDVjbzcgU+slxqW03XM2w5cNittYgYhAtUseKP0PilPsODWu/QoZREY1GBGh9qT6tpmAT4J04dO+cOhpw==
   dependencies:
     "@softwareventures/nullable" "^1.0.0 || ^1.0.0 || ^1.2.1 || ^2.0.0"
     "@softwareventures/ordered" "^0.2.0 || ^1.0.0"
