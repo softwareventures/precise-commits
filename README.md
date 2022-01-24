@@ -186,8 +186,8 @@ and create a `.husky/pre-commit` script:
 npm run pre-commit
 ```
 
-If you use yarn, you might want to add a workaround for the benefit of
-Windows users, see https://typicode.github.io/husky/#/?id=yarn-on-windows
+If you use yarn, you might want to add a workaround for the benefit of Windows
+users, see https://typicode.github.io/husky/#/?id=yarn-on-windows
 
 ## 3. As part of a PR build
 
