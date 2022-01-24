@@ -12,10 +12,10 @@
   "license": "MIT",
   "scripts": {
     "pre-commit": "node lib/cli.js",
-    "prepare": "husky install && rimraf lib && tsc",
     "cz": "git-cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
+    "prepare": "husky install && rimraf lib && tsc",
     "semantic-release": "semantic-release",
     "test": "yarn && jest"
   },
