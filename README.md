@@ -170,12 +170,24 @@ Update the `"scripts"` section of your `package.json`:
 {
   //...
   "scripts": {
-    "precise-commits": "precise-commits",
-    "precommit": "npm run precise-commits"
+    "prepare": "husky install",
+    "pre-commit": "npm run precise-commits"
   }
   //...
 }
 ```
+
+and create a `.husky/pre-commit` script:
+
+```sh
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run pre-commit
+```
+
+If you use yarn, you might want to add a workaround for the benefit of
+Windows users, see https://typicode.github.io/husky/#/?id=yarn-on-windows
 
 ## 3. As part of a PR build
 
