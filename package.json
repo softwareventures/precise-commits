@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@softwareventures/array": "5.0.0",
-    "execa": "5.1.1",
+    "execa": "6.0.0",
     "find-up": "5.0.0",
     "glob": "7.2.0",
     "ignore": "5.2.0",
