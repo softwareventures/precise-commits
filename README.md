@@ -110,7 +110,7 @@ work, and allowing you to keep your PRs small and explicit!
 you will need to install this yourself as a `devDependency` of your project.
 
 ```sh
-npm install --save-dev prettier precise-commits
+npm install --save-dev prettier @softwareventures/precise-commits
 ```
 
 <br>
