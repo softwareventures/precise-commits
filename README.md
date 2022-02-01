@@ -1,14 +1,5 @@
 <h1 align="center">Precise Commits</h1>
 
-<p align="center">
-    <a href="https://travis-ci.org/nrwl/precise-commits"><img src="https://img.shields.io/travis/nrwl/precise-commits.svg?style=flat-square" alt="Travis"/></a>
-    <a href="https://github.com/nrwl/precise-commits/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/precise-commits.svg?style=flat-square" alt="GitHub license" /></a>
-    <a href="https://www.npmjs.com/package/precise-commits"><img src="https://img.shields.io/npm/v/precise-commits.svg?style=flat-square" alt="NPM Version" /></a>
-    <a href="https://www.npmjs.com/package/precise-commits"><img src="https://img.shields.io/npm/dt/precise-commits.svg?style=flat-square" alt="NPM Downloads" /></a>
-    <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg" alt="Commitizen friendly" /></a>
-    <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square" alt="semantic-release" /></a>
-</p>
-
 <br>
 
 # Why `precise-commits`?
