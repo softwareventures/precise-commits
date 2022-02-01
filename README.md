@@ -1,5 +1,8 @@
 <h1 align="center">Precise Commits</h1>
 
+This is a fork of the original project, with bug fixes and support for Windows
+line endings.
+
 <br>
 
 # Why `precise-commits`?
