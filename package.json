@@ -54,7 +54,7 @@
     "@types/prettier": "2.4.3",
     "cz-conventional-changelog": "3.3.0",
     "husky": "7.0.4",
-    "jest": "27.5.0",
+    "jest": "27.5.1",
     "mkdirp": "1.0.4",
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
