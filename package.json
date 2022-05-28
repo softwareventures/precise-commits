@@ -51,7 +51,7 @@
     "@types/jest": "27.5.1",
     "@types/mkdirp": "1.0.2",
     "@types/node": "16.11.36",
-    "@types/prettier": "2.6.1",
+    "@types/prettier": "2.6.2",
     "cz-conventional-changelog": "3.3.0",
     "husky": "7.0.4",
     "jest": "27.5.1",
