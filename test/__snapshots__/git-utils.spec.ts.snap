@@ -94,3 +94,15 @@ index 30011dc..1f5fc71 100644
 +const b = true
 \\\\ No newline at end of file"
 `;
+
+exports[`git-utils getDiffForFile() updated-class-body 1`] = `
+"diff --git a/updated-class-body.js b/updated-class-body.js
+index 077a8f0..2b6c02c 100644
+--- a/updated-class-body.js
++++ b/updated-class-body.js
+@@ -2,2 +2,2 @@ class Hatstand {
+-    constructor() {
+-        this.hats = [];
++    constructor(hats) {
++        this.hats = hats ?? [];"
+`;
