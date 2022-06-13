@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@softwareventures/array": "5.1.0",
+    "@softwareventures/nullable": "2.0.0",
     "execa": "5.1.1",
     "find-up": "5.0.0",
     "glob": "7.2.0",
@@ -42,7 +43,6 @@
     "prettier": ">=1.8.0"
   },
   "devDependencies": {
-    "@softwareventures/nullable": "2.0.0",
     "@softwareventures/prettier-config": "3.0.0",
     "@softwareventures/semantic-release-config": "2.0.2",
     "@softwareventures/tsconfig": "5.1.1",
