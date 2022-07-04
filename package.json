@@ -28,7 +28,7 @@
     "node": "^12 || ^14 || ^16 || >=17"
   },
   "dependencies": {
-    "@softwareventures/array": "5.1.0",
+    "@softwareventures/array": "5.2.0",
     "@softwareventures/nullable": "2.0.0",
     "execa": "5.1.1",
     "find-up": "5.0.0",
