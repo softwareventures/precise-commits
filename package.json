@@ -48,7 +48,7 @@
     "@softwareventures/tsconfig": "5.1.1",
     "@types/find-up": "2.1.1",
     "@types/glob": "7.2.0",
-    "@types/jest": "27.5.2",
+    "@types/jest": "28.1.8",
     "@types/mkdirp": "1.0.2",
     "@types/node": "16.11.56",
     "@types/prettier": "2.7.0",
