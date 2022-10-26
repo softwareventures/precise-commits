@@ -50,7 +50,7 @@
     "@types/glob": "8.0.0",
     "@types/jest": "27.5.2",
     "@types/mkdirp": "1.0.2",
-    "@types/node": "16.18.0",
+    "@types/node": "16.18.1",
     "@types/prettier": "2.7.1",
     "cz-conventional-changelog": "3.3.0",
     "husky": "7.0.4",
