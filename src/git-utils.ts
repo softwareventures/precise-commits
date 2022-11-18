@@ -3,6 +3,7 @@ import {dirname} from "path";
 
 import {runCommandSync} from "./utils";
 import {hasProperty} from "unknown";
+import {notNull} from "@softwareventures/nullable";
 
 interface DiffIndexFile {
     diffFilterChar: string;
@@ -164,8 +165,8 @@ function parseDiffIndexOutput(stdout: string): DiffIndexFile[] {
     return lines.filter(Boolean).map(line => {
         const parts = line.split("\t");
         return {
-            filename: parts[1],
-            diffFilterChar: parts[0]
+            filename: notNull(parts[1]),
+            diffFilterChar: notNull(parts[0])
         };
     });
 }

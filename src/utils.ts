@@ -1,4 +1,5 @@
 import * as execa from "execa";
+import {notNull} from "@softwareventures/nullable";
 
 export interface LineChanges {
     start: number;
@@ -38,17 +39,21 @@ export function extractLineChangeData(diffData: string) {
         if (!d) {
             throw new Error("The detected line change data could be not be parsed");
         }
-        const [removalStartLine, noOfLinesRemoved = 1] = d[2].split(",").map(s => parseInt(s, 10));
-        const [additionStartLine, noOfLinesAdded = 1] = d[4].split(",").map(s => parseInt(s, 10));
+        const [removalStartLine, noOfLinesRemoved = 1] = notNull(d[2])
+            .split(",")
+            .map(s => parseInt(s, 10));
+        const [additionStartLine, noOfLinesAdded = 1] = notNull(d[4])
+            .split(",")
+            .map(s => parseInt(s, 10));
         if (noOfLinesRemoved > 0) {
             lineChangeData.removals.push({
-                start: removalStartLine,
+                start: notNull(removalStartLine),
                 noOfLines: noOfLinesRemoved
             });
         }
         if (noOfLinesAdded > 0) {
             lineChangeData.additions.push({
-                start: additionStartLine,
+                start: notNull(additionStartLine),
                 noOfLines: noOfLinesAdded
             });
         }
