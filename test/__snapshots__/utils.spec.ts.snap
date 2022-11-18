@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-json-file 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 19,
     "rangeStart": 0,
   },
@@ -10,8 +10,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-json-file 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 21,
     "rangeStart": 0,
   },
@@ -19,8 +19,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-json-file 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 19,
     "rangeStart": 0,
   },
@@ -28,8 +28,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-jsx-file 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 661,
     "rangeStart": 0,
   },
@@ -37,8 +37,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-jsx-file 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 681,
     "rangeStart": 0,
   },
@@ -46,8 +46,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() brand-new-jsx-file 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 661,
     "rangeStart": 0,
   },
@@ -55,8 +55,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() empty-javascript-file 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 53,
     "rangeStart": 0,
   },
@@ -64,8 +64,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() empty-javascript-file 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 54,
     "rangeStart": 0,
   },
@@ -73,8 +73,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() empty-javascript-file 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 53,
     "rangeStart": 0,
   },
@@ -82,12 +82,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() formatting-would-affect-total-line-count 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 76,
     "rangeStart": 63,
   },
-  Object {
+  {
     "rangeEnd": 131,
     "rangeStart": 106,
   },
@@ -95,12 +95,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() formatting-would-affect-total-line-count 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 82,
     "rangeStart": 67,
   },
-  Object {
+  {
     "rangeEnd": 142,
     "rangeStart": 115,
   },
@@ -108,12 +108,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() formatting-would-affect-total-line-count 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 76,
     "rangeStart": 63,
   },
-  Object {
+  {
     "rangeEnd": 131,
     "rangeStart": 106,
   },
@@ -121,12 +121,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() multiple-updated-lines-javascript-file 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 128,
     "rangeStart": 33,
   },
-  Object {
+  {
     "rangeEnd": 171,
     "rangeStart": 134,
   },
@@ -134,12 +134,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() multiple-updated-lines-javascript-file 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 130,
     "rangeStart": 34,
   },
-  Object {
+  {
     "rangeEnd": 176,
     "rangeStart": 139,
   },
@@ -147,12 +147,12 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() multiple-updated-lines-javascript-file 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 128,
     "rangeStart": 33,
   },
-  Object {
+  {
     "rangeEnd": 171,
     "rangeStart": 134,
   },
@@ -160,8 +160,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() single-updated-line-typescript 1`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 29,
     "rangeStart": 15,
   },
@@ -169,8 +169,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() single-updated-line-typescript 2`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 30,
     "rangeStart": 16,
   },
@@ -178,8 +178,8 @@ Array [
 `;
 
 exports[`utils calculateCharacterRangesFromLineChanges() single-updated-line-typescript 3`] = `
-Array [
-  Object {
+[
+  {
     "rangeEnd": 29,
     "rangeStart": 15,
   },
@@ -187,55 +187,55 @@ Array [
 `;
 
 exports[`utils extractLineChangeData() brand-new-json-file 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 3,
       "start": 1,
     },
   ],
-  "removals": Array [],
+  "removals": [],
 }
 `;
 
 exports[`utils extractLineChangeData() brand-new-jsx-file 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 21,
       "start": 1,
     },
   ],
-  "removals": Array [],
+  "removals": [],
 }
 `;
 
 exports[`utils extractLineChangeData() empty-javascript-file 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 2,
       "start": 1,
     },
   ],
-  "removals": Array [],
+  "removals": [],
 }
 `;
 
 exports[`utils extractLineChangeData() formatting-would-affect-total-line-count 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 2,
       "start": 5,
     },
-    Object {
+    {
       "noOfLines": 2,
       "start": 10,
     },
   ],
-  "removals": Array [
-    Object {
+  "removals": [
+    {
       "noOfLines": 1,
       "start": 5,
     },
@@ -244,19 +244,19 @@ Object {
 `;
 
 exports[`utils extractLineChangeData() multiple-updated-lines-javascript-file 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 1,
       "start": 2,
     },
-    Object {
+    {
       "noOfLines": 1,
       "start": 6,
     },
   ],
-  "removals": Array [
-    Object {
+  "removals": [
+    {
       "noOfLines": 1,
       "start": 2,
     },
@@ -265,15 +265,15 @@ Object {
 `;
 
 exports[`utils extractLineChangeData() single-updated-line-typescript 1`] = `
-Object {
-  "additions": Array [
-    Object {
+{
+  "additions": [
+    {
       "noOfLines": 1,
       "start": 2,
     },
   ],
-  "removals": Array [
-    Object {
+  "removals": [
+    {
       "noOfLines": 1,
       "start": 2,
     },

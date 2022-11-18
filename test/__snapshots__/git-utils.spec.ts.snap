@@ -8,9 +8,9 @@ index 0000000..f663bcc
 +++ b/brand-new-json-file.json
 @@ -0,0 +1,3 @@
 +{
-+    \\"foo\\": true
++    "foo": true
 +}
-\\\\ No newline at end of file"
+\\ No newline at end of file"
 `;
 
 exports[`git-utils getDiffForFile() brand-new-jsx-file 1`] = `
@@ -20,28 +20,28 @@ index 0000000..ae72777
 --- /dev/null
 +++ b/brand-new-jsx-file.jsx
 @@ -0,0 +1,21 @@
-+function HelloWorld({greeting = \\"hello\\", greeted = '\\"World\\"', silent = false, onMouseOver,}) {
++function HelloWorld({greeting = "hello", greeted = '"World"', silent = false, onMouseOver,}) {
 +
 +    if(!greeting){return null};
 +  
 +       // TODO: Don't use random in render
-+    let num = Math.floor (Math.random() * 1E+7).toString().replace(/\\\\.\\\\d+/ig, \\"\\")
++    let num = Math.floor (Math.random() * 1E+7).toString().replace(/\\.\\d+/ig, "")
 +  
 +    return <div className='HelloWorld' title={\`You are visitor number \${ num }\`} onMouseOver={onMouseOver}>
 +  
 +      <strong>{ greeting.slice( 0, 1 ).toUpperCase() + greeting.slice(1).toLowerCase() }</strong>
-+      {greeting.endsWith(\\",\\") ? \\" \\" : <span style={{color: '\\\\grey'}}>\\", \\"</span> }
++      {greeting.endsWith(",") ? " " : <span style={{color: '\\grey'}}>", "</span> }
 +      <em>
 +      { greeted }
 +      </em>
 +      { (silent)
-+        ? \\".\\"
-+        : \\"!\\"}
++        ? "."
++        : "!"}
 +  
 +      </div>;
 +  
 +  }
-\\\\ No newline at end of file"
+\\ No newline at end of file"
 `;
 
 exports[`git-utils getDiffForFile() empty-javascript-file 1`] = `
@@ -53,7 +53,7 @@ index 0000000..3772dd0
 @@ -0,0 +1,2 @@
 +var greeting = 'hello'
 +        var audience = 'world'
-\\\\ No newline at end of file"
+\\ No newline at end of file"
 `;
 
 exports[`git-utils getDiffForFile() formatting-would-affect-total-line-count 1`] = `
@@ -76,11 +76,11 @@ index 50d7ab7..2b98ecd 100644
 --- a/multiple-updated-lines-javascript-file.js
 +++ b/multiple-updated-lines-javascript-file.js
 @@ -2 +2 @@ var     untouchedUglyLines1 = ''
--function TouchedFunctionSignature({greeting = \\"Hello\\", greeted = '\\"World\\"', silent = false,}) {
-+function TouchedFunctionSignature({greeting = \\"Hello\\", greeted = '\\"Mars\\"', silent = false,}) {
-@@ -5,0 +6 @@ function TouchedFunctionSignature({greeting = \\"Hello\\", greeted = '\\"World\\"', sile
+-function TouchedFunctionSignature({greeting = "Hello", greeted = '"World"', silent = false,}) {
++function TouchedFunctionSignature({greeting = "Hello", greeted = '"Mars"', silent = false,}) {
+@@ -5,0 +6 @@ function TouchedFunctionSignature({greeting = "Hello", greeted = '"World"', sile
 +      const newlyAddedUglyLine = true
-\\\\ No newline at end of file"
+\\ No newline at end of file"
 `;
 
 exports[`git-utils getDiffForFile() single-updated-line-typescript 1`] = `
@@ -90,7 +90,7 @@ index 30011dc..1f5fc71 100644
 +++ b/single-updated-line-typescript.ts
 @@ -2 +2 @@ const a = true
 -const b = false
-\\\\ No newline at end of file
+\\ No newline at end of file
 +const b = true
-\\\\ No newline at end of file"
+\\ No newline at end of file"
 `;

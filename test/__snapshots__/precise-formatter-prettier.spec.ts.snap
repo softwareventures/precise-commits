@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`preciseFormatterPrettier resolveConfig() brand-new-json-file 1`] = `
-Object {
+{
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": false,
@@ -24,7 +24,7 @@ Object {
 `;
 
 exports[`preciseFormatterPrettier resolveConfig() brand-new-jsx-file 1`] = `
-Object {
+{
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": false,
@@ -47,7 +47,7 @@ Object {
 `;
 
 exports[`preciseFormatterPrettier resolveConfig() empty-javascript-file 1`] = `
-Object {
+{
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": false,
@@ -70,7 +70,7 @@ Object {
 `;
 
 exports[`preciseFormatterPrettier resolveConfig() formatting-would-affect-total-line-count 1`] = `
-Object {
+{
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": false,
@@ -93,7 +93,7 @@ Object {
 `;
 
 exports[`preciseFormatterPrettier resolveConfig() multiple-updated-lines-javascript-file 1`] = `
-Object {
+{
   "endOfLine": "auto",
   "filepath": "./test/fixtures/multiple-updated-lines-javascript-file/initial.js",
   "semi": true,
@@ -103,7 +103,7 @@ Object {
 `;
 
 exports[`preciseFormatterPrettier resolveConfig() single-updated-line-typescript 1`] = `
-Object {
+{
   "arrowParens": "avoid",
   "bracketSameLine": false,
   "bracketSpacing": false,

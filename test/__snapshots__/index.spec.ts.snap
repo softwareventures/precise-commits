@@ -2,13 +2,13 @@
 
 exports[`@softwareventures/precise-commits main() brand-new-json-file 1`] = `
 "{
-  \\"foo\\": true
+  "foo": true
 }
 "
 `;
 
 exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
-"function HelloWorld({greeting = \\"hello\\", greeted = '\\"World\\"', silent = false, onMouseOver}) {
+"function HelloWorld({greeting = "hello", greeted = '"World"', silent = false, onMouseOver}) {
     if (!greeting) {
         return null;
     }
@@ -16,18 +16,18 @@ exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
     // TODO: Don't use random in render
     let num = Math.floor(Math.random() * 1e7)
         .toString()
-        .replace(/\\\\.\\\\d+/gi, \\"\\");
+        .replace(/\\.\\d+/gi, "");
 
     return (
         <div
-            className=\\"HelloWorld\\"
+            className="HelloWorld"
             title={\`You are visitor number \${num}\`}
             onMouseOver={onMouseOver}
         >
             <strong>{greeting.slice(0, 1).toUpperCase() + greeting.slice(1).toLowerCase()}</strong>
-            {greeting.endsWith(\\",\\") ? \\" \\" : <span style={{color: \\"grey\\"}}>\\", \\"</span>}
+            {greeting.endsWith(",") ? " " : <span style={{color: "grey"}}>", "</span>}
             <em>{greeted}</em>
-            {silent ? \\".\\" : \\"!\\"}
+            {silent ? "." : "!"}
         </div>
     );
 }
@@ -35,8 +35,8 @@ exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
 `;
 
 exports[`@softwareventures/precise-commits main() empty-javascript-file 1`] = `
-"var greeting = \\"hello\\";
-var audience = \\"world\\";
+"var greeting = "hello";
+var audience = "world";
 "
 `;
 
@@ -44,7 +44,7 @@ exports[`@softwareventures/precise-commits main() formatting-would-affect-total-
 "  var untouchedUglyLine     =      10
 
 function myfunc(a, b, c) {
-    console.log(\\"blah\\");
+    console.log("blah");
 }
 
 var newStatement = true;
@@ -54,8 +54,8 @@ var newStatement = true;
 exports[`@softwareventures/precise-commits main() multiple-updated-lines-javascript-file 1`] = `
 "var     untouchedUglyLines1 = ''
 function TouchedFunctionSignature({
-  greeting = \\"Hello\\",
-  greeted = '\\"Mars\\"',
+  greeting = "Hello",
+  greeted = '"Mars"',
   silent = false
 }) {}
       const newlyAddedUglyLine = true;"
