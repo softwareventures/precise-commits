@@ -36,7 +36,7 @@
     "ignore": "5.2.1",
     "mri": "1.2.0",
     "ora": "5.4.1",
-    "tslib": "2.4.1",
+    "tslib": "2.5.0",
     "unknown": "0.2.5"
   },
   "peerDependencies": {
