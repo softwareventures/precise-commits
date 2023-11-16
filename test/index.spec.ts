@@ -34,7 +34,7 @@ describe(LIBRARY_NAME, () => {
                         done();
                     },
                     onError(err) {
-                        done.fail(err);
+                        done(err);
                     }
                 });
             });
@@ -66,7 +66,7 @@ describe(LIBRARY_NAME, () => {
                         done();
                     },
                     onError(err) {
-                        done.fail(err);
+                        done(err);
                     }
                 });
             });
