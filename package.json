@@ -72,7 +72,7 @@
     "extends": "@softwareventures/semantic-release-config"
   },
   "jest": {
-    "globalSetup": "<rootDir>/test/global-setup.js",
+    "globalSetup": "<rootDir>/test/global-setup.ts",
     "globalTeardown": "<rootDir>/test/global-teardown.ts",
     "watchPathIgnorePatterns": [
       "<rootDir>/tmp"
