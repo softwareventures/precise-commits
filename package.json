@@ -40,7 +40,7 @@
     "unknown": "0.2.5"
   },
   "peerDependencies": {
-    "prettier": ">=1.8.0"
+    "prettier": "^1.8.0 || ^2.0.0"
   },
   "devDependencies": {
     "@softwareventures/prettier-config": "4.0.0",
