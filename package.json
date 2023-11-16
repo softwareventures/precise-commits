@@ -11,10 +11,10 @@
   "repository": "github:softwareventures/precise-commits",
   "license": "MIT",
   "scripts": {
-    "pre-commit": "node lib/cli.js",
     "cz": "git-cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
+    "pre-commit": "node lib/cli.js",
     "prepare": "husky install && rimraf lib && tsc",
     "semantic-release": "semantic-release",
     "test": "yarn && jest"
