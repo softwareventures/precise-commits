@@ -186,6 +186,33 @@ exports[`utils calculateCharacterRangesFromLineChanges() single-updated-line-typ
 ]
 `;
 
+exports[`utils calculateCharacterRangesFromLineChanges() updated-class-body 1`] = `
+[
+  {
+    "rangeEnd": 75,
+    "rangeStart": 17,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() updated-class-body 2`] = `
+[
+  {
+    "rangeEnd": 78,
+    "rangeStart": 18,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() updated-class-body 3`] = `
+[
+  {
+    "rangeEnd": 75,
+    "rangeStart": 17,
+  },
+]
+`;
+
 exports[`utils extractLineChangeData() brand-new-json-file 1`] = `
 {
   "additions": [
@@ -275,6 +302,23 @@ exports[`utils extractLineChangeData() single-updated-line-typescript 1`] = `
   "removals": [
     {
       "noOfLines": 1,
+      "start": 2,
+    },
+  ],
+}
+`;
+
+exports[`utils extractLineChangeData() updated-class-body 1`] = `
+{
+  "additions": [
+    {
+      "noOfLines": 2,
+      "start": 2,
+    },
+  ],
+  "removals": [
+    {
+      "noOfLines": 2,
       "start": 2,
     },
   ],

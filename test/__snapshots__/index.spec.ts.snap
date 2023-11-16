@@ -65,3 +65,12 @@ exports[`@softwareventures/precise-commits main() single-updated-line-typescript
 "const a = true
 const b = true;"
 `;
+
+exports[`@softwareventures/precise-commits main() updated-class-body 1`] = `
+"class Hatstand {
+    constructor(hats) {
+        this.hats = hats ?? [];
+    }
+}
+"
+`;
