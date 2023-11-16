@@ -1,4 +1,4 @@
-import mkdirp = require("mkdirp");
+import {mkdirp} from "mkdirp";
 
 /**
  * Create the tmp directory in which our `.git` directory
