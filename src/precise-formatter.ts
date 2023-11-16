@@ -18,6 +18,7 @@ export interface PreciseFormatter<FormatterConfig> {
      * and character range info.
      */
     checkFormattingOfRanges(
+        filePath: string,
         fileContents: string,
         config: FormatterConfig | null,
         characterRanges: CharacterRange[]
@@ -27,6 +28,7 @@ export interface PreciseFormatter<FormatterConfig> {
      * character range info.
      */
     formatRanges(
+        filePath: string,
         fileContents: string,
         config: FormatterConfig | null,
         characterRanges: CharacterRange[]

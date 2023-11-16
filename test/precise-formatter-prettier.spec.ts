@@ -23,6 +23,7 @@ describe("preciseFormatterPrettier", () => {
         var c = 3
       `;
             const formatted = preciseFormatterPrettier.formatRanges(
+                "foo.js",
                 contents,
                 {
                     semi: true
@@ -48,6 +49,7 @@ describe("preciseFormatterPrettier", () => {
         var c = 3;
       `;
             const formatted = preciseFormatterPrettier.checkFormattingOfRanges(
+                "foo.js",
                 contents,
                 {
                     semi: true
@@ -67,6 +69,7 @@ describe("preciseFormatterPrettier", () => {
         var c = 3
       `;
             const formatted = preciseFormatterPrettier.checkFormattingOfRanges(
+                "foo.js",
                 contents,
                 {
                     semi: true

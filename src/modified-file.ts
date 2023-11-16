@@ -93,6 +93,7 @@ export class ModifiedFile {
      */
     hasValidFormattingForCharacterRanges(): boolean {
         return this.selectedFormatter.checkFormattingOfRanges(
+            this.fullPath,
             this.fileContents,
             this.formatterConfig,
             this.modifiedCharacterRanges
@@ -104,6 +105,7 @@ export class ModifiedFile {
      */
     formatCharacterRangesWithinContents(): void {
         this.formattedFileContents = this.selectedFormatter.formatRanges(
+            this.fullPath,
             this.fileContents,
             this.formatterConfig,
             this.modifiedCharacterRanges

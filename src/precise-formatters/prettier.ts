@@ -39,6 +39,7 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * already formatted appropriately based on the given prettier config.
      */
     checkFormattingOfRanges(
+        filePath: string,
         fileContents: string,
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
@@ -47,10 +48,9 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
         return characterRanges.every(characterRange => {
             return check(formattedContents, {
                 ...config,
-                ...{
-                    rangeStart: characterRange.rangeStart,
-                    rangeEnd: characterRange.rangeEnd
-                }
+                filepath: filePath,
+                rangeStart: characterRange.rangeStart,
+                rangeEnd: characterRange.rangeEnd
             });
         });
     },
@@ -60,6 +60,7 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * of the Myer's diff algorithm.
      */
     formatRanges(
+        filePath: string,
         fileContents: string,
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
@@ -69,7 +70,12 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
         // we've already made.
         return characterRanges.reduceRight(
             (fileContents, {rangeStart, rangeEnd}) =>
-                format(fileContents, {...config, rangeStart, rangeEnd}),
+                format(fileContents, {
+                    ...config,
+                    filepath: filePath,
+                    rangeStart,
+                    rangeEnd
+                }),
             fileContents
         );
     },
