@@ -54,6 +54,93 @@ exports[`utils calculateCharacterRangesFromLineChanges() brand-new-jsx-file 3`] 
 ]
 `;
 
+exports[`utils calculateCharacterRangesFromLineChanges() changed-line-in-closure 1`] = `
+[
+  {
+    "rangeEnd": 148,
+    "rangeStart": 59,
+  },
+  {
+    "rangeEnd": 360,
+    "rangeStart": 225,
+  },
+  {
+    "rangeEnd": 588,
+    "rangeStart": 559,
+  },
+  {
+    "rangeEnd": 719,
+    "rangeStart": 644,
+  },
+  {
+    "rangeEnd": 869,
+    "rangeStart": 752,
+  },
+  {
+    "rangeEnd": 1039,
+    "rangeStart": 983,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() changed-line-in-closure 2`] = `
+[
+  {
+    "rangeEnd": 156,
+    "rangeStart": 62,
+  },
+  {
+    "rangeEnd": 376,
+    "rangeStart": 236,
+  },
+  {
+    "rangeEnd": 611,
+    "rangeStart": 581,
+  },
+  {
+    "rangeEnd": 745,
+    "rangeStart": 669,
+  },
+  {
+    "rangeEnd": 900,
+    "rangeStart": 780,
+  },
+  {
+    "rangeEnd": 1074,
+    "rangeStart": 1017,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() changed-line-in-closure 3`] = `
+[
+  {
+    "rangeEnd": 148,
+    "rangeStart": 59,
+  },
+  {
+    "rangeEnd": 360,
+    "rangeStart": 225,
+  },
+  {
+    "rangeEnd": 588,
+    "rangeStart": 559,
+  },
+  {
+    "rangeEnd": 719,
+    "rangeStart": 644,
+  },
+  {
+    "rangeEnd": 869,
+    "rangeStart": 752,
+  },
+  {
+    "rangeEnd": 1039,
+    "rangeStart": 983,
+  },
+]
+`;
+
 exports[`utils calculateCharacterRangesFromLineChanges() empty-javascript-file 1`] = `
 [
   {
@@ -234,6 +321,51 @@ exports[`utils extractLineChangeData() brand-new-jsx-file 1`] = `
     },
   ],
   "removals": [],
+}
+`;
+
+exports[`utils extractLineChangeData() changed-line-in-closure 1`] = `
+{
+  "additions": [
+    {
+      "noOfLines": 5,
+      "start": 4,
+    },
+    {
+      "noOfLines": 5,
+      "start": 12,
+    },
+    {
+      "noOfLines": 1,
+      "start": 23,
+    },
+    {
+      "noOfLines": 1,
+      "start": 26,
+    },
+    {
+      "noOfLines": 3,
+      "start": 29,
+    },
+    {
+      "noOfLines": 1,
+      "start": 35,
+    },
+  ],
+  "removals": [
+    {
+      "noOfLines": 4,
+      "start": 7,
+    },
+    {
+      "noOfLines": 3,
+      "start": 17,
+    },
+    {
+      "noOfLines": 1,
+      "start": 22,
+    },
+  ],
 }
 `;
 

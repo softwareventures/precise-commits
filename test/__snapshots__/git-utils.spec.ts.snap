@@ -44,6 +44,43 @@ index 0000000..ae72777
 \\ No newline at end of file"
 `;
 
+exports[`git-utils getDiffForFile() changed-line-in-closure 1`] = `
+"diff --git a/changed-line-in-closure.ts b/changed-line-in-closure.ts
+index 6ad59aa..c61b8fb 100644
+--- a/changed-line-in-closure.ts
++++ b/changed-line-in-closure.ts
+@@ -3,0 +4,5 @@ import {waitFor} from 'wait-for'
++const failOnError = error => {
++    console.log("got error:", error);
++    fail(error);
++}
++
+@@ -7,4 +12,5 @@ describe("salad sausage", () => {
+-        repo.findAbc(
+-            111,
+-            Egg.fromText("nettle")
+-        )
++        const subscription = repo.findAbc(
++                111,
++                Egg.fromText("nettle")
++        );
++        subscription
+@@ -17,3 +23 @@ describe("salad sausage", () => {
+-                error => {
+-                    console.log("got error:", error);
+-                },
++                failOnError,
+@@ -22 +26 @@ describe("salad sausage", () => {
+-                    console.log("finished");
++                    console.log("finished"); // TODO: winkle ankle cricket
+@@ -24,0 +29,3 @@ describe("salad sausage", () => {
++        subscription.getEffects().subscribe(
++                effect => commandEffectsReceived.push(effect)
++        )
+@@ -27,0 +35 @@ describe("salad sausage", () => {
++            expect(commandEffectsReceived).toBeEmpty();"
+`;
+
 exports[`git-utils getDiffForFile() empty-javascript-file 1`] = `
 "diff --git a/empty-javascript-file.js b/empty-javascript-file.js
 new file mode 100644

@@ -34,6 +34,41 @@ exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
 "
 `;
 
+exports[`@softwareventures/precise-commits main() changed-line-in-closure 1`] = `
+"import {Egg} from "egg";
+import {waitFor} from 'wait-for'
+
+const failOnError = error => {
+    console.log("got error:", error);
+    fail(error);
+};
+
+describe("salad sausage", () => {
+
+    it("hats notepad tree", async () => {
+        const subscription = repo.findAbc(111, Egg.fromText("nettle"));
+        subscription.getSnapshots().subscribe(
+            result => {
+                console.info("got result: ", result);
+                firstResult = result;
+            },
+            failOnError,
+            () => {
+                flag = true;
+                console.log("finished"); // TODO: winkle ankle cricket
+            }
+        );
+        subscription.getEffects().subscribe(effect => commandEffectsReceived.push(effect));
+        return waitFor(() => {
+            expect(flag).toBeTruthy();
+            expect(firstResult).toBeNull();
+            expect(commandEffectsReceived).toBeEmpty();
+        }, {timeout: 150});
+    });
+});
+"
+`;
+
 exports[`@softwareventures/precise-commits main() empty-javascript-file 1`] = `
 "var greeting = "hello";
 var audience = "world";
