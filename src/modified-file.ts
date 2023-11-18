@@ -21,28 +21,28 @@ export interface ModifiedFileConfig {
 }
 
 export class ModifiedFile {
-    private fullPath: string;
-    private pathInGit: string;
+    private readonly fullPath: string;
+    private readonly pathInGit: string;
     /**
      * An optional commit SHA pair which will be used to inform how the git
      * commands are run. E.g. `git diff`
      */
-    private base: string | null;
-    private head: string | typeof index | typeof workingTree;
+    private readonly base: string | null;
+    private readonly head: string | typeof index | typeof workingTree;
     /**
      * The chosen formatter to be run on the modified file.
      */
-    private selectedFormatter: PreciseFormatter<any>;
+    private readonly selectedFormatter: PreciseFormatter<any>;
     /**
      * The parent directory of the relevant .git directory that was resolved
      * for the modified file.
      */
-    private gitDirectoryParent: string;
+    private readonly gitDirectoryParent: string;
     /**
      * The contents of the file in their current state on the user's file
      * system
      */
-    public fileContents: string;
+    public readonly fileContents: string;
     /**
      * The final file contents, after we've run the formatter
      */
@@ -50,7 +50,7 @@ export class ModifiedFile {
     /**
      * The resolved formatter config which applies to this file
      */
-    private formatterConfig: object | null;
+    private readonly formatterConfig: object | null;
     /**
      * The calculated character ranges which have been modified
      * within this file
