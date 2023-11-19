@@ -1096,10 +1096,10 @@
   dependencies:
     tslib "2.6.2"
 
-"@softwareventures/tsconfig@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@softwareventures/tsconfig/-/tsconfig-7.0.0.tgz#fd7ee45badff849ae67c2475177cb45ee4baeccd"
-  integrity sha512-1vHU4p6jt0zNKXmdc8sU1oD5rvIIe5TQsxgt1nXgt2mMNn7Fd/LL4l+038BNExvS94TEVlAqM6uDppFmULnK2Q==
+"@softwareventures/tsconfig@7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@softwareventures/tsconfig/-/tsconfig-7.0.1.tgz#2d7efd1729be164e3af181cdf0c9ca69c5430788"
+  integrity sha512-cRvjG55GMjy0NKX7gvEqc+GR927HBrmcbVhjl1m/Ncavq3V5LClu6dVYzrfYIISIT37uwuIJ1lWFNsx8xQwqxg==
 
 "@tootallnate/once@2":
   version "2.0.0"
