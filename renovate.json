@@ -1,4 +1,4 @@
 {
-  "extends": ["@softwareventures:app"],
+  "extends": ["github>softwareventures/renovate-config:app"],
   "includeForks": true
 }
