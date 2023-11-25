@@ -14,7 +14,6 @@
     "cz": "git-cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
-    "pre-commit": "node lib/cli.js",
     "prepare": "husky install && rimraf lib && tsc",
     "semantic-release": "semantic-release",
     "test": "yarn && jest"
@@ -43,6 +42,7 @@
     "prettier": "^1.8.0 || ^2.0.0"
   },
   "devDependencies": {
+    "@softwareventures/precise-commits": "3.0.28",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "4.0.0",
     "@softwareventures/tsconfig": "7.1.0",
