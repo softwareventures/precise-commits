@@ -1,16 +1,15 @@
 import {readFileSync, writeFileSync} from "fs";
-
+import {relative, sep, posix} from "path";
+import {notNull} from "@softwareventures/nullable";
+import execa = require("execa");
+import type {CharacterRange} from "./utils";
 import {
     calculateCharacterRangesFromLineChanges,
-    CharacterRange,
     extractLineChangeData
 } from "./utils";
 import {getDiffForFile, index, workingTree} from "./git-utils";
-import {PreciseFormatter} from "./precise-formatter";
+import type {PreciseFormatter} from "./precise-formatter";
 import {assertInstanceOf} from "./unknown";
-import {notNull} from "@softwareventures/nullable";
-import {relative, sep, posix} from "path";
-import execa = require("execa");
 
 export interface ModifiedFileConfig {
     fullPath: string;

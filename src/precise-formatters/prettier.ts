@@ -1,10 +1,10 @@
 import * as fs from "fs";
-import ignore from "ignore";
 import {extname, join} from "path";
-import {Options as PrettierOptions, getSupportInfo, format, resolveConfig, check} from "prettier";
-
-import {PreciseFormatter} from "../precise-formatter";
-import {CharacterRange} from "../utils";
+import ignore from "ignore";
+import type {Options as PrettierOptions} from "prettier";
+import {getSupportInfo, format, resolveConfig, check} from "prettier";
+import type {PreciseFormatter} from "../precise-formatter";
+import type {CharacterRange} from "../utils";
 
 let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
 getSupportInfo().languages.forEach(language => {
@@ -44,15 +44,15 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
     ): boolean {
-        let formattedContents = fileContents;
-        return characterRanges.every(characterRange => {
-            return check(formattedContents, {
+        const formattedContents = fileContents;
+        return characterRanges.every(characterRange =>
+            check(formattedContents, {
                 ...config,
                 filepath: filePath,
                 rangeStart: characterRange.rangeStart,
                 rangeEnd: characterRange.rangeEnd
-            });
-        });
+            })
+        );
     },
     /**
      * Run prettier on each character range pair given, and apply the

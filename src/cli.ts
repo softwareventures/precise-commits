@@ -4,10 +4,10 @@ import {normalize} from "path";
 import ora = require("ora");
 import mri = require("mri");
 import glob = require("glob");
-import {main} from ".";
 import {notNull} from "@softwareventures/nullable";
 import {hasProperty} from "unknown";
 import {concatMap, isArray} from "@softwareventures/array";
+import {main} from ".";
 
 const LIBRARY_NAME = "precise-commits";
 const config = mri<unknown>(process.argv.slice(2));
@@ -23,7 +23,7 @@ if (hasProperty(config, "whitelist")) {
     } else {
         filesWhitelist = glob.sync(String(config.whitelist));
     }
-    if (!filesWhitelist || !filesWhitelist.length) {
+    if (!filesWhitelist?.length) {
         console.error(
             `Error: No files match the glob pattern(s) you provided for --whitelist -> "${config.whitelist}"`
         );

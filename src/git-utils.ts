@@ -1,9 +1,8 @@
-import {sync as findUpSync} from "find-up";
 import {dirname} from "path";
-
-import {runCommandSync} from "./utils";
+import {sync as findUpSync} from "find-up";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
+import {runCommandSync} from "./utils";
 
 interface DiffIndexFile {
     diffFilterChar: string;
