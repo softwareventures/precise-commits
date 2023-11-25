@@ -41,7 +41,7 @@ export class ModifiedFile {
      * The contents of the file in their current state on the user's file
      * system
      */
-    public readonly fileContents: string;
+    private readonly fileContents: string;
     /**
      * The final file contents, after we've run the formatter
      */
