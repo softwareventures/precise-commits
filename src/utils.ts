@@ -23,7 +23,7 @@ export const NO_LINE_CHANGE_DATA_ERROR = "No line change data could be detected"
  * removal `start` is the line before
  */
 export function extractLineChangeData(diffData: string) {
-    const lineChanges = diffData.match(/@@.*@@/g);
+    const lineChanges = diffData.match(/^@@.*@@/gm);
     if (!lineChanges) {
         throw new Error(NO_LINE_CHANGE_DATA_ERROR);
     }
