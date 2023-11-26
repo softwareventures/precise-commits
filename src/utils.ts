@@ -23,7 +23,7 @@ export const noLineChangeDataError = "No line change data could be detected";
  * Addition `start` number included in the range,
  * removal `start` is the line before
  */
-export function extractLineChangeData(diffData: string) {
+export function extractLineChangeData(diffData: string): LineChangeData {
     const lineChanges = diffData.match(/^@@.*@@/gmu);
     if (lineChanges == null) {
         throw new Error(noLineChangeDataError);
