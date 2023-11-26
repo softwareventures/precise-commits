@@ -96,7 +96,12 @@
       "<rootDir>/tmp"
     ],
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
     },
     "testRegex": ".*\\.spec\\.ts$",
     "moduleFileExtensions": [
