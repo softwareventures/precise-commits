@@ -11,7 +11,7 @@
   "repository": "github:softwareventures/precise-commits",
   "license": "MIT",
   "scripts": {
-    "commit": "git-cz",
+    "commit": "cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
     "prepare": "husky install && rimraf lib && tsc",
