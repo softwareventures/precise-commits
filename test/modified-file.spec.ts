@@ -7,7 +7,7 @@ const fixtures = readFixtures();
 let testBed: TestBed;
 
 describe("ModifiedFile", () => {
-    describe("isAlreadyFormatted()", function () {
+    describe("isAlreadyFormatted()", () => {
         beforeAll(() => {
             testBed = new TestBed();
         });

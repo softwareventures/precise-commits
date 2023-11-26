@@ -12,17 +12,17 @@ interface LineSeparator {
 
 const lf: LineSeparator = {
     name: "LF",
-    convert: text => text.replace(/\r?\n|\r/g, "\n")
+    convert: text => text.replace(/\r?\n|\r/gu, "\n")
 };
 
 const crlf: LineSeparator = {
     name: "CRLF",
-    convert: text => text.replace(/\r?\n|\r/g, "\r\n")
+    convert: text => text.replace(/\r?\n|\r/gu, "\r\n")
 };
 
 const cr: LineSeparator = {
     name: "CR",
-    convert: text => text.replace(/\r?\n|\r/g, "\r")
+    convert: text => text.replace(/\r?\n|\r/gu, "\r")
 };
 
 describe("utils", () => {

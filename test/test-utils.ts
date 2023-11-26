@@ -48,15 +48,15 @@ export class TestBed {
     private testBedDirectoryPath: string | null = null;
     private readonly fixtureToTmpFile = new Map<Fixture, TmpFile>();
 
-    constructor() {
+    public constructor() {
         this.createUniqueDirectoryForTestBed();
     }
 
-    getTmpFileForFixture(fixture: Fixture): TmpFile {
+    public getTmpFileForFixture(fixture: Fixture): TmpFile {
         return notNull(this.fixtureToTmpFile.get(fixture));
     }
 
-    prepareFixtureInTmpDirectory(fixture: Fixture): void {
+    public prepareFixtureInTmpDirectory(fixture: Fixture): void {
         /**
          * Create and cache a TmpFile for the given Fixture
          */
@@ -172,10 +172,10 @@ export function readFixtures(): Fixture[] {
         /**
          * Could have any of the file extensions supported by prettier
          */
-        const initialContentsFileName = files.find(f => Boolean(f.match(/initial/)));
-        const stagedContentsFileName = files.find(f => Boolean(f.match(/staged/)));
-        const committedContentsFileName = files.find(f => Boolean(f.match(/committed/)));
-        const prettierConfigFileName = files.find(f => Boolean(f.match(/prettierrc/)));
+        const initialContentsFileName = files.find(f => Boolean(f.match(/initial/u)));
+        const stagedContentsFileName = files.find(f => Boolean(f.match(/staged/u)));
+        const committedContentsFileName = files.find(f => Boolean(f.match(/committed/u)));
+        const prettierConfigFileName = files.find(f => Boolean(f.match(/prettierrc/u)));
 
         if (!stagedContentsFileName && !committedContentsFileName) {
             throw new Error(`"staged" or "committed" file missing for fixture: ${fixtureDirPath}`);
@@ -208,7 +208,7 @@ export function readFixtures(): Fixture[] {
 }
 
 export function mergeOptionsForTmpFile(
-    options: Partial<AdditionalOptions>,
+    options: Pick<AdditionalOptions, "checkOnly" | "filesWhitelist">,
     tmpFile: TmpFile
 ): AdditionalOptions {
     const shaOptions = tmpFile.committed
@@ -221,5 +221,5 @@ export function mergeOptionsForTmpFile(
     return {
         ...options,
         ...shaOptions
-    } as AdditionalOptions;
+    };
 }

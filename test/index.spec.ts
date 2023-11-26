@@ -3,11 +3,11 @@ import {lastValueFrom, tap} from "rxjs";
 import {main} from "../src/index";
 import {TestBed, readFixtures, mergeOptionsForTmpFile} from "./test-utils";
 
-const LIBRARY_NAME = require("../package.json").name;
+const libraryName = require("../package.json").name;
 const fixtures = readFixtures();
 let testBed: TestBed;
 
-describe(LIBRARY_NAME, () => {
+describe(libraryName, () => {
     describe("main()", () => {
         beforeAll(() => {
             testBed = new TestBed();
