@@ -109,14 +109,13 @@ index 4e74cec..5eda403 100644
 
 exports[`git-utils getDiffForFile() hunk-marker-in-code 1`] = `
 "diff --git a/hunk-marker-in-code.ts b/hunk-marker-in-code.ts
-index 1f462db..22938de 100644
+index 1f462db..917655e 100644
 --- a/hunk-marker-in-code.ts
 +++ b/hunk-marker-in-code.ts
-@@ -2,2 +2,2 @@ export function extractLineChangeData(diffData: string) {
+@@ -2,2 +2 @@ export function extractLineChangeData(diffData: string) {
 -    const lineChanges = diffData.match(/@@.*@@/g);
 -    return lineChanges;
-+    return diffData.match(/@@.*@@/gu);
-+"
++    return diffData.match(/@@.*@@/gu );"
 `;
 
 exports[`git-utils getDiffForFile() multiple-updated-lines-javascript-file 1`] = `

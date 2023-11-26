@@ -219,7 +219,7 @@ exports[`utils calculateCharacterRangesFromLineChanges() hunk-marker-in-code 1`]
 exports[`utils calculateCharacterRangesFromLineChanges() hunk-marker-in-code 2`] = `
 [
   {
-    "rangeEnd": 101,
+    "rangeEnd": 100,
     "rangeStart": 59,
   },
 ]
@@ -433,7 +433,7 @@ exports[`utils extractLineChangeData() hunk-marker-in-code 1`] = `
 {
   "additions": [
     {
-      "noOfLines": 2,
+      "noOfLines": 1,
       "start": 2,
     },
   ],

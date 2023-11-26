@@ -89,7 +89,6 @@ var newStatement = true;
 exports[`@softwareventures/precise-commits main() hunk-marker-in-code 1`] = `
 "export function extractLineChangeData(diffData: string) {
     return diffData.match(/@@.*@@/gu);
-
 }"
 `;
 
