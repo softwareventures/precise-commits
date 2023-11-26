@@ -42,7 +42,7 @@
     "prettier": "^1.8.0 || ^2.0.0"
   },
   "devDependencies": {
-    "@softwareventures/precise-commits": "3.0.28",
+    "@softwareventures/precise-commits": "3.0.29",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "4.0.0",
     "@softwareventures/tsconfig": "7.1.0",
