@@ -207,6 +207,33 @@ exports[`utils calculateCharacterRangesFromLineChanges() formatting-would-affect
 ]
 `;
 
+exports[`utils calculateCharacterRangesFromLineChanges() hunk-marker-in-code 1`] = `
+[
+  {
+    "rangeEnd": 98,
+    "rangeStart": 58,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() hunk-marker-in-code 2`] = `
+[
+  {
+    "rangeEnd": 101,
+    "rangeStart": 59,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() hunk-marker-in-code 3`] = `
+[
+  {
+    "rangeEnd": 98,
+    "rangeStart": 58,
+  },
+]
+`;
+
 exports[`utils calculateCharacterRangesFromLineChanges() multiple-updated-lines-javascript-file 1`] = `
 [
   {
@@ -397,6 +424,23 @@ exports[`utils extractLineChangeData() formatting-would-affect-total-line-count 
     {
       "noOfLines": 1,
       "start": 5,
+    },
+  ],
+}
+`;
+
+exports[`utils extractLineChangeData() hunk-marker-in-code 1`] = `
+{
+  "additions": [
+    {
+      "noOfLines": 2,
+      "start": 2,
+    },
+  ],
+  "removals": [
+    {
+      "noOfLines": 2,
+      "start": 2,
     },
   ],
 }
