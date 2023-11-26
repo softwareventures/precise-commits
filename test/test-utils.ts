@@ -2,7 +2,7 @@ import {readFileSync, writeFileSync, readdirSync} from "fs";
 import {extname, join} from "path";
 import {randomBytes} from "crypto";
 import mkdirp = require("mkdirp");
-import {notNull} from "@softwareventures/nullable";
+import {mapNullable, notNull} from "@softwareventures/nullable";
 import {runCommandSync} from "../src/utils";
 import type {AdditionalOptions} from "../lib/index";
 
@@ -131,7 +131,7 @@ export class TestBed {
         tmpFile: TmpFile,
         customPrettierConfig: CustomPrettierConfig | null
     ): void {
-        if (!customPrettierConfig) {
+        if (customPrettierConfig == null) {
             return;
         }
         writeFileSync(
@@ -177,11 +177,11 @@ export function readFixtures(): Fixture[] {
         const committedContentsFileName = files.find(f => Boolean(f.match(/committed/u)));
         const prettierConfigFileName = files.find(f => Boolean(f.match(/prettierrc/u)));
 
-        if (!stagedContentsFileName && !committedContentsFileName) {
+        if (stagedContentsFileName == null && committedContentsFileName == null) {
             throw new Error(`"staged" or "committed" file missing for fixture: ${fixtureDirPath}`);
         }
 
-        if (stagedContentsFileName && committedContentsFileName) {
+        if (stagedContentsFileName != null && committedContentsFileName != null) {
             throw new Error(
                 `"staged" and "committed" files cannot be used together - fixture: ${fixtureDirPath}`
             );
@@ -190,19 +190,18 @@ export function readFixtures(): Fixture[] {
         return {
             fixtureName: name,
             fileExtension: extname(notNull(stagedContentsFileName ?? committedContentsFileName)),
-            initialContents: !initialContentsFileName
-                ? null
-                : readFileSync(join(fixtureDirPath, initialContentsFileName), "utf8"),
-            stagedContents: stagedContentsFileName
-                ? readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8")
-                : readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8"),
+            initialContents: mapNullable(initialContentsFileName, filename =>
+                readFileSync(join(fixtureDirPath, filename), "utf8")
+            ),
+            stagedContents:
+                stagedContentsFileName == null
+                    ? readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8")
+                    : readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8"),
             committed: Boolean(committedContentsFileName),
-            customPrettierConfig: !prettierConfigFileName
-                ? null
-                : ({
-                      filename: prettierConfigFileName,
-                      contents: readFileSync(join(fixtureDirPath, prettierConfigFileName), "utf8")
-                  } as CustomPrettierConfig)
+            customPrettierConfig: mapNullable(prettierConfigFileName, filename => ({
+                filename,
+                contents: readFileSync(join(fixtureDirPath, filename), "utf8")
+            }))
         };
     });
 }
