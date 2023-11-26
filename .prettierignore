@@ -1,3 +1,4 @@
+/.yarn
 .idea
 node_modules
 /lib
