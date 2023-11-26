@@ -3,23 +3,20 @@ import {relative, sep, posix} from "path";
 import {notNull} from "@softwareventures/nullable";
 import execa = require("execa");
 import type {CharacterRange} from "./utils";
-import {
-    calculateCharacterRangesFromLineChanges,
-    extractLineChangeData
-} from "./utils";
+import {calculateCharacterRangesFromLineChanges, extractLineChangeData} from "./utils";
 import {getDiffForFile, index, workingTree} from "./git-utils";
 import type {PreciseFormatter} from "./precise-formatter";
 import {assertInstanceOf} from "./unknown";
 
-export interface ModifiedFileConfig {
+export interface ModifiedFileConfig<TFormatterConfig> {
     fullPath: string;
     gitDirectoryParent: string;
     base: string | null;
     head: string | typeof index | typeof workingTree;
-    selectedFormatter: PreciseFormatter<any>;
+    selectedFormatter: PreciseFormatter<TFormatterConfig>;
 }
 
-export class ModifiedFile {
+export class ModifiedFile<TFormatterConfig> {
     private readonly fullPath: string;
     private readonly pathInGit: string;
     /**
@@ -31,7 +28,7 @@ export class ModifiedFile {
     /**
      * The chosen formatter to be run on the modified file.
      */
-    private readonly selectedFormatter: PreciseFormatter<any>;
+    private readonly selectedFormatter: PreciseFormatter<TFormatterConfig>;
     /**
      * The parent directory of the relevant .git directory that was resolved
      * for the modified file.
@@ -49,7 +46,7 @@ export class ModifiedFile {
     /**
      * The resolved formatter config which applies to this file
      */
-    private readonly formatterConfig: object | null;
+    private readonly formatterConfig: TFormatterConfig | null;
     /**
      * The calculated character ranges which have been modified
      * within this file
@@ -62,7 +59,7 @@ export class ModifiedFile {
         base,
         head,
         selectedFormatter
-    }: ModifiedFileConfig) {
+    }: ModifiedFileConfig<TFormatterConfig>) {
         this.fullPath = fullPath;
         this.pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
         this.gitDirectoryParent = gitDirectoryParent;
