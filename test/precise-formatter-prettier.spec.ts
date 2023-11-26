@@ -1,5 +1,5 @@
-import {readFixtures} from "./test-utils";
 import {preciseFormatterPrettier} from "../src/precise-formatters/prettier";
+import {readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 

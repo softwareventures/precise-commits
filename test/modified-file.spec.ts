@@ -1,8 +1,7 @@
-import {TestBed, readFixtures} from "./test-utils";
-
 import {ModifiedFile} from "../src/modified-file";
 import {preciseFormatterPrettier} from "../src/precise-formatters/prettier";
 import {resolveNearestGitDirectoryParent, workingTree} from "../src/git-utils";
+import {TestBed, readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;

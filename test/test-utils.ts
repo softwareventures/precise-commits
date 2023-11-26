@@ -1,11 +1,10 @@
 import {readFileSync, writeFileSync, readdirSync} from "fs";
 import {extname, join} from "path";
 import {randomBytes} from "crypto";
-
-import {runCommandSync} from "../src/utils";
-import {AdditionalOptions} from "../lib/index";
 import mkdirp = require("mkdirp");
 import {notNull} from "@softwareventures/nullable";
+import {runCommandSync} from "../src/utils";
+import type {AdditionalOptions} from "../lib/index";
 
 export interface Fixture {
     fixtureName: string;
@@ -47,7 +46,7 @@ interface TmpFile {
 export class TestBed {
     private static readonly TMP_DIRECTORY_PATH = join(process.cwd(), "tmp");
     private testBedDirectoryPath: string | null = null;
-    private fixtureToTmpFile = new Map<Fixture, TmpFile>();
+    private readonly fixtureToTmpFile = new Map<Fixture, TmpFile>();
 
     constructor() {
         this.createUniqueDirectoryForTestBed();
@@ -173,10 +172,10 @@ export function readFixtures(): Fixture[] {
         /**
          * Could have any of the file extensions supported by prettier
          */
-        const initialContentsFileName = files.find(f => !!f.match(/initial/));
-        const stagedContentsFileName = files.find(f => !!f.match(/staged/));
-        const committedContentsFileName = files.find(f => !!f.match(/committed/));
-        const prettierConfigFileName = files.find(f => !!f.match(/prettierrc/));
+        const initialContentsFileName = files.find(f => Boolean(f.match(/initial/)));
+        const stagedContentsFileName = files.find(f => Boolean(f.match(/staged/)));
+        const committedContentsFileName = files.find(f => Boolean(f.match(/committed/)));
+        const prettierConfigFileName = files.find(f => Boolean(f.match(/prettierrc/)));
 
         if (!stagedContentsFileName && !committedContentsFileName) {
             throw new Error(`"staged" or "committed" file missing for fixture: ${fixtureDirPath}`);
@@ -197,13 +196,13 @@ export function readFixtures(): Fixture[] {
             stagedContents: stagedContentsFileName
                 ? readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8")
                 : readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8"),
-            committed: !!committedContentsFileName,
+            committed: Boolean(committedContentsFileName),
             customPrettierConfig: !prettierConfigFileName
                 ? null
-                : <CustomPrettierConfig>{
+                : ({
                       filename: prettierConfigFileName,
                       contents: readFileSync(join(fixtureDirPath, prettierConfigFileName), "utf8")
-                  }
+                  } as CustomPrettierConfig)
         };
     });
 }
@@ -219,8 +218,8 @@ export function mergeOptionsForTmpFile(
           }
         : {base: null, head: null};
 
-    return <AdditionalOptions>{
+    return {
         ...options,
         ...shaOptions
-    };
+    } as AdditionalOptions;
 }

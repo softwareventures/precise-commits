@@ -1,12 +1,11 @@
 import {join} from "path";
-
-import {TestBed, readFixtures} from "./test-utils";
 import {
     getDiffForFile,
     resolveNearestGitDirectoryParent,
     getModifiedFilenames,
     index
 } from "../src/git-utils";
+import {TestBed, readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;

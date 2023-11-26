@@ -1,6 +1,6 @@
-import {TestBed, readFixtures} from "./test-utils";
 import {getDiffForFile, index, resolveNearestGitDirectoryParent} from "../src/git-utils";
 import {extractLineChangeData, calculateCharacterRangesFromLineChanges} from "../src/utils";
+import {TestBed, readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;
