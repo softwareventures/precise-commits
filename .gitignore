@@ -1,8 +1,4 @@
-/.idea/workspace.xml
-/.idea/tasks.xml
-/.idea/shelf
-
-# Generated lib directory containing the final code
+# Build output
 /lib
 
 # Temp directory created during testing
@@ -22,6 +18,11 @@ yarn-error.log
 # In case someone runs npm by accident
 package-lock.json
 npm-debug.log*
+
+# Personal WebStorm IDE files
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/shelf
 
 # macOS
 .DS_Store
