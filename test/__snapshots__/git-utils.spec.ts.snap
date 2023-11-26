@@ -83,9 +83,8 @@ index 6ad59aa..c61b8fb 100644
 
 exports[`git-utils getDiffForFile() empty-javascript-file 1`] = `
 "diff --git a/empty-javascript-file.js b/empty-javascript-file.js
-new file mode 100644
-index 0000000..3772dd0
---- /dev/null
+index e69de29..3772dd0 100644
+--- a/empty-javascript-file.js
 +++ b/empty-javascript-file.js
 @@ -0,0 +1,2 @@
 +var greeting = 'hello'

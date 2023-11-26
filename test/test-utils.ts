@@ -93,7 +93,7 @@ export class TestBed {
          * If we editing an existing `initial` file, we need to first create
          * it and commit it
          */
-        if (tmpFile.initialContents) {
+        if (tmpFile.initialContents != null) {
             this.createAndCommitTmpFileOnDisk(tmpFile);
         }
         this.stageGivenChangesToTmpFileOnDisk(tmpFile);
