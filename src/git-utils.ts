@@ -9,9 +9,9 @@ interface DiffIndexFile {
     filename: string;
 }
 
-export function resolveNearestGitDirectoryParent(workingDirectory: string) {
+export function resolveNearestGitDirectoryParent(workingDirectory: string): string {
     const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory, type: "directory"});
-    if (!gitDirectoryPath) {
+    if (gitDirectoryPath == null) {
         throw new Error("No .git directory found");
     }
     return dirname(gitDirectoryPath);
@@ -59,7 +59,7 @@ export function getDiffForFile(
                 ) {
                     return runCommandSync(
                         "git",
-                        ["diff", "--unified=0", SPECIAL_EMPTY_TREE_COMMIT_HASH, "--", fullPath],
+                        ["diff", "--unified=0", specialEmptyTreeCommitHash, "--", fullPath],
                         gitDirectoryParent
                     ).stdout;
                 } else {
@@ -100,11 +100,11 @@ export function getDiffForFile(
  *
  */
 /**
- * const DIFF_INDEX_FILTER = 'ACDMRTUXB';
+ * const diffIndexFilter = 'ACDMRTUXB';
  * NOTE: We are only explicitly testing "Modified" and "Added" files for now...
  */
-const DIFF_INDEX_FILTER = "AM";
-const SPECIAL_EMPTY_TREE_COMMIT_HASH = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+const diffIndexFilter = "AM";
+const specialEmptyTreeCommitHash = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 
 export function getModifiedFilenames(
     gitDirectoryParent: string,
@@ -112,13 +112,13 @@ export function getModifiedFilenames(
     head: string | null
 ): string[] {
     let diffIndexOutput: string;
-    if (base && head) {
+    if (base != null && head != null) {
         /**
          * We are grabbing the files between the two given commit SHAs
          */
         diffIndexOutput = runCommandSync(
             "git",
-            ["diff", "--name-status", `--diff-filter=${DIFF_INDEX_FILTER}`, base, head],
+            ["diff", "--name-status", `--diff-filter=${diffIndexFilter}`, base, head],
             gitDirectoryParent
         ).stdout;
     } else {
@@ -144,14 +144,14 @@ export function getModifiedFilenames(
                 typeof err.message === "string" &&
                 err.message.includes("fatal: Needed a single revision")
             ) {
-                head = SPECIAL_EMPTY_TREE_COMMIT_HASH;
+                head = specialEmptyTreeCommitHash;
             } else {
                 throw err;
             }
         }
         diffIndexOutput = runCommandSync(
             "git",
-            ["diff-index", "--cached", "--name-status", `--diff-filter=${DIFF_INDEX_FILTER}`, head],
+            ["diff-index", "--cached", "--name-status", `--diff-filter=${diffIndexFilter}`, head],
             gitDirectoryParent
         ).stdout;
     }

@@ -9,7 +9,7 @@ import {hasProperty} from "unknown";
 import {concatMap, isArray} from "@softwareventures/array";
 import {main} from ".";
 
-const LIBRARY_NAME = "precise-commits";
+const libraryName = "precise-commits";
 const config = mri<unknown>(process.argv.slice(2));
 
 /**
@@ -23,9 +23,11 @@ if (hasProperty(config, "whitelist")) {
     } else {
         filesWhitelist = glob.sync(String(config.whitelist));
     }
-    if (!filesWhitelist?.length) {
+    if ((filesWhitelist?.length ?? 0) === 0) {
         console.error(
-            `Error: No files match the glob pattern(s) you provided for --whitelist -> "${config.whitelist}"`
+            `Error: No files match the glob pattern(s) you provided for --whitelist -> "${String(
+                config.whitelist
+            )}"`
         );
         process.exit(1);
     }
@@ -71,7 +73,7 @@ const options = {
     formatter
 };
 
-const primarySpinner = ora(` Running ${LIBRARY_NAME}...`);
+const primarySpinner = ora(` Running ${libraryName}...`);
 const modifiedFilesSpinner = ora(" Detecting modified files from git...");
 const spinnersByFilename = new Map<string, ora.Ora>();
 
@@ -85,7 +87,7 @@ main(process.cwd(), options).subscribe({
         } else if (event.event === "ModifiedFilesDetected") {
             if (event.modifiedFiles.length > 0) {
                 modifiedFilesSpinner.succeed(
-                    ` ${LIBRARY_NAME}: ${event.modifiedFiles.length} modified file(s) found`
+                    ` ${libraryName}: ${event.modifiedFiles.length} modified file(s) found`
                 );
             }
         } else if (event.event === "BegunProcessingFile") {
@@ -122,7 +124,7 @@ main(process.cwd(), options).subscribe({
             }
         } else if (event.event === "Complete") {
             if (event.totalFiles === 0) {
-                modifiedFilesSpinner.info(` ${LIBRARY_NAME}: No matching modified files detected.
+                modifiedFilesSpinner.info(` ${libraryName}: No matching modified files detected.
         
   --> If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file
 
@@ -137,7 +139,7 @@ main(process.cwd(), options).subscribe({
         }
     },
     error: (error: unknown) => {
-        modifiedFilesSpinner.fail(` ${LIBRARY_NAME}: An Error occurred\n`);
+        modifiedFilesSpinner.fail(` ${libraryName}: An Error occurred\n`);
         console.error(error);
         console.log("\n");
         primarySpinner.stop();

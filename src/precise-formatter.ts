@@ -3,16 +3,16 @@ import type {CharacterRange} from "./utils";
 /**
  * Any registered precise-formatters must implement this interface
  */
-export interface PreciseFormatter<FormatterConfig> {
+export interface PreciseFormatter<TFormatterConfig> {
     /**
      * Resolve the formatter config which is relevant for the given file path.
      */
-    resolveConfig: (modifiedFilePath: string) => FormatterConfig | null;
+    resolveConfig: (modifiedFilePath: string) => TFormatterConfig | null;
     /**
      * Return true if the file contents are already formatted in accordance
      * with the given config.
      */
-    isAlreadyFormatted: (fileContents: string, formatterConfig: FormatterConfig | null) => boolean;
+    isAlreadyFormatted: (fileContents: string, formatterConfig: TFormatterConfig | null) => boolean;
     /**
      * Check the formatting of the file contents, using the given config
      * and character range info.
@@ -20,7 +20,7 @@ export interface PreciseFormatter<FormatterConfig> {
     checkFormattingOfRanges: (
         filePath: string,
         fileContents: string,
-        config: FormatterConfig | null,
+        config: TFormatterConfig | null,
         characterRanges: CharacterRange[]
     ) => boolean;
     /**
@@ -30,7 +30,7 @@ export interface PreciseFormatter<FormatterConfig> {
     formatRanges: (
         filePath: string,
         fileContents: string,
-        config: FormatterConfig | null,
+        config: TFormatterConfig | null,
         characterRanges: CharacterRange[]
     ) => string;
     /**

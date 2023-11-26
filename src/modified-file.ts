@@ -56,7 +56,13 @@ export class ModifiedFile {
      */
     private modifiedCharacterRanges: CharacterRange[] = [];
 
-    constructor({fullPath, gitDirectoryParent, base, head, selectedFormatter}: ModifiedFileConfig) {
+    public constructor({
+        fullPath,
+        gitDirectoryParent,
+        base,
+        head,
+        selectedFormatter
+    }: ModifiedFileConfig) {
         this.fullPath = fullPath;
         this.pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
         this.gitDirectoryParent = gitDirectoryParent;
@@ -82,7 +88,7 @@ export class ModifiedFile {
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved formatter config. We can use this as a check to skip unnecessary work.
      */
-    isAlreadyFormatted(): boolean {
+    public isAlreadyFormatted(): boolean {
         return this.selectedFormatter.isAlreadyFormatted(this.fileContents, this.formatterConfig);
     }
 
@@ -90,7 +96,7 @@ export class ModifiedFile {
      * Run the formatters check mode on the given ranges and return true if they are all
      * already formatted appropriately based on the resolved formatter config.
      */
-    hasValidFormattingForCharacterRanges(): boolean {
+    public hasValidFormattingForCharacterRanges(): boolean {
         return this.selectedFormatter.checkFormattingOfRanges(
             this.fullPath,
             this.fileContents,
@@ -102,7 +108,7 @@ export class ModifiedFile {
     /**
      * Run the formatter on the file contents and store the result
      */
-    formatCharacterRangesWithinContents(): void {
+    public formatCharacterRangesWithinContents(): void {
         this.formattedFileContents = this.selectedFormatter.formatRanges(
             this.fullPath,
             this.fileContents,
@@ -115,14 +121,14 @@ export class ModifiedFile {
      * Return true if the formatted file contents are different to
      * what was originally resolved from disk.
      */
-    shouldContentsBeUpdatedOnDisk(): boolean {
+    public shouldContentsBeUpdatedOnDisk(): boolean {
         return this.fileContents !== this.formattedFileContents;
     }
 
     /**
      * Write the updated file contents back to disk.
      */
-    updateFileOnDisk(): void {
+    public updateFileOnDisk(): void {
         if (this.head === index) {
             const hash = execa.sync(
                 "git",
@@ -161,7 +167,7 @@ export class ModifiedFile {
      * more granular feedback within the main() function of the
      * library.
      */
-    calculateModifiedCharacterRanges(): {err: Error | null} {
+    public calculateModifiedCharacterRanges(): {err: Error | null} {
         try {
             /**
              * Extract line change data from the git diff results.

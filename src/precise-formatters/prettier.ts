@@ -6,10 +6,10 @@ import {getSupportInfo, format, resolveConfig, check} from "prettier";
 import type {PreciseFormatter} from "../precise-formatter";
 import type {CharacterRange} from "../utils";
 
-let PRETTIER_SUPPORTED_FILE_EXTENSIONS: string[] = [];
+let prettierSupportedFileExtensions: string[] = [];
 getSupportInfo().languages.forEach(language => {
-    PRETTIER_SUPPORTED_FILE_EXTENSIONS = [
-        ...PRETTIER_SUPPORTED_FILE_EXTENSIONS,
+    prettierSupportedFileExtensions = [
+        ...prettierSupportedFileExtensions,
         ...(language.extensions ?? [])
     ];
 });
@@ -19,31 +19,28 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * Resolve the relevant prettier config for the given
      * modified file path.
      */
-    resolveConfig(modifiedFilePath: string): PrettierOptions | null {
-        return {
-            ...resolveConfig.sync(modifiedFilePath, {
-                useCache: false
-            }),
-            filepath: modifiedFilePath
-        };
-    },
+    resolveConfig: (modifiedFilePath: string) => ({
+        ...resolveConfig.sync(modifiedFilePath, {
+            useCache: false
+        }),
+        filepath: modifiedFilePath
+    }),
     /**
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved prettier config. We can use this as a check to skip unnecessary work.
      */
-    isAlreadyFormatted(fileContents: string, config: PrettierOptions | null): boolean {
-        return check(fileContents, {...config});
-    },
+    isAlreadyFormatted: (fileContents: string, config: PrettierOptions | null) =>
+        check(fileContents, {...config}),
     /**
      * Run prettier's check mode on the given ranges and return true if they are all
      * already formatted appropriately based on the given prettier config.
      */
-    checkFormattingOfRanges(
+    checkFormattingOfRanges: (
         filePath: string,
         fileContents: string,
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
-    ): boolean {
+    ) => {
         const formattedContents = fileContents;
         return characterRanges.every(characterRange =>
             check(formattedContents, {
@@ -59,16 +56,16 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * difference as a patch to the original contents using an implementation
      * of the Myer's diff algorithm.
      */
-    formatRanges(
+    formatRanges: (
         filePath: string,
         fileContents: string,
         config: PrettierOptions | null,
         characterRanges: CharacterRange[]
-    ): string {
+    ) =>
         // Start from the last character range and work backwards so that
         // we don't have to update character ranges to account for the changes
         // we've already made.
-        return characterRanges.reduceRight(
+        characterRanges.reduceRight(
             (fileContents, {rangeStart, rangeEnd}) =>
                 format(fileContents, {
                     ...config,
@@ -77,13 +74,12 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
                     rangeEnd
                 }),
             fileContents
-        );
-    },
+        ),
     /**
      * Generate a predicate function which will return true if the filename
      * is not excluded via a .prettierignore file.
      */
-    generateIgnoreFilePredicate(workingDirectory: string) {
+    generateIgnoreFilePredicate: (workingDirectory: string) => {
         const prettierIgnoreFilePath = join(workingDirectory, ".prettierignore");
         /**
          * If there is no .prettierignore file present, simply always return true
@@ -102,8 +98,8 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * Return true if prettier supports the file extension of the given
      * filename.
      */
-    hasSupportedFileExtension(filename: string) {
+    hasSupportedFileExtension: (filename: string) => {
         const fileExtension = extname(filename);
-        return PRETTIER_SUPPORTED_FILE_EXTENSIONS.includes(fileExtension);
+        return prettierSupportedFileExtensions.includes(fileExtension);
     }
 };

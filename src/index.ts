@@ -7,7 +7,7 @@ import {
     resolveNearestGitDirectoryParent,
     workingTree
 } from "./git-utils";
-import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
+import {noLineChangeDataError, generateFilesWhitelistPredicate} from "./utils";
 import {ModifiedFile} from "./modified-file";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
 import {observeAsync} from "./observable";
@@ -139,7 +139,7 @@ export function main(
             // from the method so we can handle it here.
             const {err} = modifiedFile.calculateModifiedCharacterRanges();
             if (err != null) {
-                if (err.message === NO_LINE_CHANGE_DATA_ERROR) {
+                if (err.message === noLineChangeDataError) {
                     return void emit({
                         event: "FinishedProcessingFile",
                         filename,
@@ -193,7 +193,7 @@ export function main(
                     if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
                         workingTreeFile.updateFileOnDisk();
                     }
-                } else if (err.message !== NO_LINE_CHANGE_DATA_ERROR) {
+                } else if (err.message !== noLineChangeDataError) {
                     // Unexpected error
                     throw err;
                 }
