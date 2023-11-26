@@ -1,9 +1,9 @@
 import {readFileSync} from "fs";
 import {lastValueFrom, tap} from "rxjs";
 import {main} from "../src/index";
+import {name as libraryName} from "../package.json";
 import {TestBed, readFixtures, mergeOptionsForTmpFile} from "./test-utils";
 
-const libraryName = require("../package.json").name;
 const fixtures = readFixtures();
 let testBed: TestBed;
 
