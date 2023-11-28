@@ -77,69 +77,70 @@ const spinnersByFilename = new Map<string, ora.Ora>();
 
 let shouldErrorOut = false;
 
-main(process.cwd(), options, {
-    onInit(workingDirectory) {
-        primarySpinner.start();
-        modifiedFilesSpinner.start();
-    },
-    onModifiedFilesDetected(modifiedFilenames) {
-        if (!modifiedFilenames || !modifiedFilenames.length) {
-            return;
-        }
-        modifiedFilesSpinner.succeed(
-            ` ${LIBRARY_NAME}: ${modifiedFilenames.length} modified file(s) found`
-        );
-    },
-    onBegunProcessingFile(filename, index, totalFiles) {
-        spinnersByFilename.set(
-            filename,
-            ora()
-                .start()
-                .succeed(` [${index + 1}/${totalFiles}] Processing file: ${filename}`)
-        );
-    },
-    onFinishedProcessingFile(filename, index, status) {
-        const spinner = spinnersByFilename.get(filename);
-        switch (status) {
-            case "UPDATED":
-                notNull(spinner).succeed(`       --> Updated formatting in: ${filename}`);
-                break;
-            case "NOT_UPDATED":
-                notNull(spinner).info(`       --> No formatting changes required in: ${filename}`);
-                break;
-            case "INVALID_FORMATTING":
-                /**
-                 * If --check-only is passed as a CLI argument, the script will error out.
-                 */
-                if (options.checkOnly) {
-                    shouldErrorOut = true;
-                }
-                notNull(spinner).fail(`       --> Invalid formatting detected in: ${filename}`);
-                break;
-        }
-    },
-    onError(err) {
-        modifiedFilesSpinner.fail(` ${LIBRARY_NAME}: An Error occurred\n`);
-        console.error(err);
-        console.log("\n");
-        primarySpinner.stop();
-        return process.exit(1);
-    },
-    onComplete(totalFiles) {
-        if (!totalFiles) {
-            modifiedFilesSpinner.info(` ${LIBRARY_NAME}: No matching modified files detected.
+main(process.cwd(), options).subscribe({
+    next: event => {
+        if (event.event === "Init") {
+            primarySpinner.start();
+            modifiedFilesSpinner.start();
+        } else if (event.event === "ModifiedFilesDetected") {
+            if (event.modifiedFiles.length > 0) {
+                modifiedFilesSpinner.succeed(
+                    ` ${LIBRARY_NAME}: ${event.modifiedFiles.length} modified file(s) found`
+                );
+            }
+        } else if (event.event === "BegunProcessingFile") {
+            spinnersByFilename.set(
+                event.filename,
+                ora()
+                    .start()
+                    .succeed(
+                        ` [${event.index + 1}/${event.totalFiles}] Processing file: ${
+                            event.filename
+                        }`
+                    )
+            );
+        } else if (event.event === "FinishedProcessingFile") {
+            const spinner = spinnersByFilename.get(event.filename);
+            switch (event.status) {
+                case "UPDATED":
+                    notNull(spinner).succeed(`       --> Updated formatting in: ${event.filename}`);
+                    break;
+                case "NOT_UPDATED":
+                    notNull(spinner).info(
+                        `       --> No formatting changes required in: ${event.filename}`
+                    );
+                    break;
+                case "INVALID_FORMATTING":
+                    // If --check-only is passed as a CLI argument, the script will error out.
+                    if (options.checkOnly) {
+                        shouldErrorOut = true;
+                    }
+                    notNull(spinner).fail(
+                        `       --> Invalid formatting detected in: ${event.filename}`
+                    );
+                    break;
+            }
+        } else if (event.event === "Complete") {
+            if (event.totalFiles === 0) {
+                modifiedFilesSpinner.info(` ${LIBRARY_NAME}: No matching modified files detected.
         
   --> If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file
 
         `);
-            primarySpinner.stop();
+                primarySpinner.stop();
+            } else if (options.checkOnly) {
+                primarySpinner.succeed(" Checks complete 🎉");
+            } else {
+                primarySpinner.succeed(" Formatting complete 🎉");
+            }
             return process.exit(shouldErrorOut ? 1 : 0);
         }
-        if (options.checkOnly) {
-            primarySpinner.succeed(" Checks complete 🎉");
-        } else {
-            primarySpinner.succeed(" Formatting complete 🎉");
-        }
-        return process.exit(shouldErrorOut ? 1 : 0);
+    },
+    error: (error: unknown) => {
+        modifiedFilesSpinner.fail(` ${LIBRARY_NAME}: An Error occurred\n`);
+        console.error(error);
+        console.log("\n");
+        primarySpinner.stop();
+        return process.exit(1);
     }
 });
