@@ -3,6 +3,7 @@ import {readFileSync} from "fs";
 import {TestBed, readFixtures, mergeOptionsForTmpFile} from "./test-utils";
 
 import {main} from "../src/index";
+import {lastValueFrom, tap} from "rxjs";
 
 const LIBRARY_NAME = require("../package.json").name;
 const fixtures = readFixtures();
@@ -15,7 +16,7 @@ describe(LIBRARY_NAME, () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, done => {
+            it(fixture.fixtureName, async () => {
                 expect.assertions(1);
                 testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
@@ -23,20 +24,9 @@ describe(LIBRARY_NAME, () => {
                     {checkOnly: false, filesWhitelist: null},
                     tmpFile
                 );
-                main(tmpFile.directoryPath, options, {
-                    onInit() {},
-                    onBegunProcessingFile() {},
-                    onModifiedFilesDetected() {},
-                    onFinishedProcessingFile() {},
-                    onComplete() {
-                        const formatted = readFileSync(tmpFile.path, "utf8");
-                        expect(formatted).toMatchSnapshot();
-                        done();
-                    },
-                    onError(err) {
-                        done(err);
-                    }
-                });
+                await lastValueFrom(main(tmpFile.directoryPath, options));
+                const formatted = readFileSync(tmpFile.path, "utf8");
+                expect(formatted).toMatchSnapshot();
             });
         });
     });
@@ -47,7 +37,7 @@ describe(LIBRARY_NAME, () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, done => {
+            it(fixture.fixtureName, async () => {
                 expect.assertions(1);
                 testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
@@ -55,20 +45,15 @@ describe(LIBRARY_NAME, () => {
                     {checkOnly: true, filesWhitelist: null},
                     tmpFile
                 );
-                main(tmpFile.directoryPath, options, {
-                    onInit() {},
-                    onBegunProcessingFile() {},
-                    onModifiedFilesDetected() {},
-                    onFinishedProcessingFile(_fn, _i, status) {
-                        expect(status).toEqual("INVALID_FORMATTING");
-                    },
-                    onComplete() {
-                        done();
-                    },
-                    onError(err) {
-                        done(err);
-                    }
-                });
+                await lastValueFrom(
+                    main(tmpFile.directoryPath, options).pipe(
+                        tap(event => {
+                            if (event.event === "FinishedProcessingFile") {
+                                expect(event.status).toEqual("INVALID_FORMATTING");
+                            }
+                        })
+                    )
+                );
             });
         });
     });
