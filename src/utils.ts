@@ -104,7 +104,7 @@ export function calculateCharacterRangesFromLineChanges(
 
 export function runCommandSync(
     command: string,
-    args: string[],
+    args: readonly string[],
     workingDirectory = process.cwd()
 ): ExecaSyncReturnValue {
     return execa.sync(command, args, {cwd: workingDirectory});
