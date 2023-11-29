@@ -89,7 +89,7 @@ export function main(
 
         // Resolve the relevant .git directory's parent directory up front, as we will need this when
         // executing various `git` commands.
-        const gitDirectoryParent = resolveNearestGitDirectoryParent(workingDirectory);
+        const gitDirectoryParent = await resolveNearestGitDirectoryParent(workingDirectory);
 
         // We fundamentally check whether or not the file extensions are supported by the given formatter,
         // whether or not they are included in the optional `filesWhitelist` array, and that the user

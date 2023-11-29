@@ -1,7 +1,7 @@
 import {dirname} from "path";
-import {sync as findUpSync} from "find-up";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
+import findUp = require("find-up");
 import {runCommandSync} from "./utils";
 
 interface DiffIndexFile {
@@ -9,8 +9,8 @@ interface DiffIndexFile {
     filename: string;
 }
 
-export function resolveNearestGitDirectoryParent(workingDirectory: string): string {
-    const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory, type: "directory"});
+export async function resolveNearestGitDirectoryParent(workingDirectory: string): Promise<string> {
+    const gitDirectoryPath = await findUp(".git", {cwd: workingDirectory, type: "directory"});
     if (gitDirectoryPath == null) {
         throw new Error("No .git directory found");
     }
