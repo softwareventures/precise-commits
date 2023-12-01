@@ -1,6 +1,7 @@
 import {isAbsolute, join, relative} from "path";
 
 import type {Observable} from "rxjs";
+import {filter, firstValueFrom, from, map, mergeMap, toArray} from "rxjs";
 import {
     getModifiedFilenames,
     index,
@@ -91,22 +92,27 @@ export function main(
         // executing various `git` commands.
         const gitDirectoryParent = await resolveNearestGitDirectoryParent(workingDirectory);
 
-        // We fundamentally check whether or not the file extensions are supported by the given formatter,
-        // whether or not they are included in the optional `filesWhitelist` array, and that the user
-        // has not chosen to ignore them via any supported "ignore" mechanism of the formatter.
-        const modifiedFiles = getModifiedFilenames(gitDirectoryParent, options.base, options.head)
-            .map(path => join(gitDirectoryParent, path))
-            .map(path => relative(workingDirectory, path))
-            .filter(path => !isAbsolute(path))
-            .filter(selectedFormatter.hasSupportedFileExtension)
-            .filter(generateFilesWhitelistPredicate(options.filesWhitelist))
-            .filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory));
+        // Find files that we should process. A file is relevant if:
+        //  * The file extension is supported by the given formatter.
+        //  * The file is included in the optional `filesWhitelist` array, or no whitelist is specified.
+        //  * The file is not ignored as a result of any supported "ignore" mechanism of the formatter.
+        const relevantFiles = await firstValueFrom(
+            from(getModifiedFilenames(gitDirectoryParent, options.base, options.head))
+                .pipe(mergeMap(array => array))
+                .pipe(map(path => join(gitDirectoryParent, path)))
+                .pipe(map(path => relative(workingDirectory, path)))
+                .pipe(filter(path => !isAbsolute(path)))
+                .pipe(filter(selectedFormatter.hasSupportedFileExtension))
+                .pipe(filter(generateFilesWhitelistPredicate(options.filesWhitelist)))
+                .pipe(filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory)))
+                .pipe(toArray())
+        );
 
-        const totalFiles = modifiedFiles.length;
-        emit({event: "ModifiedFilesDetected", modifiedFiles});
+        const totalFiles = relevantFiles.length;
+        emit({event: "ModifiedFilesDetected", modifiedFiles: relevantFiles});
 
         // Process each file synchronously.
-        modifiedFiles.forEach((filename, fileIndex) => {
+        relevantFiles.forEach((filename, fileIndex) => {
             emit({event: "BegunProcessingFile", filename, index: fileIndex, totalFiles});
 
             const fullPath = join(workingDirectory, filename);

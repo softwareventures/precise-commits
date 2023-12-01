@@ -2,7 +2,7 @@ import {dirname} from "path";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
 import findUp = require("find-up");
-import {runCommandSync} from "./utils";
+import {runCommand, runCommandSync} from "./utils";
 
 interface DiffIndexFile {
     diffFilterChar: string;
@@ -106,20 +106,22 @@ export function getDiffForFile(
 const diffIndexFilter = "AM";
 const specialEmptyTreeCommitHash = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 
-export function getModifiedFilenames(
+export async function getModifiedFilenames(
     gitDirectoryParent: string,
     base: string | null,
     head: string | null
-): string[] {
+): Promise<string[]> {
     let diffIndexOutput: string;
     if (base != null && head != null) {
         /**
          * We are grabbing the files between the two given commit SHAs
          */
-        diffIndexOutput = runCommandSync(
-            "git",
-            ["diff", "--name-status", `--diff-filter=${diffIndexFilter}`, base, head],
-            gitDirectoryParent
+        diffIndexOutput = (
+            await runCommand(
+                "git",
+                ["diff", "--name-status", `--diff-filter=${diffIndexFilter}`, base, head],
+                gitDirectoryParent
+            )
         ).stdout;
     } else {
         /**
@@ -128,10 +130,8 @@ export function getModifiedFilenames(
          */
         let head: string = "";
         try {
-            head = runCommandSync(
-                "git",
-                ["rev-parse", "--verify", "HEAD"],
-                gitDirectoryParent
+            head = (
+                await runCommand("git", ["rev-parse", "--verify", "HEAD"], gitDirectoryParent)
             ).stdout.replace("\n", "");
         } catch (err) {
             /**
@@ -149,10 +149,18 @@ export function getModifiedFilenames(
                 throw err;
             }
         }
-        diffIndexOutput = runCommandSync(
-            "git",
-            ["diff-index", "--cached", "--name-status", `--diff-filter=${diffIndexFilter}`, head],
-            gitDirectoryParent
+        diffIndexOutput = (
+            await runCommand(
+                "git",
+                [
+                    "diff-index",
+                    "--cached",
+                    "--name-status",
+                    `--diff-filter=${diffIndexFilter}`,
+                    head
+                ],
+                gitDirectoryParent
+            )
         ).stdout;
     }
     const allFiles = parseDiffIndexOutput(diffIndexOutput);
