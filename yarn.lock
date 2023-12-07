@@ -1223,15 +1223,6 @@
     "@softwareventures/ordered" "^1.1.0 || ^2.0.0"
     tslib "^2.0.0"
 
-"@softwareventures/array@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@softwareventures/array/-/array-7.0.0.tgz#0f1a62bb447c9156cdd35a2c636d42655a0e9e05"
-  integrity sha512-xHMS/7k0Iw/ivaeelC6+tePJYv/2R+LFUyuTuSJioZa+zumahtcN10aNDbogWXOa2QarvHPmfl/FC4v5MteEHQ==
-  dependencies:
-    "@softwareventures/nullable" "^1.0.0 || ^2.0.0 || ^3.0.0"
-    "@softwareventures/ordered" "^1.1.0 || ^2.0.0"
-    tslib "^2.0.0"
-
 "@softwareventures/nullable@3.1.0", "@softwareventures/nullable@^1.0.0 || ^2.0.0 || ^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-3.1.0.tgz#fa90b5c37cd38c0f2da2727e886e4bdfa36526b8"
