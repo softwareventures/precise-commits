@@ -52,7 +52,7 @@
     "@types/find-up": "2.1.1",
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.11",
-    "@types/node": "16.18.65",
+    "@types/node": "16.18.68",
     "@types/prettier": "2.7.3",
     "commitizen": "4.3.0",
     "conventional-changelog-conventionalcommits": "6.1.0",
