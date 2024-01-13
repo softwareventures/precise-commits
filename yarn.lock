@@ -1223,12 +1223,19 @@
     "@softwareventures/ordered" "^1.1.0 || ^2.0.0"
     tslib "^2.0.0"
 
-"@softwareventures/nullable@3.1.0", "@softwareventures/nullable@^1.0.0 || ^2.0.0 || ^3.0.0":
+"@softwareventures/nullable@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-3.1.0.tgz#fa90b5c37cd38c0f2da2727e886e4bdfa36526b8"
   integrity sha512-iVrju9OeZsBk1itOijs+OFVLWpZqlEMEe8tbfhvqkb5bn7/quBA/ohu4fLL57EW5Ulsi3m6oqrolDzMxggITbA==
   dependencies:
     tslib "2.4.1"
+
+"@softwareventures/nullable@3.2.0", "@softwareventures/nullable@^1.0.0 || ^2.0.0 || ^3.0.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@softwareventures/nullable/-/nullable-3.2.0.tgz#b4e1b570ba0086eeeb9350ebd25db2533e3dfe88"
+  integrity sha512-xPtUK3GJkrqvOyy14ds5KAJgnB0bbd549ztx6kDpIqk27U0W2Vg1gUBMagmdcRQE+PGFFRimd1C8RVCCizF6Ww==
+  dependencies:
+    tslib "2.6.2"
 
 "@softwareventures/ordered@^1.1.0 || ^2.0.0":
   version "2.0.0"
