@@ -1214,15 +1214,6 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@softwareventures/array@6.0.3":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@softwareventures/array/-/array-6.0.3.tgz#018a4ec7a1c5e559bc9c5b4a13583a13496acf3a"
-  integrity sha512-RPPC4ZClS7HauBgnFVJgVC+WSehCa33sSDE+SE5nDmaMGBvQO+4l99l0+cCXNY89qkzs57Z1iX44m5/rxmyBJg==
-  dependencies:
-    "@softwareventures/nullable" "^1.0.0 || ^2.0.0 || ^3.0.0"
-    "@softwareventures/ordered" "^1.1.0 || ^2.0.0"
-    tslib "^2.0.0"
-
 "@softwareventures/array@6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@softwareventures/array/-/array-6.1.0.tgz#377c9b99a71228dbd58301cc21f69939cfa9ab4e"
@@ -1246,12 +1237,12 @@
   dependencies:
     tslib "^1.9.3 || ^2.0.0 || ^2.1.0"
 
-"@softwareventures/precise-commits@3.0.31":
-  version "3.0.31"
-  resolved "https://registry.yarnpkg.com/@softwareventures/precise-commits/-/precise-commits-3.0.31.tgz#d9cdaf326faed909f0f2089a7d14913f90349c5c"
-  integrity sha512-GlvGIwLVtypN9DkBGs2D0U3y9pYEgbgZYccAa5JRt0QQA1qvaQBTOZDKomSTDIrJ3rcLiyEQi8bsYUVkyGefxg==
+"@softwareventures/precise-commits@3.0.32":
+  version "3.0.32"
+  resolved "https://registry.yarnpkg.com/@softwareventures/precise-commits/-/precise-commits-3.0.32.tgz#56c6e2d97e171d008a0e91074efd24491b10c3c6"
+  integrity sha512-JIgO16ZMfIOqEJSAIZD0WuQAgcOLvykVnCG4POJYUJsXMhJYXcTCcrvPV5xKtGym5LmPRW4uImnE+EoIEtDBmA==
   dependencies:
-    "@softwareventures/array" "6.0.3"
+    "@softwareventures/array" "6.1.0"
     "@softwareventures/nullable" "3.1.0"
     execa "5.1.1"
     find-up "5.0.0"
