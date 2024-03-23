@@ -115,7 +115,7 @@ export function main(
                     // of them are reformatted in isolation, we first check the whole file to see if
                     // it is already formatted. This could also allow us to skip unnecessary git diff
                     // analysis work.
-                    if (modifiedFile.isAlreadyFormatted()) {
+                    if (await modifiedFile.isAlreadyFormatted()) {
                         return {
                             event: "FileProcessed",
                             fileIndex,

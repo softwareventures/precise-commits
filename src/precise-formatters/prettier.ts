@@ -28,7 +28,7 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved prettier config. We can use this as a check to skip unnecessary work.
      */
-    isAlreadyFormatted: (fileContents: string, config: PrettierOptions | null) =>
+    isAlreadyFormatted: async (fileContents: string, config: PrettierOptions | null) =>
         check(fileContents, {...config}),
     /**
      * Run prettier's check mode on the given ranges and return true if they are all

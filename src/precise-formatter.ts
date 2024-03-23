@@ -12,7 +12,10 @@ export interface PreciseFormatter<TFormatterConfig> {
      * Return true if the file contents are already formatted in accordance
      * with the given config.
      */
-    isAlreadyFormatted: (fileContents: string, formatterConfig: TFormatterConfig | null) => boolean;
+    isAlreadyFormatted: (
+        fileContents: string,
+        formatterConfig: TFormatterConfig | null
+    ) => Promise<boolean>;
     /**
      * Check the formatting of the file contents, using the given config
      * and character range info.

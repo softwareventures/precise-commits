@@ -97,7 +97,7 @@ export class ModifiedFile<TFormatterConfig> {
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved formatter config. We can use this as a check to skip unnecessary work.
      */
-    public isAlreadyFormatted(): boolean {
+    public async isAlreadyFormatted(): Promise<boolean> {
         return this.selectedFormatter.isAlreadyFormatted(this.fileContents, this.formatterConfig);
     }
 

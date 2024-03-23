@@ -26,7 +26,7 @@ describe("ModifiedFile", () => {
                     head: tmpFile.updatedCommitSHA ?? workingTree,
                     selectedFormatter: preciseFormatterPrettier
                 });
-                expect(modifiedFile.isAlreadyFormatted()).toEqual(false);
+                expect(await modifiedFile.isAlreadyFormatted()).toEqual(false);
             });
         });
     });
