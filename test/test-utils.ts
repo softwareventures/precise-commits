@@ -5,7 +5,7 @@ import {writeFile} from "fs/promises";
 import mkdirp = require("mkdirp");
 import {mapNullable, notNull} from "@softwareventures/nullable";
 import {runCommand} from "../src/utils";
-import type {AdditionalOptions} from "../lib/index";
+import type {AdditionalOptions} from "../src";
 
 export interface Fixture {
     fixtureName: string;
