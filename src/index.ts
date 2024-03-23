@@ -127,7 +127,7 @@ export function main(
                     // Calculate what character ranges have been affected in the modified file.
                     // If any of the analysis threw an error for any reason, it will be returned
                     // from the method so we can handle it here.
-                    const {err} = modifiedFile.calculateModifiedCharacterRanges();
+                    const {err} = await modifiedFile.calculateModifiedCharacterRanges();
                     if (err != null) {
                         if (err.message === noLineChangeDataError) {
                             return {
@@ -174,7 +174,7 @@ export function main(
                             head: workingTree,
                             selectedFormatter
                         });
-                        const {err} = workingTreeFile.calculateModifiedCharacterRanges();
+                        const {err} = await workingTreeFile.calculateModifiedCharacterRanges();
                         if (err == null) {
                             workingTreeFile.formatCharacterRangesWithinContents();
                             if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {

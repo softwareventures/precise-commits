@@ -164,7 +164,7 @@ export class ModifiedFile<TFormatterConfig> {
      * more granular feedback within the main() function of the
      * library.
      */
-    public calculateModifiedCharacterRanges(): {err: Error | null} {
+    public async calculateModifiedCharacterRanges(): Promise<{err: Error | null}> {
         try {
             /**
              * Extract line change data from the git diff results.
