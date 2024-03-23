@@ -35,7 +35,7 @@ export interface PreciseFormatter<TFormatterConfig> {
         fileContents: string,
         config: TFormatterConfig | null,
         characterRanges: CharacterRange[]
-    ) => string;
+    ) => Promise<string>;
     /**
      * Function which creates a callback function which will be
      * used as a predicate when filtering the modified files returned

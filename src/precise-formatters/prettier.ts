@@ -55,7 +55,7 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * difference as a patch to the original contents using an implementation
      * of the Myer's diff algorithm.
      */
-    formatRanges: (
+    formatRanges: async (
         filePath: string,
         fileContents: string,
         config: PrettierOptions | null,

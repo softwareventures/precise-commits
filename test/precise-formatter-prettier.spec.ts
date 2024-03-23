@@ -16,13 +16,13 @@ describe("preciseFormatterPrettier", () => {
     });
 
     describe("formatRanges()", () => {
-        it("should format the given ranges of the given source", () => {
+        it("should format the given ranges of the given source", async () => {
             const contents = `
         var a = 1
         var b = 2
         var c = 3
       `;
-            const formatted = preciseFormatterPrettier.formatRanges(
+            const formatted = await preciseFormatterPrettier.formatRanges(
                 "foo.js",
                 contents,
                 {

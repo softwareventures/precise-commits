@@ -117,8 +117,8 @@ export class ModifiedFile<TFormatterConfig> {
     /**
      * Run the formatter on the file contents and store the result
      */
-    public formatCharacterRangesWithinContents(): void {
-        this.formattedFileContents = this.selectedFormatter.formatRanges(
+    public async formatCharacterRangesWithinContents(): Promise<void> {
+        this.formattedFileContents = await this.selectedFormatter.formatRanges(
             this.fullPath,
             this.fileContents,
             this.formatterConfig,

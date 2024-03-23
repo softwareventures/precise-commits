@@ -155,7 +155,7 @@ export function main(
                     }
 
                     // "FORMAT MODE"
-                    modifiedFile.formatCharacterRangesWithinContents();
+                    await modifiedFile.formatCharacterRangesWithinContents();
                     if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
                         return {
                             event: "FileProcessed",
@@ -176,7 +176,7 @@ export function main(
                         });
                         const {err} = await workingTreeFile.calculateModifiedCharacterRanges();
                         if (err == null) {
-                            workingTreeFile.formatCharacterRangesWithinContents();
+                            await workingTreeFile.formatCharacterRangesWithinContents();
                             if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
                                 await workingTreeFile.updateFileOnDisk();
                             }
