@@ -42,13 +42,13 @@ describe("preciseFormatterPrettier", () => {
     });
 
     describe("checkFormattingOfRanges()", () => {
-        it("should return true if the given ranges are all formatted according to the given config", () => {
+        it("should return true if the given ranges are all formatted according to the given config", async () => {
             const contents = `
         var a = 1;
         var b = 2
         var c = 3;
       `;
-            const formatted = preciseFormatterPrettier.checkFormattingOfRanges(
+            const formatted = await preciseFormatterPrettier.checkFormattingOfRanges(
                 "foo.js",
                 contents,
                 {
@@ -62,13 +62,13 @@ describe("preciseFormatterPrettier", () => {
             expect(formatted).toEqual(true);
         });
 
-        it("should return false if any of the given ranges are not formatted according to the given config", () => {
+        it("should return false if any of the given ranges are not formatted according to the given config", async () => {
             const contents = `
         var a = 1
         var b = 2
         var c = 3
       `;
-            const formatted = preciseFormatterPrettier.checkFormattingOfRanges(
+            const formatted = await preciseFormatterPrettier.checkFormattingOfRanges(
                 "foo.js",
                 contents,
                 {

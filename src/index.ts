@@ -148,7 +148,7 @@ export function main(
                             event: "FileProcessed",
                             fileIndex,
                             filename,
-                            status: modifiedFile.hasValidFormattingForCharacterRanges()
+                            status: (await modifiedFile.hasValidFormattingForCharacterRanges())
                                 ? "NotUpdated"
                                 : "InvalidFormatting"
                         } as const;

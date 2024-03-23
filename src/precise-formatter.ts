@@ -25,7 +25,7 @@ export interface PreciseFormatter<TFormatterConfig> {
         fileContents: string,
         config: TFormatterConfig | null,
         characterRanges: CharacterRange[]
-    ) => boolean;
+    ) => Promise<boolean>;
     /**
      * Run the formatter on the file contents, using the given config and
      * character range info.

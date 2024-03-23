@@ -105,7 +105,7 @@ export class ModifiedFile<TFormatterConfig> {
      * Run the formatters check mode on the given ranges and return true if they are all
      * already formatted appropriately based on the resolved formatter config.
      */
-    public hasValidFormattingForCharacterRanges(): boolean {
+    public async hasValidFormattingForCharacterRanges(): Promise<boolean> {
         return this.selectedFormatter.checkFormattingOfRanges(
             this.fullPath,
             this.fileContents,

@@ -34,7 +34,7 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * Run prettier's check mode on the given ranges and return true if they are all
      * already formatted appropriately based on the given prettier config.
      */
-    checkFormattingOfRanges: (
+    checkFormattingOfRanges: async (
         filePath: string,
         fileContents: string,
         config: PrettierOptions | null,
