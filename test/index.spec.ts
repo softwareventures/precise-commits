@@ -1,5 +1,5 @@
 import {readFileSync} from "fs";
-import {lastValueFrom, tap} from "rxjs";
+import {EMPTY, lastValueFrom, mergeMap, of} from "rxjs";
 import {main} from "../src/index";
 import {name as libraryName} from "../package.json";
 import {TestBed, readFixtures, mergeOptionsForTmpFile} from "./test-utils";
@@ -43,15 +43,20 @@ describe(libraryName, () => {
                     {checkOnly: true, filesWhitelist: null},
                     tmpFile
                 );
-                await lastValueFrom(
+                const fileStates = await lastValueFrom(
                     main(tmpFile.directoryPath, options).pipe(
-                        tap(event => {
-                            if (event.event === "FinishedProcessingFile") {
-                                expect(event.status).toEqual("INVALID_FORMATTING");
+                        mergeMap(state => {
+                            if (state.state === "Running") {
+                                return of(state.files);
+                            } else {
+                                return EMPTY;
                             }
                         })
                     )
                 );
+                for (const fileState of fileStates) {
+                    expect(fileState.status).toEqual("InvalidFormatting");
+                }
             });
         });
     });

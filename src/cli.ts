@@ -7,6 +7,7 @@ import glob = require("glob");
 import {notNull} from "@softwareventures/nullable";
 import {hasProperty} from "unknown";
 import {concatMap, isArray} from "@softwareventures/array";
+import {pairwise} from "rxjs";
 import {main} from ".";
 
 const libraryName = "precise-commits";
@@ -75,74 +76,76 @@ const options = {
 
 const primarySpinner = ora(` Running ${libraryName}...`);
 const modifiedFilesSpinner = ora(" Detecting modified files from git...");
-const spinnersByFilename = new Map<string, ora.Ora>();
+const fileSpinners: ora.Ora[] = [];
 
 let shouldErrorOut = false;
 
-main(process.cwd(), options).subscribe({
-    next: event => {
-        if (event.event === "Init") {
-            primarySpinner.start();
-            modifiedFilesSpinner.start();
-        } else if (event.event === "ModifiedFilesDetected") {
-            if (event.modifiedFiles.length > 0) {
-                modifiedFilesSpinner.succeed(
-                    ` ${libraryName}: ${event.modifiedFiles.length} modified file(s) found`
-                );
-            }
-        } else if (event.event === "BegunProcessingFile") {
-            spinnersByFilename.set(
-                event.filename,
-                ora()
-                    .start()
-                    .succeed(
-                        ` [${event.index + 1}/${event.totalFiles}] Processing file: ${
-                            event.filename
-                        }`
-                    )
-            );
-        } else if (event.event === "FinishedProcessingFile") {
-            const spinner = spinnersByFilename.get(event.filename);
-            switch (event.status) {
-                case "UPDATED":
-                    notNull(spinner).succeed(`       --> Updated formatting in: ${event.filename}`);
-                    break;
-                case "NOT_UPDATED":
-                    notNull(spinner).info(
-                        `       --> No formatting changes required in: ${event.filename}`
-                    );
-                    break;
-                case "INVALID_FORMATTING":
-                    // If --check-only is passed as a CLI argument, the script will error out.
-                    if (options.checkOnly) {
-                        shouldErrorOut = true;
+main(process.cwd(), options)
+    .pipe(pairwise())
+    .subscribe({
+        next: ([previous, current]) => {
+            if (current.state === "Running") {
+                if (previous.state === "Initializing") {
+                    primarySpinner.start();
+                    modifiedFilesSpinner.start();
+                }
+
+                modifiedFilesSpinner.text = ` ${libraryName}: ${current.files.length} modified file(s) found`;
+                if (current.gitSearchComplete) {
+                    modifiedFilesSpinner.succeed();
+                }
+
+                current.files.forEach((fileState, index) => {
+                    if (index > fileSpinners.length) {
+                        fileSpinners.push(
+                            ora().start(
+                                ` [${index + 1}/${current.files.length}] Processing file: ${
+                                    fileState.filename
+                                }`
+                            )
+                        );
                     }
-                    notNull(spinner).fail(
-                        `       --> Invalid formatting detected in: ${event.filename}`
-                    );
-                    break;
-            }
-        } else if (event.event === "Complete") {
-            if (event.totalFiles === 0) {
-                modifiedFilesSpinner.info(` ${libraryName}: No matching modified files detected.
-        
+
+                    if (fileState.status === "Updated") {
+                        notNull(fileSpinners[index]).succeed(
+                            `       --> Updated formatting in: ${fileState.filename}`
+                        );
+                    } else if (fileState.status === "NotUpdated") {
+                        notNull(fileSpinners[index]).info(
+                            `       --> No formatting changes required in: ${fileState.filename}`
+                        );
+                    } else if (fileState.status === "InvalidFormatting") {
+                        // If --check-only is passed as a CLI argument, the script will error out.
+                        if (options.checkOnly) {
+                            shouldErrorOut = true;
+                        }
+
+                        notNull(fileSpinners[index]).fail(
+                            `       --> Invalid formatting detected in: ${fileState.filename}`
+                        );
+                    }
+                });
+            } else if (current.state === "Finished") {
+                if (current.fileCount === 0) {
+                    modifiedFilesSpinner.info(` ${libraryName}: No matching modified files detected.
+
   --> If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file
 
-        `);
-                primarySpinner.stop();
-            } else if (options.checkOnly) {
-                primarySpinner.succeed(" Checks complete 🎉");
-            } else {
-                primarySpinner.succeed(" Formatting complete 🎉");
+            `);
+                    primarySpinner.stop();
+                } else if (options.checkOnly) {
+                    primarySpinner.succeed(" Checks complete 🎉");
+                } else {
+                    primarySpinner.succeed(" Formatting complete 🎉");
+                }
+                return process.exit(shouldErrorOut ? 1 : 0);
             }
-            return process.exit(shouldErrorOut ? 1 : 0);
+        },
+        error: (error: unknown) => {
+            modifiedFilesSpinner.fail(` ${libraryName}: An Error occurred\n`);
+            console.error(error);
+            console.log("\n");
+            primarySpinner.stop();
+            return process.exit(1);
         }
-    },
-    error: (error: unknown) => {
-        modifiedFilesSpinner.fail(` ${libraryName}: An Error occurred\n`);
-        console.error(error);
-        console.log("\n");
-        primarySpinner.stop();
-        return process.exit(1);
-    }
-});
+    });
