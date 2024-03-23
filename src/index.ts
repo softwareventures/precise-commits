@@ -178,7 +178,7 @@ export function main(
                         if (err == null) {
                             workingTreeFile.formatCharacterRangesWithinContents();
                             if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
-                                workingTreeFile.updateFileOnDisk();
+                                await workingTreeFile.updateFileOnDisk();
                             }
                         } else if (err.message !== noLineChangeDataError) {
                             // Unexpected error
@@ -187,7 +187,7 @@ export function main(
                     }
 
                     // Write the file back to disk and report.
-                    modifiedFile.updateFileOnDisk();
+                    await modifiedFile.updateFileOnDisk();
                     return {
                         event: "FileProcessed",
                         fileIndex,

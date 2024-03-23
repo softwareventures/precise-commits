@@ -1,6 +1,5 @@
-import {writeFileSync} from "fs";
 import {relative, sep, posix} from "path";
-import {readFile} from "fs/promises";
+import {readFile, writeFile} from "fs/promises";
 import {notNull} from "@softwareventures/nullable";
 import execa = require("execa");
 import type {CharacterRange} from "./utils";
@@ -138,25 +137,23 @@ export class ModifiedFile<TFormatterConfig> {
     /**
      * Write the updated file contents back to disk.
      */
-    public updateFileOnDisk(): void {
+    public async updateFileOnDisk(): Promise<void> {
         if (this.head === index) {
-            const hash = execa.sync(
-                "git",
-                ["hash-object", "-w", "--path", this.fullPath, "--stdin"],
-                {
+            const hash = (
+                await execa("git", ["hash-object", "-w", "--path", this.fullPath, "--stdin"], {
                     cwd: this.gitDirectoryParent,
                     input: notNull(this.formattedFileContents)
-                }
+                })
             ).stdout;
-            const mode = execa
-                .sync("git", ["ls-files", "--stage", "--", this.fullPath], {
+            const mode = (
+                await execa("git", ["ls-files", "--stage", "--", this.fullPath], {
                     cwd: this.gitDirectoryParent
                 })
-                .stdout.split(" ")?.[0];
+            ).stdout.split(" ")?.[0];
             if (mode == null) {
                 throw new Error("Can't find file in git index");
             }
-            execa.sync(
+            await execa(
                 "git",
                 [
                     "update-index",
@@ -168,7 +165,7 @@ export class ModifiedFile<TFormatterConfig> {
                 {cwd: this.gitDirectoryParent}
             );
         } else {
-            writeFileSync(this.fullPath, notNull(this.formattedFileContents));
+            await writeFile(this.fullPath, notNull(this.formattedFileContents));
         }
     }
 
