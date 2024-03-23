@@ -93,7 +93,7 @@ export class TestBed {
          * it and commit it
          */
         if (tmpFile.initialContents != null) {
-            this.createAndCommitTmpFileOnDisk(tmpFile);
+            await this.createAndCommitTmpFileOnDisk(tmpFile);
         }
         this.stageGivenChangesToTmpFileOnDisk(tmpFile);
         if (tmpFile.committed) {
@@ -139,19 +139,18 @@ export class TestBed {
         );
     }
 
-    private createAndCommitTmpFileOnDisk(tmpFile: TmpFile): void {
+    private async createAndCommitTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
         writeFileSync(tmpFile.path, notNull(tmpFile.initialContents));
-        runCommandSync("git", ["add", tmpFile.path], tmpFile.directoryPath);
-        runCommandSync(
+        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
+        await runCommand(
             "git",
             ["commit", "-m", `adding initial contents for ${tmpFile.path}`],
             tmpFile.directoryPath
         );
         if (tmpFile.committed) {
-            tmpFile.initialCommitSHA = runCommandSync(
-                "git",
-                ["rev-parse", "HEAD"],
-                tmpFile.directoryPath
+            // eslint-disable-next-line require-atomic-updates
+            tmpFile.initialCommitSHA = (
+                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
             ).stdout.trim();
         }
     }
