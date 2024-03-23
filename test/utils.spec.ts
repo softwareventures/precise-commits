@@ -32,11 +32,14 @@ describe("utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
+            it(fixture.fixtureName, async () => {
                 testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
                 const diff = getDiffForFile(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                    gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA ?? index
@@ -53,11 +56,14 @@ describe("utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
+            it(fixture.fixtureName, async () => {
                 testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
                 const diff = getDiffForFile(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                    gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA ?? index

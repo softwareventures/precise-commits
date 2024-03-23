@@ -13,12 +13,15 @@ describe("ModifiedFile", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
+            it(fixture.fixtureName, async () => {
                 testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
                 const modifiedFile = new ModifiedFile({
                     fullPath: tmpFile.path,
-                    gitDirectoryParent: resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                    gitDirectoryParent,
                     base: tmpFile.initialCommitSHA,
                     head: tmpFile.updatedCommitSHA ?? workingTree,
                     selectedFormatter: preciseFormatterPrettier
