@@ -80,7 +80,7 @@ export class ModifiedFile<TFormatterConfig> {
                           stripFinalNewline: false
                       })
                   ).stdout;
-        const formatterConfig = selectedFormatter.resolveConfig(fullPath);
+        const formatterConfig = await selectedFormatter.resolveConfig(fullPath);
         return new ModifiedFile(
             fullPath,
             pathInGit,

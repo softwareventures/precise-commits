@@ -7,7 +7,7 @@ export interface PreciseFormatter<TFormatterConfig> {
     /**
      * Resolve the formatter config which is relevant for the given file path.
      */
-    resolveConfig: (modifiedFilePath: string) => TFormatterConfig | null;
+    resolveConfig: (modifiedFilePath: string) => Promise<TFormatterConfig | null>;
     /**
      * Return true if the file contents are already formatted in accordance
      * with the given config.

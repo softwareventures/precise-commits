@@ -19,12 +19,11 @@ export const preciseFormatterPrettier: PreciseFormatter<PrettierOptions> = {
      * Resolve the relevant prettier config for the given
      * modified file path.
      */
-    resolveConfig: (modifiedFilePath: string) => ({
-        ...resolveConfig.sync(modifiedFilePath, {
-            useCache: false
-        }),
-        filepath: modifiedFilePath
-    }),
+    resolveConfig: async (modifiedFilePath: string) =>
+        resolveConfig(modifiedFilePath, {useCache: false}).then(config => ({
+            ...config,
+            filepath: modifiedFilePath
+        })),
     /**
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved prettier config. We can use this as a check to skip unnecessary work.
