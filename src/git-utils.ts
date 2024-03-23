@@ -1,18 +1,17 @@
-import {sync as findUpSync} from "find-up";
 import {dirname} from "path";
-
-import {runCommandSync} from "./utils";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
+import findUp = require("find-up");
+import {runCommand} from "./utils";
 
 interface DiffIndexFile {
     diffFilterChar: string;
     filename: string;
 }
 
-export function resolveNearestGitDirectoryParent(workingDirectory: string) {
-    const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory, type: "directory"});
-    if (!gitDirectoryPath) {
+export async function resolveNearestGitDirectoryParent(workingDirectory: string): Promise<string> {
+    const gitDirectoryPath = await findUp(".git", {cwd: workingDirectory, type: "directory"});
+    if (gitDirectoryPath == null) {
         throw new Error("No .git directory found");
     }
     return dirname(gitDirectoryPath);
@@ -21,33 +20,39 @@ export function resolveNearestGitDirectoryParent(workingDirectory: string) {
 export const index = Symbol("index");
 export const workingTree = Symbol("working-tree");
 
-export function getDiffForFile(
+export async function getDiffForFile(
     gitDirectoryParent: string,
     fullPath: string,
     base: string | null,
     head: string | typeof index | typeof workingTree
-): string {
+): Promise<string> {
     if (head === index) {
         if (base == null) {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", "--cached", "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", "--cached", "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         } else {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", "--cached", base, "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", "--cached", base, "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         }
     } else if (head === workingTree) {
         if (base == null) {
             try {
-                return runCommandSync(
-                    "git",
-                    ["diff", "--unified=0", "HEAD", "--", fullPath],
-                    gitDirectoryParent
+                return (
+                    await runCommand(
+                        "git",
+                        ["diff", "--unified=0", "HEAD", "--", fullPath],
+                        gitDirectoryParent
+                    )
                 ).stdout;
             } catch (err: unknown) {
                 //If there has never been a commit before, there will be no HEAD to compare
@@ -58,29 +63,33 @@ export function getDiffForFile(
                     typeof err.message === "string" &&
                     err.message.includes("fatal: bad revision")
                 ) {
-                    return runCommandSync(
+                    return runCommand(
                         "git",
-                        ["diff", "--unified=0", SPECIAL_EMPTY_TREE_COMMIT_HASH, "--", fullPath],
+                        ["diff", "--unified=0", specialEmptyTreeCommitHash, "--", fullPath],
                         gitDirectoryParent
-                    ).stdout;
+                    ).then(result => result.stdout);
                 } else {
                     throw err;
                 }
             }
         } else {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", base, "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", base, "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         }
     } else if (base == null) {
         throw new Error("Invalid argument");
     } else {
-        return runCommandSync(
-            "git",
-            ["diff", "--unified=0", base, head, fullPath],
-            gitDirectoryParent
+        return (
+            await runCommand(
+                "git",
+                ["diff", "--unified=0", base, head, fullPath],
+                gitDirectoryParent
+            )
         ).stdout;
     }
 }
@@ -101,26 +110,28 @@ export function getDiffForFile(
  *
  */
 /**
- * const DIFF_INDEX_FILTER = 'ACDMRTUXB';
+ * const diffIndexFilter = 'ACDMRTUXB';
  * NOTE: We are only explicitly testing "Modified" and "Added" files for now...
  */
-const DIFF_INDEX_FILTER = "AM";
-const SPECIAL_EMPTY_TREE_COMMIT_HASH = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+const diffIndexFilter = "AM";
+const specialEmptyTreeCommitHash = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 
-export function getModifiedFilenames(
+export async function getModifiedFilenames(
     gitDirectoryParent: string,
     base: string | null,
     head: string | null
-): string[] {
+): Promise<string[]> {
     let diffIndexOutput: string;
-    if (base && head) {
+    if (base != null && head != null) {
         /**
          * We are grabbing the files between the two given commit SHAs
          */
-        diffIndexOutput = runCommandSync(
-            "git",
-            ["diff", "--name-status", `--diff-filter=${DIFF_INDEX_FILTER}`, base, head],
-            gitDirectoryParent
+        diffIndexOutput = (
+            await runCommand(
+                "git",
+                ["diff", "--name-status", `--diff-filter=${diffIndexFilter}`, base, head],
+                gitDirectoryParent
+            )
         ).stdout;
     } else {
         /**
@@ -129,10 +140,8 @@ export function getModifiedFilenames(
          */
         let head: string = "";
         try {
-            head = runCommandSync(
-                "git",
-                ["rev-parse", "--verify", "HEAD"],
-                gitDirectoryParent
+            head = (
+                await runCommand("git", ["rev-parse", "--verify", "HEAD"], gitDirectoryParent)
             ).stdout.replace("\n", "");
         } catch (err) {
             /**
@@ -145,15 +154,23 @@ export function getModifiedFilenames(
                 typeof err.message === "string" &&
                 err.message.includes("fatal: Needed a single revision")
             ) {
-                head = SPECIAL_EMPTY_TREE_COMMIT_HASH;
+                head = specialEmptyTreeCommitHash;
             } else {
                 throw err;
             }
         }
-        diffIndexOutput = runCommandSync(
-            "git",
-            ["diff-index", "--cached", "--name-status", `--diff-filter=${DIFF_INDEX_FILTER}`, head],
-            gitDirectoryParent
+        diffIndexOutput = (
+            await runCommand(
+                "git",
+                [
+                    "diff-index",
+                    "--cached",
+                    "--name-status",
+                    `--diff-filter=${diffIndexFilter}`,
+                    head
+                ],
+                gitDirectoryParent
+            )
         ).stdout;
     }
     const allFiles = parseDiffIndexOutput(diffIndexOutput);

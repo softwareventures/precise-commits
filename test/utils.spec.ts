@@ -1,6 +1,6 @@
-import {TestBed, readFixtures} from "./test-utils";
 import {getDiffForFile, index, resolveNearestGitDirectoryParent} from "../src/git-utils";
 import {extractLineChangeData, calculateCharacterRangesFromLineChanges} from "../src/utils";
+import {TestBed, readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;
@@ -12,17 +12,17 @@ interface LineSeparator {
 
 const lf: LineSeparator = {
     name: "LF",
-    convert: text => text.replace(/\r?\n|\r/g, "\n")
+    convert: text => text.replace(/\r?\n|\r/gu, "\n")
 };
 
 const crlf: LineSeparator = {
     name: "CRLF",
-    convert: text => text.replace(/\r?\n|\r/g, "\r\n")
+    convert: text => text.replace(/\r?\n|\r/gu, "\r\n")
 };
 
 const cr: LineSeparator = {
     name: "CR",
-    convert: text => text.replace(/\r?\n|\r/g, "\r")
+    convert: text => text.replace(/\r?\n|\r/gu, "\r")
 };
 
 describe("utils", () => {
@@ -32,11 +32,14 @@ describe("utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+            it(fixture.fixtureName, async () => {
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const diff = getDiffForFile(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
+                const diff = await getDiffForFile(
+                    gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA ?? index
@@ -53,11 +56,14 @@ describe("utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+            it(fixture.fixtureName, async () => {
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const diff = getDiffForFile(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
+                const diff = await getDiffForFile(
+                    gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA ?? index

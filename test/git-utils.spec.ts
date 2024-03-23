@@ -1,12 +1,11 @@
 import {join} from "path";
-
-import {TestBed, readFixtures} from "./test-utils";
 import {
     getDiffForFile,
     resolveNearestGitDirectoryParent,
     getModifiedFilenames,
     index
 } from "../src/git-utils";
+import {TestBed, readFixtures} from "./test-utils";
 
 const fixtures = readFixtures();
 let testBed: TestBed;
@@ -18,20 +17,22 @@ describe("git-utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+            it(fixture.fixtureName, async () => {
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 /**
                  * The tmpFile should resolve to its own .git directory
                  */
-                expect(resolveNearestGitDirectoryParent(tmpFile.directoryPath)).toEqual(
+                expect(await resolveNearestGitDirectoryParent(tmpFile.directoryPath)).toEqual(
                     tmpFile.directoryPath
                 );
             });
         });
 
-        it(`should resolve the overall project's .git directory for this spec file`, () => {
-            expect(resolveNearestGitDirectoryParent(__dirname)).toEqual(join(__dirname, ".."));
+        it(`should resolve the overall project's .git directory for this spec file`, async () => {
+            expect(await resolveNearestGitDirectoryParent(__dirname)).toEqual(
+                join(__dirname, "..")
+            );
         });
     });
 
@@ -41,11 +42,14 @@ describe("git-utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+            it(fixture.fixtureName, async () => {
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const diff = getDiffForFile(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
+                const diff = await getDiffForFile(
+                    gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA ?? index
@@ -61,11 +65,14 @@ describe("git-utils", () => {
         });
 
         fixtures.forEach(fixture => {
-            it(fixture.fixtureName, () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+            it(fixture.fixtureName, async () => {
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const fileNames = getModifiedFilenames(
-                    resolveNearestGitDirectoryParent(tmpFile.directoryPath),
+                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
+                    tmpFile.directoryPath
+                );
+                const fileNames = await getModifiedFilenames(
+                    gitDirectoryParent,
                     tmpFile.initialCommitSHA,
                     tmpFile.updatedCommitSHA
                 );

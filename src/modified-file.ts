@@ -1,89 +1,103 @@
-import {readFileSync, writeFileSync} from "fs";
-
-import {
-    calculateCharacterRangesFromLineChanges,
-    CharacterRange,
-    extractLineChangeData
-} from "./utils";
-import {getDiffForFile, index, workingTree} from "./git-utils";
-import {PreciseFormatter} from "./precise-formatter";
-import {assertInstanceOf} from "./unknown";
-import {notNull} from "@softwareventures/nullable";
 import {relative, sep, posix} from "path";
+import {readFile, writeFile} from "fs/promises";
+import {notNull} from "@softwareventures/nullable";
 import execa = require("execa");
+import type {CharacterRange} from "./utils";
+import {calculateCharacterRangesFromLineChanges, extractLineChangeData} from "./utils";
+import {getDiffForFile, index, workingTree} from "./git-utils";
+import type {PreciseFormatter} from "./precise-formatter";
+import {assertInstanceOf} from "./unknown";
 
-export interface ModifiedFileConfig {
+export interface ModifiedFileConfig<TFormatterConfig> {
     fullPath: string;
     gitDirectoryParent: string;
     base: string | null;
     head: string | typeof index | typeof workingTree;
-    selectedFormatter: PreciseFormatter<any>;
+    selectedFormatter: PreciseFormatter<TFormatterConfig>;
 }
 
-export class ModifiedFile {
-    private readonly fullPath: string;
-    private readonly pathInGit: string;
-    /**
-     * An optional commit SHA pair which will be used to inform how the git
-     * commands are run. E.g. `git diff`
-     */
-    private readonly base: string | null;
-    private readonly head: string | typeof index | typeof workingTree;
-    /**
-     * The chosen formatter to be run on the modified file.
-     */
-    private readonly selectedFormatter: PreciseFormatter<any>;
-    /**
-     * The parent directory of the relevant .git directory that was resolved
-     * for the modified file.
-     */
-    private readonly gitDirectoryParent: string;
-    /**
-     * The contents of the file in their current state on the user's file
-     * system
-     */
-    public readonly fileContents: string;
+export class ModifiedFile<TFormatterConfig> {
     /**
      * The final file contents, after we've run the formatter
      */
     private formattedFileContents: string | null = null;
-    /**
-     * The resolved formatter config which applies to this file
-     */
-    private readonly formatterConfig: object | null;
     /**
      * The calculated character ranges which have been modified
      * within this file
      */
     private modifiedCharacterRanges: CharacterRange[] = [];
 
-    constructor({fullPath, gitDirectoryParent, base, head, selectedFormatter}: ModifiedFileConfig) {
-        this.fullPath = fullPath;
-        this.pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
-        this.gitDirectoryParent = gitDirectoryParent;
-        this.base = base;
-        this.head = head;
-        this.selectedFormatter = selectedFormatter;
-        this.fileContents =
+    private constructor(
+        private readonly fullPath: string,
+        private readonly pathInGit: string,
+        /**
+         * The parent directory of the relevant .git directory that was resolved
+         * for the modified file.
+         */
+        private readonly gitDirectoryParent: string,
+        /**
+         * An optional commit SHA pair which will be used to inform how the git
+         * commands are run. E.g. `git diff`
+         */
+        private readonly base: string | null,
+        private readonly head: string | typeof index | typeof workingTree,
+        /**
+         * The chosen formatter to be run on the modified file.
+         */
+        private readonly selectedFormatter: PreciseFormatter<TFormatterConfig>,
+        /**
+         * The contents of the file in their current state on the user's file
+         * system
+         */
+        private readonly fileContents: string,
+        /**
+         * The resolved formatter config which applies to this file
+         */
+        private readonly formatterConfig: TFormatterConfig | null
+    ) {}
+
+    public static async read<TFormatterConfig>({
+        fullPath,
+        gitDirectoryParent,
+        base,
+        head,
+        selectedFormatter
+    }: ModifiedFileConfig<TFormatterConfig>): Promise<ModifiedFile<TFormatterConfig>> {
+        const pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
+        const fileContents =
             head === workingTree
-                ? readFileSync(this.fullPath, "utf8")
+                ? await readFile(fullPath, "utf8")
                 : head === index
-                ? execa.sync("git", ["show", `:0:${this.pathInGit}`], {
-                      cwd: gitDirectoryParent,
-                      stripFinalNewline: false
-                  }).stdout
-                : execa.sync("git", ["show", `${head}:${this.pathInGit}`], {
-                      cwd: gitDirectoryParent,
-                      stripFinalNewline: false
-                  }).stdout;
-        this.formatterConfig = this.selectedFormatter.resolveConfig(this.fullPath);
+                  ? (
+                        await execa("git", ["show", `:0:${pathInGit}`], {
+                            cwd: gitDirectoryParent,
+                            stripFinalNewline: false
+                        })
+                    ).stdout
+                  : (
+                        await execa("git", ["show", `${head}:${pathInGit}`], {
+                            cwd: gitDirectoryParent,
+                            stripFinalNewline: false
+                        })
+                    ).stdout;
+        const formatterConfig = await selectedFormatter.resolveConfig(fullPath);
+        return new ModifiedFile(
+            fullPath,
+            pathInGit,
+            gitDirectoryParent,
+            base,
+            head,
+            selectedFormatter,
+            fileContents,
+            formatterConfig
+        );
     }
 
     /**
      * Return true if the whole file has already been formatted appropriately based on
      * the resolved formatter config. We can use this as a check to skip unnecessary work.
      */
-    isAlreadyFormatted(): boolean {
+    public async isAlreadyFormatted(): Promise<boolean> {
         return this.selectedFormatter.isAlreadyFormatted(this.fileContents, this.formatterConfig);
     }
 
@@ -91,7 +105,7 @@ export class ModifiedFile {
      * Run the formatters check mode on the given ranges and return true if they are all
      * already formatted appropriately based on the resolved formatter config.
      */
-    hasValidFormattingForCharacterRanges(): boolean {
+    public async hasValidFormattingForCharacterRanges(): Promise<boolean> {
         return this.selectedFormatter.checkFormattingOfRanges(
             this.fullPath,
             this.fileContents,
@@ -103,8 +117,8 @@ export class ModifiedFile {
     /**
      * Run the formatter on the file contents and store the result
      */
-    formatCharacterRangesWithinContents(): void {
-        this.formattedFileContents = this.selectedFormatter.formatRanges(
+    public async formatCharacterRangesWithinContents(): Promise<void> {
+        this.formattedFileContents = await this.selectedFormatter.formatRanges(
             this.fullPath,
             this.fileContents,
             this.formatterConfig,
@@ -116,32 +130,30 @@ export class ModifiedFile {
      * Return true if the formatted file contents are different to
      * what was originally resolved from disk.
      */
-    shouldContentsBeUpdatedOnDisk(): boolean {
+    public shouldContentsBeUpdatedOnDisk(): boolean {
         return this.fileContents !== this.formattedFileContents;
     }
 
     /**
      * Write the updated file contents back to disk.
      */
-    updateFileOnDisk(): void {
+    public async updateFileOnDisk(): Promise<void> {
         if (this.head === index) {
-            const hash = execa.sync(
-                "git",
-                ["hash-object", "-w", "--path", this.fullPath, "--stdin"],
-                {
+            const hash = (
+                await execa("git", ["hash-object", "-w", "--path", this.fullPath, "--stdin"], {
                     cwd: this.gitDirectoryParent,
                     input: notNull(this.formattedFileContents)
-                }
+                })
             ).stdout;
-            const mode = execa
-                .sync("git", ["ls-files", "--stage", "--", this.fullPath], {
+            const mode = (
+                await execa("git", ["ls-files", "--stage", "--", this.fullPath], {
                     cwd: this.gitDirectoryParent
                 })
-                .stdout.split(" ")?.[0];
+            ).stdout.split(" ")?.[0];
             if (mode == null) {
                 throw new Error("Can't find file in git index");
             }
-            execa.sync(
+            await execa(
                 "git",
                 [
                     "update-index",
@@ -153,7 +165,7 @@ export class ModifiedFile {
                 {cwd: this.gitDirectoryParent}
             );
         } else {
-            writeFileSync(this.fullPath, notNull(this.formattedFileContents));
+            await writeFile(this.fullPath, notNull(this.formattedFileContents));
         }
     }
 
@@ -162,12 +174,12 @@ export class ModifiedFile {
      * more granular feedback within the main() function of the
      * library.
      */
-    calculateModifiedCharacterRanges(): {err: Error | null} {
+    public async calculateModifiedCharacterRanges(): Promise<{err: Error | null}> {
         try {
             /**
              * Extract line change data from the git diff results.
              */
-            const diff = getDiffForFile(
+            const diff = await getDiffForFile(
                 this.gitDirectoryParent,
                 this.fullPath,
                 this.base,

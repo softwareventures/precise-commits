@@ -1,5 +1,6 @@
 import * as execa from "execa";
 import {notNull} from "@softwareventures/nullable";
+import type {ExecaReturnValue} from "execa";
 
 export interface LineChanges {
     start: number;
@@ -16,16 +17,16 @@ export interface CharacterRange {
     rangeEnd: number;
 }
 
-export const NO_LINE_CHANGE_DATA_ERROR = "No line change data could be detected";
+export const noLineChangeDataError = "No line change data could be detected";
 
 /**
  * Addition `start` number included in the range,
  * removal `start` is the line before
  */
-export function extractLineChangeData(diffData: string) {
-    const lineChanges = diffData.match(/^@@.*@@/gm);
-    if (!lineChanges) {
-        throw new Error(NO_LINE_CHANGE_DATA_ERROR);
+export function extractLineChangeData(diffData: string): LineChangeData {
+    const lineChanges = diffData.match(/^@@.*@@/gmu);
+    if (lineChanges == null) {
+        throw new Error(noLineChangeDataError);
     }
     const lineChangeData: {
         removals: LineChanges[];
@@ -35,8 +36,8 @@ export function extractLineChangeData(diffData: string) {
         additions: []
     };
     lineChanges.forEach(lineChange => {
-        const d = lineChange.match(/(@@ )-(\d+,?\d*)( )\+(\d+,?\d*)( @@)/);
-        if (!d) {
+        const d = lineChange.match(/^(@@ )-(\d+,?\d*)( )\+(\d+,?\d*)( @@)/u);
+        if (d == null) {
             throw new Error("The detected line change data could be not be parsed");
         }
         const [removalStartLine, noOfLinesRemoved = 1] = notNull(d[2])
@@ -101,14 +102,18 @@ export function calculateCharacterRangesFromLineChanges(
     });
 }
 
-export function runCommandSync(command: string, args: string[], workingDirectory = process.cwd()) {
-    return execa.sync(command, args, {cwd: workingDirectory});
+export async function runCommand(
+    command: string,
+    args: readonly string[],
+    workingDirectory = process.cwd()
+): Promise<ExecaReturnValue> {
+    return execa(command, args, {cwd: workingDirectory});
 }
 
 export function generateFilesWhitelistPredicate(
     filesWhitelist: string[] | null
 ): (file: string) => boolean {
-    if (!filesWhitelist) {
+    if (filesWhitelist == null) {
         return () => true;
     }
     return file => filesWhitelist.includes(file);

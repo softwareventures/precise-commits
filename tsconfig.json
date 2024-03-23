@@ -2,7 +2,7 @@
   "extends": "@softwareventures/tsconfig/commonjs",
   "compilerOptions": {
     "outDir": "./lib",
-    "types": ["jest", "node"]
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"]
 }

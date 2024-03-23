@@ -12,10 +12,12 @@
   "license": "MIT",
   "scripts": {
     "commit": "cz",
-    "fix": "tsc --noEmit && prettier --write .",
-    "lint": "tsc --noEmit && prettier --check .",
-    "prepare": "husky install && rimraf lib && tsc",
-    "test": "jest"
+    "fix": "tsc --noEmit && eslint src test --fix && prettier --write .",
+    "postinstall": "husky install",
+    "lint": "tsc --noEmit && eslint src test && prettier --check .",
+    "prepack": "tsc && pinst --disable",
+    "postpack": "pinst --enable",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "main": "lib/index.js",
   "bin": "lib/cli.js",
@@ -23,7 +25,7 @@
     "lib"
   ],
   "engines": {
-    "node": "^14 || ^16 || >=18"
+    "node": "^18 || >=20"
   },
   "dependencies": {
     "@softwareventures/array": "6.1.0",
@@ -39,12 +41,13 @@
     "unknown": "0.2.5"
   },
   "peerDependencies": {
-    "prettier": "^1.8.0 || ^2.0.0"
+    "prettier": "^1.8.0 || ^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.8.1",
     "@commitlint/config-conventional": "17.8.1",
     "@commitlint/cz-commitlint": "17.8.1",
+    "@softwareventures/eslint-config": "7.1.4",
     "@softwareventures/precise-commits": "3.0.33",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "4.0.0",
@@ -53,19 +56,32 @@
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.11",
     "@types/node": "16.18.76",
-    "@types/prettier": "2.7.3",
+    "@types/prettier": "3.0.0",
+    "@typescript-eslint/eslint-plugin": "6.12.0",
+    "@typescript-eslint/parser": "6.12.0",
     "commitizen": "4.3.0",
     "conventional-changelog-conventionalcommits": "6.1.0",
     "cz-conventional-changelog": "3.3.0",
+    "eslint": "8.54.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-import": "2.29.0",
+    "eslint-plugin-jsdoc": "46.9.0",
+    "eslint-plugin-prefer-arrow": "1.2.3",
+    "eslint-plugin-sonarjs": "0.23.0",
     "husky": "8.0.3",
     "inquirer": "8.2.6",
     "jest": "29.7.0",
     "mkdirp": "3.0.1",
-    "prettier": "2.8.8",
+    "pinst": "3.0.0",
+    "prettier": "3.2.5",
     "rimraf": "5.0.5",
     "semantic-release": "19.0.5",
     "ts-jest": "29.1.1",
     "typescript": "5.3.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "@softwareventures"
   },
   "prettier": "@softwareventures/prettier-config",
   "config": {
@@ -83,7 +99,12 @@
       "<rootDir>/tmp"
     ],
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
     },
     "testRegex": ".*\\.spec\\.ts$",
     "moduleFileExtensions": [
@@ -94,5 +115,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }

@@ -1,11 +1,11 @@
 import {readFileSync, writeFileSync, readdirSync} from "fs";
 import {extname, join} from "path";
 import {randomBytes} from "crypto";
-
-import {runCommandSync} from "../src/utils";
-import {AdditionalOptions} from "../lib/index";
+import {writeFile} from "fs/promises";
 import mkdirp = require("mkdirp");
-import {notNull} from "@softwareventures/nullable";
+import {mapNullable, notNull} from "@softwareventures/nullable";
+import {runCommand} from "../src/utils";
+import type {AdditionalOptions} from "../lib/index";
 
 export interface Fixture {
     fixtureName: string;
@@ -47,17 +47,17 @@ interface TmpFile {
 export class TestBed {
     private static readonly TMP_DIRECTORY_PATH = join(process.cwd(), "tmp");
     private testBedDirectoryPath: string | null = null;
-    private fixtureToTmpFile = new Map<Fixture, TmpFile>();
+    private readonly fixtureToTmpFile = new Map<Fixture, TmpFile>();
 
-    constructor() {
+    public constructor() {
         this.createUniqueDirectoryForTestBed();
     }
 
-    getTmpFileForFixture(fixture: Fixture): TmpFile {
+    public getTmpFileForFixture(fixture: Fixture): TmpFile {
         return notNull(this.fixtureToTmpFile.get(fixture));
     }
 
-    prepareFixtureInTmpDirectory(fixture: Fixture): void {
+    public async prepareFixtureInTmpDirectory(fixture: Fixture): Promise<void> {
         /**
          * Create and cache a TmpFile for the given Fixture
          */
@@ -67,11 +67,11 @@ export class TestBed {
          * Initialise a .git directory for the fixture
          */
         mkdirp.sync(tmpFile.directoryPath);
-        runCommandSync("git", ["init"], tmpFile.directoryPath);
+        await runCommand("git", ["init"], tmpFile.directoryPath);
         /**
          * Apply the two different file contents to the TmpFile
          */
-        this.applyInitialAndStagedContentsOnDisk(tmpFile);
+        await this.applyInitialAndStagedContentsOnDisk(tmpFile);
         /**
          * Apply any custom prettier config if present
          */
@@ -88,25 +88,24 @@ export class TestBed {
         return randomBytes(20).toString("hex");
     }
 
-    private applyInitialAndStagedContentsOnDisk(tmpFile: TmpFile): void {
+    private async applyInitialAndStagedContentsOnDisk(tmpFile: TmpFile): Promise<void> {
         /**
          * If we editing an existing `initial` file, we need to first create
          * it and commit it
          */
         if (tmpFile.initialContents != null) {
-            this.createAndCommitTmpFileOnDisk(tmpFile);
+            await this.createAndCommitTmpFileOnDisk(tmpFile);
         }
-        this.stageGivenChangesToTmpFileOnDisk(tmpFile);
+        await this.stageGivenChangesToTmpFileOnDisk(tmpFile);
         if (tmpFile.committed) {
-            runCommandSync(
+            await runCommand(
                 "git",
                 ["commit", "-m", `committing updates to ${tmpFile.path}]`],
                 tmpFile.directoryPath
             );
-            tmpFile.updatedCommitSHA = runCommandSync(
-                "git",
-                ["rev-parse", "HEAD"],
-                tmpFile.directoryPath
+            // eslint-disable-next-line require-atomic-updates
+            tmpFile.updatedCommitSHA = (
+                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
             ).stdout.trim();
         }
     }
@@ -132,7 +131,7 @@ export class TestBed {
         tmpFile: TmpFile,
         customPrettierConfig: CustomPrettierConfig | null
     ): void {
-        if (!customPrettierConfig) {
+        if (customPrettierConfig == null) {
             return;
         }
         writeFileSync(
@@ -141,26 +140,25 @@ export class TestBed {
         );
     }
 
-    private createAndCommitTmpFileOnDisk(tmpFile: TmpFile): void {
+    private async createAndCommitTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
         writeFileSync(tmpFile.path, notNull(tmpFile.initialContents));
-        runCommandSync("git", ["add", tmpFile.path], tmpFile.directoryPath);
-        runCommandSync(
+        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
+        await runCommand(
             "git",
             ["commit", "-m", `adding initial contents for ${tmpFile.path}`],
             tmpFile.directoryPath
         );
         if (tmpFile.committed) {
-            tmpFile.initialCommitSHA = runCommandSync(
-                "git",
-                ["rev-parse", "HEAD"],
-                tmpFile.directoryPath
+            // eslint-disable-next-line require-atomic-updates
+            tmpFile.initialCommitSHA = (
+                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
             ).stdout.trim();
         }
     }
 
-    private stageGivenChangesToTmpFileOnDisk(tmpFile: TmpFile): void {
-        writeFileSync(tmpFile.path, tmpFile.stagedContents);
-        runCommandSync("git", ["add", tmpFile.path], tmpFile.directoryPath);
+    private async stageGivenChangesToTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
+        await writeFile(tmpFile.path, tmpFile.stagedContents);
+        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
     }
 }
 
@@ -173,16 +171,16 @@ export function readFixtures(): Fixture[] {
         /**
          * Could have any of the file extensions supported by prettier
          */
-        const initialContentsFileName = files.find(f => !!f.match(/initial/));
-        const stagedContentsFileName = files.find(f => !!f.match(/staged/));
-        const committedContentsFileName = files.find(f => !!f.match(/committed/));
-        const prettierConfigFileName = files.find(f => !!f.match(/prettierrc/));
+        const initialContentsFileName = files.find(f => Boolean(f.match(/initial/u)));
+        const stagedContentsFileName = files.find(f => Boolean(f.match(/staged/u)));
+        const committedContentsFileName = files.find(f => Boolean(f.match(/committed/u)));
+        const prettierConfigFileName = files.find(f => Boolean(f.match(/prettierrc/u)));
 
-        if (!stagedContentsFileName && !committedContentsFileName) {
+        if (stagedContentsFileName == null && committedContentsFileName == null) {
             throw new Error(`"staged" or "committed" file missing for fixture: ${fixtureDirPath}`);
         }
 
-        if (stagedContentsFileName && committedContentsFileName) {
+        if (stagedContentsFileName != null && committedContentsFileName != null) {
             throw new Error(
                 `"staged" and "committed" files cannot be used together - fixture: ${fixtureDirPath}`
             );
@@ -191,25 +189,24 @@ export function readFixtures(): Fixture[] {
         return {
             fixtureName: name,
             fileExtension: extname(notNull(stagedContentsFileName ?? committedContentsFileName)),
-            initialContents: !initialContentsFileName
-                ? null
-                : readFileSync(join(fixtureDirPath, initialContentsFileName), "utf8"),
-            stagedContents: stagedContentsFileName
-                ? readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8")
-                : readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8"),
-            committed: !!committedContentsFileName,
-            customPrettierConfig: !prettierConfigFileName
-                ? null
-                : <CustomPrettierConfig>{
-                      filename: prettierConfigFileName,
-                      contents: readFileSync(join(fixtureDirPath, prettierConfigFileName), "utf8")
-                  }
+            initialContents: mapNullable(initialContentsFileName, filename =>
+                readFileSync(join(fixtureDirPath, filename), "utf8")
+            ),
+            stagedContents:
+                stagedContentsFileName == null
+                    ? readFileSync(join(fixtureDirPath, notNull(committedContentsFileName)), "utf8")
+                    : readFileSync(join(fixtureDirPath, stagedContentsFileName), "utf8"),
+            committed: Boolean(committedContentsFileName),
+            customPrettierConfig: mapNullable(prettierConfigFileName, filename => ({
+                filename,
+                contents: readFileSync(join(fixtureDirPath, filename), "utf8")
+            }))
         };
     });
 }
 
 export function mergeOptionsForTmpFile(
-    options: Partial<AdditionalOptions>,
+    options: Pick<AdditionalOptions, "checkOnly" | "filesWhitelist">,
     tmpFile: TmpFile
 ): AdditionalOptions {
     const shaOptions = tmpFile.committed
@@ -219,7 +216,7 @@ export function mergeOptionsForTmpFile(
           }
         : {base: null, head: null};
 
-    return <AdditionalOptions>{
+    return {
         ...options,
         ...shaOptions
     };

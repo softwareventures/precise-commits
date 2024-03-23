@@ -1,18 +1,16 @@
 import {isAbsolute, join, relative} from "path";
 
 import type {Observable} from "rxjs";
+import {concatAll, count, endWith, filter, from, map, mergeMap, mergeWith, of, scan} from "rxjs";
 import {
     getModifiedFilenames,
     index,
     resolveNearestGitDirectoryParent,
     workingTree
 } from "./git-utils";
-import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
-import {ModifiedFile} from "./modified-file";
+import {generateFilesWhitelistPredicate, noLineChangeDataError} from "./utils";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
-import {observeAsync} from "./observable";
-
-export type ProcessingStatus = "NOT_UPDATED" | "UPDATED" | "INVALID_FORMATTING";
+import {ModifiedFile} from "./modified-file";
 
 export interface AdditionalOptions {
     checkOnly: boolean;
@@ -21,42 +19,29 @@ export interface AdditionalOptions {
     head: string | null;
 }
 
-export interface InitEvent {
-    readonly event: "Init";
-    readonly workingDirectory: string;
+export type State = Initializing | Running | Finished;
+
+export interface Initializing {
+    readonly state: "Initializing";
 }
 
-export interface ModifiedFilesDetectedEvent {
-    readonly event: "ModifiedFilesDetected";
-    readonly modifiedFiles: readonly string[];
+export interface Running {
+    readonly state: "Running";
+    readonly gitSearchComplete: boolean;
+    readonly files: readonly FileState[];
 }
 
-export interface BegunProcessingFileEvent {
-    readonly event: "BegunProcessingFile";
+export interface FileState {
     readonly filename: string;
-    readonly index: number;
-    readonly totalFiles: number;
+    readonly status: FileStatus;
 }
 
-export interface FinishedProcessingFileEvent {
-    readonly event: "FinishedProcessingFile";
-    readonly filename: string;
-    readonly status: ProcessingStatus;
-    readonly index: number;
-    readonly totalFiles: number;
-}
+export type FileStatus = "Processing" | "NotUpdated" | "Updated" | "InvalidFormatting";
 
-export interface CompleteEvent {
-    readonly event: "Complete";
-    readonly totalFiles: number;
+export interface Finished {
+    readonly state: "Finished";
+    readonly fileCount: number;
 }
-
-export type Event =
-    | InitEvent
-    | ModifiedFilesDetectedEvent
-    | BegunProcessingFileEvent
-    | FinishedProcessingFileEvent
-    | CompleteEvent;
 
 /**
  * LIBRARY
@@ -64,153 +49,216 @@ export type Event =
 export function main(
     workingDirectory: string,
     additionalOptions: AdditionalOptions
-): Observable<Event> {
-    return observeAsync(async ({emit}) => {
-        // Merge user-given and default options.
-        const options = {
-            ...{
-                filesWhitelist: null,
-                base: null,
-                head: null,
-                checkOnly: false,
-                formatter: "prettier"
-            },
-            ...additionalOptions
-        };
-
-        // Note: Will be exposed as an option if/when new formatters are added.
-        if (options.formatter !== "prettier") {
-            throw new Error(`The only supported value for "formatter" option is "prettier"`);
-        }
-
-        const selectedFormatter = preciseFormatterPrettier;
-
-        emit({event: "Init", workingDirectory});
-
-        // Resolve the relevant .git directory's parent directory up front, as we will need this when
-        // executing various `git` commands.
-        const gitDirectoryParent = resolveNearestGitDirectoryParent(workingDirectory);
-
-        // We fundamentally check whether or not the file extensions are supported by the given formatter,
-        // whether or not they are included in the optional `filesWhitelist` array, and that the user
-        // has not chosen to ignore them via any supported "ignore" mechanism of the formatter.
-        const modifiedFiles = getModifiedFilenames(gitDirectoryParent, options.base, options.head)
-            .map(path => join(gitDirectoryParent, path))
-            .map(path => relative(workingDirectory, path))
-            .filter(path => !isAbsolute(path))
-            .filter(selectedFormatter.hasSupportedFileExtension)
-            .filter(generateFilesWhitelistPredicate(options.filesWhitelist))
-            .filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory));
-
-        const totalFiles = modifiedFiles.length;
-        emit({event: "ModifiedFilesDetected", modifiedFiles});
-
-        // Process each file synchronously.
-        modifiedFiles.forEach((filename, fileIndex) => {
-            emit({event: "BegunProcessingFile", filename, index: fileIndex, totalFiles});
-
-            const fullPath = join(workingDirectory, filename);
-
-            // Read the modified file contents and resolve the relevant formatter.
-            const modifiedFile = new ModifiedFile({
-                fullPath,
-                gitDirectoryParent,
-                base: options.base,
-                head: options.head ?? index,
-                selectedFormatter
-            });
-
-            // To avoid unnecessary issues with 100% valid files producing issues when parts
-            // of them are reformatted in isolation, we first check the whole file to see if
-            // it is already formatted. This could also allow us to skip unnecessary git diff
-            // analysis work.
-            if (modifiedFile.isAlreadyFormatted()) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: "NOT_UPDATED",
-                    index: fileIndex,
-                    totalFiles
-                });
+): Observable<State> {
+    // Merge user-given and default options.
+    return of({
+        ...{
+            filesWhitelist: null,
+            base: null,
+            head: null,
+            checkOnly: false,
+            formatter: "prettier"
+        },
+        ...additionalOptions
+    }).pipe(
+        mergeMap(async options => {
+            // Note: Will be exposed as an option if/when new formatters are added.
+            if (options.formatter !== "prettier") {
+                throw new Error(`The only supported value for "formatter" option is "prettier"`);
             }
 
-            // Calculate what character ranges have been affected in the modified file.
-            // If any of the analysis threw an error for any reason, it will be returned
-            // from the method so we can handle it here.
-            const {err} = modifiedFile.calculateModifiedCharacterRanges();
-            if (err != null) {
-                if (err.message === NO_LINE_CHANGE_DATA_ERROR) {
-                    return void emit({
-                        event: "FinishedProcessingFile",
-                        filename,
-                        status: "NOT_UPDATED",
-                        index: fileIndex,
-                        totalFiles
+            const selectedFormatter = await preciseFormatterPrettier();
+
+            // Resolve the relevant .git directory's parent directory up front, as we will need this when
+            // executing various `git` commands.
+            const gitDirectoryParent = await resolveNearestGitDirectoryParent(workingDirectory);
+
+            // Find files that we should process. A file is relevant if:
+            //  * The file extension is supported by the given formatter.
+            //  * The file is included in the optional `filesWhitelist` array, or no whitelist is specified.
+            //  * The file is not ignored as a result of any supported "ignore" mechanism of the formatter.
+            const relevantFiles = from(
+                getModifiedFilenames(gitDirectoryParent, options.base, options.head)
+            ).pipe(
+                mergeMap(array => array),
+                map(path => join(gitDirectoryParent, path)),
+                map(path => relative(workingDirectory, path)),
+                filter(path => !isAbsolute(path)),
+                filter(selectedFormatter.hasSupportedFileExtension),
+                filter(generateFilesWhitelistPredicate(options.filesWhitelist)),
+                filter(selectedFormatter.generateIgnoreFilePredicate(workingDirectory))
+            );
+
+            const newFileEvents = relevantFiles.pipe(
+                map((filename, fileIndex) => ({event: "NewFile", fileIndex, filename}) as const)
+            );
+
+            const gitSearchCompleteEvent = relevantFiles.pipe(
+                count(),
+                map(fileCount => ({event: "GitSearchComplete", fileCount}) as const)
+            );
+
+            const fileProcessedEvents = relevantFiles.pipe(
+                mergeMap(async (filename, fileIndex) => {
+                    const fullPath = join(workingDirectory, filename);
+
+                    // Read the modified file contents and resolve the relevant formatter.
+                    const modifiedFile = await ModifiedFile.read({
+                        fullPath,
+                        gitDirectoryParent,
+                        base: options.base,
+                        head: options.head ?? index,
+                        selectedFormatter
                     });
-                }
 
-                // Unexpected error
-                throw err;
-            }
-
-            // "CHECK ONLY MODE"
-            if (options.checkOnly) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: modifiedFile.hasValidFormattingForCharacterRanges()
-                        ? "NOT_UPDATED"
-                        : "INVALID_FORMATTING",
-                    index: fileIndex,
-                    totalFiles
-                });
-            }
-
-            // "FORMAT MODE"
-            modifiedFile.formatCharacterRangesWithinContents();
-            if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: "NOT_UPDATED",
-                    index: fileIndex,
-                    totalFiles
-                });
-            }
-
-            // If we're updating the index, we also need to update the working tree.
-            if (options.head == null) {
-                const workingTreeFile = new ModifiedFile({
-                    fullPath,
-                    gitDirectoryParent,
-                    base: options.base,
-                    head: workingTree,
-                    selectedFormatter
-                });
-                const {err} = workingTreeFile.calculateModifiedCharacterRanges();
-                if (err == null) {
-                    workingTreeFile.formatCharacterRangesWithinContents();
-                    if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
-                        workingTreeFile.updateFileOnDisk();
+                    // To avoid unnecessary issues with 100% valid files producing issues when parts
+                    // of them are reformatted in isolation, we first check the whole file to see if
+                    // it is already formatted. This could also allow us to skip unnecessary git diff
+                    // analysis work.
+                    if (await modifiedFile.isAlreadyFormatted()) {
+                        return {
+                            event: "FileProcessed",
+                            fileIndex,
+                            filename,
+                            status: "NotUpdated"
+                        } as const;
                     }
-                } else if (err.message !== NO_LINE_CHANGE_DATA_ERROR) {
-                    // Unexpected error
-                    throw err;
+
+                    // Calculate what character ranges have been affected in the modified file.
+                    // If any of the analysis threw an error for any reason, it will be returned
+                    // from the method so we can handle it here.
+                    const {err} = await modifiedFile.calculateModifiedCharacterRanges();
+                    if (err != null) {
+                        if (err.message === noLineChangeDataError) {
+                            return {
+                                event: "FileProcessed",
+                                fileIndex,
+                                filename,
+                                status: "NotUpdated"
+                            } as const;
+                        }
+
+                        // Unexpected error
+                        throw err;
+                    }
+
+                    // "CHECK ONLY MODE"
+                    if (options.checkOnly) {
+                        return {
+                            event: "FileProcessed",
+                            fileIndex,
+                            filename,
+                            status: (await modifiedFile.hasValidFormattingForCharacterRanges())
+                                ? "NotUpdated"
+                                : "InvalidFormatting"
+                        } as const;
+                    }
+
+                    // "FORMAT MODE"
+                    await modifiedFile.formatCharacterRangesWithinContents();
+                    if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
+                        return {
+                            event: "FileProcessed",
+                            fileIndex,
+                            filename,
+                            status: "NotUpdated"
+                        } as const;
+                    }
+
+                    // If we're updating the index, we also need to update the working tree.
+                    if (options.head == null) {
+                        const workingTreeFile = await ModifiedFile.read({
+                            fullPath,
+                            gitDirectoryParent,
+                            base: options.base,
+                            head: workingTree,
+                            selectedFormatter
+                        });
+                        const {err} = await workingTreeFile.calculateModifiedCharacterRanges();
+                        if (err == null) {
+                            await workingTreeFile.formatCharacterRangesWithinContents();
+                            if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
+                                await workingTreeFile.updateFileOnDisk();
+                            }
+                        } else if (err.message !== noLineChangeDataError) {
+                            // Unexpected error
+                            throw err;
+                        }
+                    }
+
+                    // Write the file back to disk and report.
+                    await modifiedFile.updateFileOnDisk();
+                    return {
+                        event: "FileProcessed",
+                        fileIndex,
+                        filename,
+                        status: "Updated"
+                    } as const;
+                })
+            );
+
+            return newFileEvents.pipe(mergeWith(gitSearchCompleteEvent, fileProcessedEvents));
+        }),
+        concatAll(),
+        endWith({event: "Finished"} as const),
+        scan(
+            (state: State, event) => {
+                if (event.event === "NewFile") {
+                    if (state.state === "Running") {
+                        return {
+                            ...state,
+                            files: [
+                                ...state.files,
+                                {
+                                    filename: event.filename,
+                                    status: "Processing"
+                                }
+                            ]
+                        } as const;
+                    } else {
+                        return {
+                            state: "Running",
+                            gitSearchComplete: false,
+                            files: [{filename: event.filename, status: "Processing"}]
+                        } as const;
+                    }
+                } else if (event.event === "GitSearchComplete") {
+                    if (state.state === "Running") {
+                        return {...state, gitSearchComplete: true} as const;
+                    } else {
+                        return {state: "Running", gitSearchComplete: true, files: []} as const;
+                    }
+                } else if (event.event === "FileProcessed") {
+                    if (state.state === "Running") {
+                        const files = [...state.files];
+                        files[event.fileIndex] = {
+                            filename: event.filename,
+                            status: event.status
+                        };
+                        return {...state, files} as const;
+                    } else {
+                        return {
+                            state: "Running",
+                            gitSearchComplete: false,
+                            files: [
+                                {
+                                    filename: event.filename,
+                                    status: event.status
+                                }
+                            ]
+                        } as const;
+                    }
+                } else if (event.event === "Finished") {
+                    if (state.state === "Running") {
+                        return {state: "Finished", fileCount: state.files.length} as const;
+                    } else {
+                        return {state: "Finished", fileCount: 0} as const;
+                    }
+                } else {
+                    return state;
                 }
-            }
-
-            // Write the file back to disk and report.
-            modifiedFile.updateFileOnDisk();
-            emit({
-                event: "FinishedProcessingFile",
-                filename,
-                status: "UPDATED",
-                index: fileIndex,
-                totalFiles
-            });
-        });
-
-        // Report that all files have finished processing.
-        emit({event: "Complete", totalFiles});
-    });
+            },
+            {state: "Initializing"}
+        )
+    );
 }

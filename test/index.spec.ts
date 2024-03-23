@@ -1,15 +1,13 @@
 import {readFileSync} from "fs";
-
+import {EMPTY, lastValueFrom, mergeMap, of} from "rxjs";
+import {main} from "../src/index";
+import {name as libraryName} from "../package.json";
 import {TestBed, readFixtures, mergeOptionsForTmpFile} from "./test-utils";
 
-import {main} from "../src/index";
-import {lastValueFrom, tap} from "rxjs";
-
-const LIBRARY_NAME = require("../package.json").name;
 const fixtures = readFixtures();
 let testBed: TestBed;
 
-describe(LIBRARY_NAME, () => {
+describe(libraryName, () => {
     describe("main()", () => {
         beforeAll(() => {
             testBed = new TestBed();
@@ -18,7 +16,7 @@ describe(LIBRARY_NAME, () => {
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 expect.assertions(1);
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const options = mergeOptionsForTmpFile(
                     {checkOnly: false, filesWhitelist: null},
@@ -39,21 +37,26 @@ describe(LIBRARY_NAME, () => {
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 expect.assertions(1);
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const options = mergeOptionsForTmpFile(
                     {checkOnly: true, filesWhitelist: null},
                     tmpFile
                 );
-                await lastValueFrom(
+                const fileStates = await lastValueFrom(
                     main(tmpFile.directoryPath, options).pipe(
-                        tap(event => {
-                            if (event.event === "FinishedProcessingFile") {
-                                expect(event.status).toEqual("INVALID_FORMATTING");
+                        mergeMap(state => {
+                            if (state.state === "Running") {
+                                return of(state.files);
+                            } else {
+                                return EMPTY;
                             }
                         })
                     )
                 );
+                for (const fileState of fileStates) {
+                    expect(fileState.status).toEqual("InvalidFormatting");
+                }
             });
         });
     });
