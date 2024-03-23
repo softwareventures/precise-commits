@@ -16,7 +16,7 @@ describe(libraryName, () => {
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 expect.assertions(1);
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const options = mergeOptionsForTmpFile(
                     {checkOnly: false, filesWhitelist: null},
@@ -37,7 +37,7 @@ describe(libraryName, () => {
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 expect.assertions(1);
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const options = mergeOptionsForTmpFile(
                     {checkOnly: true, filesWhitelist: null},

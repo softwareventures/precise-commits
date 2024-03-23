@@ -18,7 +18,7 @@ describe("git-utils", () => {
 
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 /**
                  * The tmpFile should resolve to its own .git directory
@@ -43,7 +43,7 @@ describe("git-utils", () => {
 
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath
@@ -66,7 +66,7 @@ describe("git-utils", () => {
 
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath

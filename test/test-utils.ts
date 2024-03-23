@@ -3,7 +3,7 @@ import {extname, join} from "path";
 import {randomBytes} from "crypto";
 import mkdirp = require("mkdirp");
 import {mapNullable, notNull} from "@softwareventures/nullable";
-import {runCommandSync} from "../src/utils";
+import {runCommand, runCommandSync} from "../src/utils";
 import type {AdditionalOptions} from "../lib/index";
 
 export interface Fixture {
@@ -56,7 +56,7 @@ export class TestBed {
         return notNull(this.fixtureToTmpFile.get(fixture));
     }
 
-    public prepareFixtureInTmpDirectory(fixture: Fixture): void {
+    public async prepareFixtureInTmpDirectory(fixture: Fixture): Promise<void> {
         /**
          * Create and cache a TmpFile for the given Fixture
          */
@@ -66,11 +66,11 @@ export class TestBed {
          * Initialise a .git directory for the fixture
          */
         mkdirp.sync(tmpFile.directoryPath);
-        runCommandSync("git", ["init"], tmpFile.directoryPath);
+        await runCommand("git", ["init"], tmpFile.directoryPath);
         /**
          * Apply the two different file contents to the TmpFile
          */
-        this.applyInitialAndStagedContentsOnDisk(tmpFile);
+        await this.applyInitialAndStagedContentsOnDisk(tmpFile);
         /**
          * Apply any custom prettier config if present
          */
@@ -87,7 +87,7 @@ export class TestBed {
         return randomBytes(20).toString("hex");
     }
 
-    private applyInitialAndStagedContentsOnDisk(tmpFile: TmpFile): void {
+    private async applyInitialAndStagedContentsOnDisk(tmpFile: TmpFile): Promise<void> {
         /**
          * If we editing an existing `initial` file, we need to first create
          * it and commit it
@@ -97,15 +97,14 @@ export class TestBed {
         }
         this.stageGivenChangesToTmpFileOnDisk(tmpFile);
         if (tmpFile.committed) {
-            runCommandSync(
+            await runCommand(
                 "git",
                 ["commit", "-m", `committing updates to ${tmpFile.path}]`],
                 tmpFile.directoryPath
             );
-            tmpFile.updatedCommitSHA = runCommandSync(
-                "git",
-                ["rev-parse", "HEAD"],
-                tmpFile.directoryPath
+            // eslint-disable-next-line require-atomic-updates
+            tmpFile.updatedCommitSHA = (
+                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
             ).stdout.trim();
         }
     }

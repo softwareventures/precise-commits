@@ -14,7 +14,7 @@ describe("ModifiedFile", () => {
 
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
-                testBed.prepareFixtureInTmpDirectory(fixture);
+                await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath
