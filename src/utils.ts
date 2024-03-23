@@ -1,6 +1,6 @@
 import * as execa from "execa";
 import {notNull} from "@softwareventures/nullable";
-import type {ExecaReturnValue, ExecaSyncReturnValue} from "execa";
+import type {ExecaReturnValue} from "execa";
 
 export interface LineChanges {
     start: number;
@@ -108,14 +108,6 @@ export async function runCommand(
     workingDirectory = process.cwd()
 ): Promise<ExecaReturnValue> {
     return execa(command, args, {cwd: workingDirectory});
-}
-
-export function runCommandSync(
-    command: string,
-    args: readonly string[],
-    workingDirectory = process.cwd()
-): ExecaSyncReturnValue {
-    return execa.sync(command, args, {cwd: workingDirectory});
 }
 
 export function generateFilesWhitelistPredicate(

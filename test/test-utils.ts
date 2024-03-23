@@ -1,9 +1,10 @@
 import {readFileSync, writeFileSync, readdirSync} from "fs";
 import {extname, join} from "path";
 import {randomBytes} from "crypto";
+import {writeFile} from "fs/promises";
 import mkdirp = require("mkdirp");
 import {mapNullable, notNull} from "@softwareventures/nullable";
-import {runCommand, runCommandSync} from "../src/utils";
+import {runCommand} from "../src/utils";
 import type {AdditionalOptions} from "../lib/index";
 
 export interface Fixture {
@@ -95,7 +96,7 @@ export class TestBed {
         if (tmpFile.initialContents != null) {
             await this.createAndCommitTmpFileOnDisk(tmpFile);
         }
-        this.stageGivenChangesToTmpFileOnDisk(tmpFile);
+        await this.stageGivenChangesToTmpFileOnDisk(tmpFile);
         if (tmpFile.committed) {
             await runCommand(
                 "git",
@@ -155,9 +156,9 @@ export class TestBed {
         }
     }
 
-    private stageGivenChangesToTmpFileOnDisk(tmpFile: TmpFile): void {
-        writeFileSync(tmpFile.path, tmpFile.stagedContents);
-        runCommandSync("git", ["add", tmpFile.path], tmpFile.directoryPath);
+    private async stageGivenChangesToTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
+        await writeFile(tmpFile.path, tmpFile.stagedContents);
+        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
     }
 }
 
