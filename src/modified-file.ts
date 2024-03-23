@@ -68,18 +68,18 @@ export class ModifiedFile<TFormatterConfig> {
             head === workingTree
                 ? await readFile(fullPath, "utf8")
                 : head === index
-                  ? (
-                        await execa("git", ["show", `:0:${pathInGit}`], {
-                            cwd: gitDirectoryParent,
-                            stripFinalNewline: false
-                        })
-                    ).stdout
-                  : (
-                        await execa("git", ["show", `${head}:${pathInGit}`], {
-                            cwd: gitDirectoryParent,
-                            stripFinalNewline: false
-                        })
-                    ).stdout;
+                ? (
+                      await execa("git", ["show", `:0:${pathInGit}`], {
+                          cwd: gitDirectoryParent,
+                          stripFinalNewline: false
+                      })
+                  ).stdout
+                : (
+                      await execa("git", ["show", `${head}:${pathInGit}`], {
+                          cwd: gitDirectoryParent,
+                          stripFinalNewline: false
+                      })
+                  ).stdout;
         const formatterConfig = await selectedFormatter.resolveConfig(fullPath);
         return new ModifiedFile(
             fullPath,

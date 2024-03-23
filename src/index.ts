@@ -90,12 +90,12 @@ export function main(
             );
 
             const newFileEvents = relevantFiles.pipe(
-                map((filename, fileIndex) => ({event: "NewFile", fileIndex, filename}) as const)
+                map((filename, fileIndex) => ({event: "NewFile", fileIndex, filename} as const))
             );
 
             const gitSearchCompleteEvent = relevantFiles.pipe(
                 count(),
-                map(fileCount => ({event: "GitSearchComplete", fileCount}) as const)
+                map(fileCount => ({event: "GitSearchComplete", fileCount} as const))
             );
 
             const fileProcessedEvents = relevantFiles.pipe(
