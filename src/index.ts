@@ -111,112 +111,118 @@ export function main(
         const totalFiles = relevantFiles.length;
         emit({event: "ModifiedFilesDetected", modifiedFiles: relevantFiles});
 
-        // Process each file synchronously.
-        relevantFiles.forEach((filename, fileIndex) => {
-            emit({event: "BegunProcessingFile", filename, index: fileIndex, totalFiles});
+        // Process each file asynchronously.
+        from(relevantFiles)
+            .pipe(
+                mergeMap(async (filename, fileIndex) => {
+                    emit({event: "BegunProcessingFile", filename, index: fileIndex, totalFiles});
 
-            const fullPath = join(workingDirectory, filename);
+                    const fullPath = join(workingDirectory, filename);
 
-            // Read the modified file contents and resolve the relevant formatter.
-            const modifiedFile = new ModifiedFile({
-                fullPath,
-                gitDirectoryParent,
-                base: options.base,
-                head: options.head ?? index,
-                selectedFormatter
-            });
+                    // Read the modified file contents and resolve the relevant formatter.
+                    const modifiedFile = new ModifiedFile({
+                        fullPath,
+                        gitDirectoryParent,
+                        base: options.base,
+                        head: options.head ?? index,
+                        selectedFormatter
+                    });
 
-            // To avoid unnecessary issues with 100% valid files producing issues when parts
-            // of them are reformatted in isolation, we first check the whole file to see if
-            // it is already formatted. This could also allow us to skip unnecessary git diff
-            // analysis work.
-            if (modifiedFile.isAlreadyFormatted()) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: "NOT_UPDATED",
-                    index: fileIndex,
-                    totalFiles
-                });
-            }
+                    // To avoid unnecessary issues with 100% valid files producing issues when parts
+                    // of them are reformatted in isolation, we first check the whole file to see if
+                    // it is already formatted. This could also allow us to skip unnecessary git diff
+                    // analysis work.
+                    if (modifiedFile.isAlreadyFormatted()) {
+                        return void emit({
+                            event: "FinishedProcessingFile",
+                            filename,
+                            status: "NOT_UPDATED",
+                            index: fileIndex,
+                            totalFiles
+                        });
+                    }
 
-            // Calculate what character ranges have been affected in the modified file.
-            // If any of the analysis threw an error for any reason, it will be returned
-            // from the method so we can handle it here.
-            const {err} = modifiedFile.calculateModifiedCharacterRanges();
-            if (err != null) {
-                if (err.message === noLineChangeDataError) {
-                    return void emit({
+                    // Calculate what character ranges have been affected in the modified file.
+                    // If any of the analysis threw an error for any reason, it will be returned
+                    // from the method so we can handle it here.
+                    const {err} = modifiedFile.calculateModifiedCharacterRanges();
+                    if (err != null) {
+                        if (err.message === noLineChangeDataError) {
+                            return void emit({
+                                event: "FinishedProcessingFile",
+                                filename,
+                                status: "NOT_UPDATED",
+                                index: fileIndex,
+                                totalFiles
+                            });
+                        }
+
+                        // Unexpected error
+                        throw err;
+                    }
+
+                    // "CHECK ONLY MODE"
+                    if (options.checkOnly) {
+                        return void emit({
+                            event: "FinishedProcessingFile",
+                            filename,
+                            status: modifiedFile.hasValidFormattingForCharacterRanges()
+                                ? "NOT_UPDATED"
+                                : "INVALID_FORMATTING",
+                            index: fileIndex,
+                            totalFiles
+                        });
+                    }
+
+                    // "FORMAT MODE"
+                    modifiedFile.formatCharacterRangesWithinContents();
+                    if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
+                        return void emit({
+                            event: "FinishedProcessingFile",
+                            filename,
+                            status: "NOT_UPDATED",
+                            index: fileIndex,
+                            totalFiles
+                        });
+                    }
+
+                    // If we're updating the index, we also need to update the working tree.
+                    if (options.head == null) {
+                        const workingTreeFile = new ModifiedFile({
+                            fullPath,
+                            gitDirectoryParent,
+                            base: options.base,
+                            head: workingTree,
+                            selectedFormatter
+                        });
+                        const {err} = workingTreeFile.calculateModifiedCharacterRanges();
+                        if (err == null) {
+                            workingTreeFile.formatCharacterRangesWithinContents();
+                            if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
+                                workingTreeFile.updateFileOnDisk();
+                            }
+                        } else if (err.message !== noLineChangeDataError) {
+                            // Unexpected error
+                            throw err;
+                        }
+                    }
+
+                    // Write the file back to disk and report.
+                    modifiedFile.updateFileOnDisk();
+                    emit({
                         event: "FinishedProcessingFile",
                         filename,
-                        status: "NOT_UPDATED",
+                        status: "UPDATED",
                         index: fileIndex,
                         totalFiles
                     });
+                })
+            )
+            .subscribe({
+                complete: () => {
+                    // Report that all files have finished processing.
+                    emit({event: "Complete", totalFiles});
                 }
-
-                // Unexpected error
-                throw err;
-            }
-
-            // "CHECK ONLY MODE"
-            if (options.checkOnly) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: modifiedFile.hasValidFormattingForCharacterRanges()
-                        ? "NOT_UPDATED"
-                        : "INVALID_FORMATTING",
-                    index: fileIndex,
-                    totalFiles
-                });
-            }
-
-            // "FORMAT MODE"
-            modifiedFile.formatCharacterRangesWithinContents();
-            if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
-                return void emit({
-                    event: "FinishedProcessingFile",
-                    filename,
-                    status: "NOT_UPDATED",
-                    index: fileIndex,
-                    totalFiles
-                });
-            }
-
-            // If we're updating the index, we also need to update the working tree.
-            if (options.head == null) {
-                const workingTreeFile = new ModifiedFile({
-                    fullPath,
-                    gitDirectoryParent,
-                    base: options.base,
-                    head: workingTree,
-                    selectedFormatter
-                });
-                const {err} = workingTreeFile.calculateModifiedCharacterRanges();
-                if (err == null) {
-                    workingTreeFile.formatCharacterRangesWithinContents();
-                    if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
-                        workingTreeFile.updateFileOnDisk();
-                    }
-                } else if (err.message !== noLineChangeDataError) {
-                    // Unexpected error
-                    throw err;
-                }
-            }
-
-            // Write the file back to disk and report.
-            modifiedFile.updateFileOnDisk();
-            emit({
-                event: "FinishedProcessingFile",
-                filename,
-                status: "UPDATED",
-                index: fileIndex,
-                totalFiles
             });
-        });
-
-        // Report that all files have finished processing.
-        emit({event: "Complete", totalFiles});
     });
 }
