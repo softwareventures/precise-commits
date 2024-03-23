@@ -2,7 +2,7 @@ import {dirname} from "path";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
 import findUp = require("find-up");
-import {runCommand, runCommandSync} from "./utils";
+import {runCommand} from "./utils";
 
 interface DiffIndexFile {
     diffFilterChar: string;
@@ -20,33 +20,39 @@ export async function resolveNearestGitDirectoryParent(workingDirectory: string)
 export const index = Symbol("index");
 export const workingTree = Symbol("working-tree");
 
-export function getDiffForFile(
+export async function getDiffForFile(
     gitDirectoryParent: string,
     fullPath: string,
     base: string | null,
     head: string | typeof index | typeof workingTree
-): string {
+): Promise<string> {
     if (head === index) {
         if (base == null) {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", "--cached", "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", "--cached", "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         } else {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", "--cached", base, "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", "--cached", base, "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         }
     } else if (head === workingTree) {
         if (base == null) {
             try {
-                return runCommandSync(
-                    "git",
-                    ["diff", "--unified=0", "HEAD", "--", fullPath],
-                    gitDirectoryParent
+                return (
+                    await runCommand(
+                        "git",
+                        ["diff", "--unified=0", "HEAD", "--", fullPath],
+                        gitDirectoryParent
+                    )
                 ).stdout;
             } catch (err: unknown) {
                 //If there has never been a commit before, there will be no HEAD to compare
@@ -57,29 +63,33 @@ export function getDiffForFile(
                     typeof err.message === "string" &&
                     err.message.includes("fatal: bad revision")
                 ) {
-                    return runCommandSync(
+                    return runCommand(
                         "git",
                         ["diff", "--unified=0", specialEmptyTreeCommitHash, "--", fullPath],
                         gitDirectoryParent
-                    ).stdout;
+                    ).then(result => result.stdout);
                 } else {
                     throw err;
                 }
             }
         } else {
-            return runCommandSync(
-                "git",
-                ["diff", "--unified=0", base, "--", fullPath],
-                gitDirectoryParent
+            return (
+                await runCommand(
+                    "git",
+                    ["diff", "--unified=0", base, "--", fullPath],
+                    gitDirectoryParent
+                )
             ).stdout;
         }
     } else if (base == null) {
         throw new Error("Invalid argument");
     } else {
-        return runCommandSync(
-            "git",
-            ["diff", "--unified=0", base, head, fullPath],
-            gitDirectoryParent
+        return (
+            await runCommand(
+                "git",
+                ["diff", "--unified=0", base, head, fullPath],
+                gitDirectoryParent
+            )
         ).stdout;
     }
 }

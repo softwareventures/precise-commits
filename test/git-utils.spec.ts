@@ -48,7 +48,7 @@ describe("git-utils", () => {
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath
                 );
-                const diff = getDiffForFile(
+                const diff = await getDiffForFile(
                     gitDirectoryParent,
                     tmpFile.path,
                     tmpFile.initialCommitSHA,

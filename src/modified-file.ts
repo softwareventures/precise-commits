@@ -169,7 +169,7 @@ export class ModifiedFile<TFormatterConfig> {
             /**
              * Extract line change data from the git diff results.
              */
-            const diff = getDiffForFile(
+            const diff = await getDiffForFile(
                 this.gitDirectoryParent,
                 this.fullPath,
                 this.base,
