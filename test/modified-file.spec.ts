@@ -19,12 +19,13 @@ describe("ModifiedFile", () => {
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath
                 );
+                const selectedFormatter = await preciseFormatterPrettier();
                 const modifiedFile = await ModifiedFile.read({
                     fullPath: tmpFile.path,
                     gitDirectoryParent,
                     base: tmpFile.initialCommitSHA,
                     head: tmpFile.updatedCommitSHA ?? workingTree,
-                    selectedFormatter: preciseFormatterPrettier
+                    selectedFormatter
                 });
                 expect(await modifiedFile.isAlreadyFormatted()).toEqual(false);
             });

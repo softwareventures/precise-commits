@@ -7,7 +7,8 @@ describe("preciseFormatterPrettier", () => {
     describe("resolveConfig()", () => {
         fixtures.forEach(({fixtureName, fileExtension}) => {
             it(fixtureName, async () => {
-                const prettierConfig = await preciseFormatterPrettier.resolveConfig(
+                const formatter = await preciseFormatterPrettier();
+                const prettierConfig = await formatter.resolveConfig(
                     `./test/fixtures/${fixtureName}/initial${fileExtension}`
                 );
                 expect(prettierConfig).toMatchSnapshot();
@@ -22,7 +23,8 @@ describe("preciseFormatterPrettier", () => {
         var b = 2
         var c = 3
       `;
-            const formatted = await preciseFormatterPrettier.formatRanges(
+            const formatter = await preciseFormatterPrettier();
+            const formatted = await formatter.formatRanges(
                 "foo.js",
                 contents,
                 {
@@ -48,7 +50,8 @@ describe("preciseFormatterPrettier", () => {
         var b = 2
         var c = 3;
       `;
-            const formatted = await preciseFormatterPrettier.checkFormattingOfRanges(
+            const formatter = await preciseFormatterPrettier();
+            const formatted = await formatter.checkFormattingOfRanges(
                 "foo.js",
                 contents,
                 {
@@ -68,7 +71,8 @@ describe("preciseFormatterPrettier", () => {
         var b = 2
         var c = 3
       `;
-            const formatted = await preciseFormatterPrettier.checkFormattingOfRanges(
+            const formatter = await preciseFormatterPrettier();
+            const formatted = await formatter.checkFormattingOfRanges(
                 "foo.js",
                 contents,
                 {

@@ -67,7 +67,7 @@ export function main(
                 throw new Error(`The only supported value for "formatter" option is "prettier"`);
             }
 
-            const selectedFormatter = preciseFormatterPrettier;
+            const selectedFormatter = await preciseFormatterPrettier();
 
             // Resolve the relevant .git directory's parent directory up front, as we will need this when
             // executing various `git` commands.
@@ -90,12 +90,12 @@ export function main(
             );
 
             const newFileEvents = relevantFiles.pipe(
-                map((filename, fileIndex) => ({event: "NewFile", fileIndex, filename} as const))
+                map((filename, fileIndex) => ({event: "NewFile", fileIndex, filename}) as const)
             );
 
             const gitSearchCompleteEvent = relevantFiles.pipe(
                 count(),
-                map(fileCount => ({event: "GitSearchComplete", fileCount} as const))
+                map(fileCount => ({event: "GitSearchComplete", fileCount}) as const)
             );
 
             const fileProcessedEvents = relevantFiles.pipe(
