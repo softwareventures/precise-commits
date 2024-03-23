@@ -94,25 +94,20 @@ export async function getDiffForFile(
     }
 }
 
-/**
- * Output of `git diff-index --help`:
- *
- * --diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
-      Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R), have
-      their type (i.e. regular file, symlink, submodule, ...) changed (T), are Unmerged (U), are
-      Unknown (X), or have had their pairing Broken (B). Any combination of the filter characters
-      (including none) can be used. When * (All-or-none) is added to the combination, all paths are
-      selected if there is any file that matches other criteria in the comparison; if there is no
-      file that matches other criteria, nothing is selected.
-
-      Also, these upper-case letters can be downcased to exclude. E.g.  --diff-filter=ad excludes
-      added and deleted paths.
- *
- */
-/**
- * const diffIndexFilter = 'ACDMRTUXB';
- * NOTE: We are only explicitly testing "Modified" and "Added" files for now...
- */
+// Output of `git diff-index --help`:
+//
+// --diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+//    Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R), have
+//    their type (i.e. regular file, symlink, submodule, ...) changed (T), are Unmerged (U), are
+//    Unknown (X), or have had their pairing Broken (B). Any combination of the filter characters
+//    (including none) can be used. When * (All-or-none) is added to the combination, all paths are
+//    selected if there is any file that matches other criteria in the comparison; if there is no
+//    file that matches other criteria, nothing is selected.
+//
+//    Also, these upper-case letters can be downcased to exclude. E.g.  --diff-filter=ad excludes
+//    added and deleted paths.
+//
+// We check files that have been added or modified.
 const diffIndexFilter = "AM";
 const specialEmptyTreeCommitHash = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 
@@ -123,9 +118,7 @@ export async function getModifiedFilenames(
 ): Promise<string[]> {
     let diffIndexOutput: string;
     if (base != null && head != null) {
-        /**
-         * We are grabbing the files between the two given commit SHAs
-         */
+        // We are grabbing the files between the two given commit SHAs
         diffIndexOutput = (
             await runCommand(
                 "git",
@@ -134,21 +127,17 @@ export async function getModifiedFilenames(
             )
         ).stdout;
     } else {
-        /**
-         * No commit SHAs given, we assume we are attempting to evaluate staged files,
-         * and so need to determine if there is HEAD SHA available.
-         */
+        // No commit SHAs given, we assume we are attempting to evaluate staged files,
+        // and so need to determine if there is HEAD SHA available.
         let head: string = "";
         try {
             head = (
                 await runCommand("git", ["rev-parse", "--verify", "HEAD"], gitDirectoryParent)
             ).stdout.replace("\n", "");
         } catch (err) {
-            /**
-             * If there has never been a commit before, there will be no HEAD to compare
-             * to. Use the special empty tree hash value instead:
-             * https://stackoverflow.com/questions/9765453/is-gits-semi-secret-empty-tree-object-reliable-and-why-is-there-not-a-symbolic
-             */
+            // If there has never been a commit before, there will be no HEAD to compare
+            // to. Use the special empty tree hash value instead:
+            // https://stackoverflow.com/questions/9765453/is-gits-semi-secret-empty-tree-object-reliable-and-why-is-there-not-a-symbolic
             if (
                 hasProperty(err, "message") &&
                 typeof err.message === "string" &&
