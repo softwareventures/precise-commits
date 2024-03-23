@@ -19,7 +19,7 @@ describe("ModifiedFile", () => {
                 const gitDirectoryParent = await resolveNearestGitDirectoryParent(
                     tmpFile.directoryPath
                 );
-                const modifiedFile = new ModifiedFile({
+                const modifiedFile = await ModifiedFile.read({
                     fullPath: tmpFile.path,
                     gitDirectoryParent,
                     base: tmpFile.initialCommitSHA,

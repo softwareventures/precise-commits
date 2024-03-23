@@ -1,5 +1,6 @@
-import {readFileSync, writeFileSync} from "fs";
+import {writeFileSync} from "fs";
 import {relative, sep, posix} from "path";
+import {readFile} from "fs/promises";
 import {notNull} from "@softwareventures/nullable";
 import execa = require("execa");
 import type {CharacterRange} from "./utils";
@@ -17,68 +18,80 @@ export interface ModifiedFileConfig<TFormatterConfig> {
 }
 
 export class ModifiedFile<TFormatterConfig> {
-    private readonly fullPath: string;
-    private readonly pathInGit: string;
-    /**
-     * An optional commit SHA pair which will be used to inform how the git
-     * commands are run. E.g. `git diff`
-     */
-    private readonly base: string | null;
-    private readonly head: string | typeof index | typeof workingTree;
-    /**
-     * The chosen formatter to be run on the modified file.
-     */
-    private readonly selectedFormatter: PreciseFormatter<TFormatterConfig>;
-    /**
-     * The parent directory of the relevant .git directory that was resolved
-     * for the modified file.
-     */
-    private readonly gitDirectoryParent: string;
-    /**
-     * The contents of the file in their current state on the user's file
-     * system
-     */
-    private readonly fileContents: string;
     /**
      * The final file contents, after we've run the formatter
      */
     private formattedFileContents: string | null = null;
-    /**
-     * The resolved formatter config which applies to this file
-     */
-    private readonly formatterConfig: TFormatterConfig | null;
     /**
      * The calculated character ranges which have been modified
      * within this file
      */
     private modifiedCharacterRanges: CharacterRange[] = [];
 
-    public constructor({
+    private constructor(
+        private readonly fullPath: string,
+        private readonly pathInGit: string,
+        /**
+         * The parent directory of the relevant .git directory that was resolved
+         * for the modified file.
+         */
+        private readonly gitDirectoryParent: string,
+        /**
+         * An optional commit SHA pair which will be used to inform how the git
+         * commands are run. E.g. `git diff`
+         */
+        private readonly base: string | null,
+        private readonly head: string | typeof index | typeof workingTree,
+        /**
+         * The chosen formatter to be run on the modified file.
+         */
+        private readonly selectedFormatter: PreciseFormatter<TFormatterConfig>,
+        /**
+         * The contents of the file in their current state on the user's file
+         * system
+         */
+        private readonly fileContents: string,
+        /**
+         * The resolved formatter config which applies to this file
+         */
+        private readonly formatterConfig: TFormatterConfig | null
+    ) {}
+
+    public static async read<TFormatterConfig>({
         fullPath,
         gitDirectoryParent,
         base,
         head,
         selectedFormatter
-    }: ModifiedFileConfig<TFormatterConfig>) {
-        this.fullPath = fullPath;
-        this.pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
-        this.gitDirectoryParent = gitDirectoryParent;
-        this.base = base;
-        this.head = head;
-        this.selectedFormatter = selectedFormatter;
-        this.fileContents =
+    }: ModifiedFileConfig<TFormatterConfig>): Promise<ModifiedFile<TFormatterConfig>> {
+        const pathInGit = relative(gitDirectoryParent, fullPath).split(sep).join(posix.sep);
+        const fileContents =
             head === workingTree
-                ? readFileSync(this.fullPath, "utf8")
+                ? await readFile(fullPath, "utf8")
                 : head === index
-                ? execa.sync("git", ["show", `:0:${this.pathInGit}`], {
-                      cwd: gitDirectoryParent,
-                      stripFinalNewline: false
-                  }).stdout
-                : execa.sync("git", ["show", `${head}:${this.pathInGit}`], {
-                      cwd: gitDirectoryParent,
-                      stripFinalNewline: false
-                  }).stdout;
-        this.formatterConfig = this.selectedFormatter.resolveConfig(this.fullPath);
+                ? (
+                      await execa("git", ["show", `:0:${pathInGit}`], {
+                          cwd: gitDirectoryParent,
+                          stripFinalNewline: false
+                      })
+                  ).stdout
+                : (
+                      await execa("git", ["show", `${head}:${pathInGit}`], {
+                          cwd: gitDirectoryParent,
+                          stripFinalNewline: false
+                      })
+                  ).stdout;
+        const formatterConfig = selectedFormatter.resolveConfig(fullPath);
+        return new ModifiedFile(
+            fullPath,
+            pathInGit,
+            gitDirectoryParent,
+            base,
+            head,
+            selectedFormatter,
+            fileContents,
+            formatterConfig
+        );
     }
 
     /**

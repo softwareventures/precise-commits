@@ -103,7 +103,7 @@ export function main(
                     const fullPath = join(workingDirectory, filename);
 
                     // Read the modified file contents and resolve the relevant formatter.
-                    const modifiedFile = new ModifiedFile({
+                    const modifiedFile = await ModifiedFile.read({
                         fullPath,
                         gitDirectoryParent,
                         base: options.base,
@@ -167,7 +167,7 @@ export function main(
 
                     // If we're updating the index, we also need to update the working tree.
                     if (options.head == null) {
-                        const workingTreeFile = new ModifiedFile({
+                        const workingTreeFile = await ModifiedFile.read({
                             fullPath,
                             gitDirectoryParent,
                             base: options.base,
