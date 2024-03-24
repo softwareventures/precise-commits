@@ -61,7 +61,7 @@
     "commitizen": "4.3.0",
     "conventional-changelog-conventionalcommits": "6.1.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.54.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jsdoc": "46.9.0",
