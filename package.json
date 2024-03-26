@@ -63,7 +63,7 @@
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-jsdoc": "46.10.1",
+    "eslint-plugin-jsdoc": "48.2.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-sonarjs": "0.24.0",
     "husky": "9.0.11",
