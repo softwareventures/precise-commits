@@ -47,7 +47,7 @@
     "@commitlint/cli": "17.8.1",
     "@commitlint/config-conventional": "17.8.1",
     "@commitlint/cz-commitlint": "17.8.1",
-    "@softwareventures/eslint-config": "7.3.0",
+    "@softwareventures/eslint-config": "7.4.0",
     "@softwareventures/precise-commits": "4.0.2",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "4.0.0",
