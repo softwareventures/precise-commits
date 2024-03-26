@@ -32,7 +32,7 @@
     "@softwareventures/nullable": "3.2.0",
     "execa": "5.1.1",
     "find-up": "5.0.0",
-    "glob": "8.1.0",
+    "glob": "10.3.10",
     "ignore": "5.3.1",
     "mri": "1.2.0",
     "ora": "5.4.1",
