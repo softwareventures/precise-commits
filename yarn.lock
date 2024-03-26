@@ -1599,17 +1599,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/array@npm:6.1.0":
-  version: 6.1.0
-  resolution: "@softwareventures/array@npm:6.1.0"
-  dependencies:
-    "@softwareventures/nullable": "npm:^1.0.0 || ^2.0.0 || ^3.0.0"
-    "@softwareventures/ordered": "npm:^1.1.0 || ^2.0.0"
-    tslib: "npm:^2.0.0"
-  checksum: 10c0/5ef659880cf850cc39ddcb1c87c1037850190f086fd8cc4bdac785f48b21abcd7eb17b8d0f4be72b87baa0c66ced7c0462e7c864699d8ac7066c97c3ad07f1a8
-  languageName: node
-  linkType: hard
-
 "@softwareventures/array@npm:7.0.0":
   version: 7.0.0
   resolution: "@softwareventures/array@npm:7.0.0"
@@ -1658,16 +1647,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/precise-commits@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@softwareventures/precise-commits@npm:4.0.2"
+"@softwareventures/precise-commits@npm:4.0.4":
+  version: 4.0.4
+  resolution: "@softwareventures/precise-commits@npm:4.0.4"
   dependencies:
-    "@softwareventures/array": "npm:6.1.0"
+    "@softwareventures/array": "npm:7.0.0"
     "@softwareventures/nullable": "npm:3.2.0"
     execa: "npm:5.1.1"
     find-up: "npm:5.0.0"
-    glob: "npm:8.1.0"
-    ignore: "npm:5.3.0"
+    glob: "npm:10.3.10"
+    ignore: "npm:5.3.1"
     mri: "npm:1.2.0"
     ora: "npm:5.4.1"
     rxjs: "npm:7.8.1"
@@ -1677,7 +1666,7 @@ __metadata:
     prettier: ^1.8.0 || ^2.0.0 || ^3.0.0
   bin:
     precise-commits: lib/cli.js
-  checksum: 10c0/f5631915d08a24bacd9ca2410d7bca648357cb8d93e8f87aef197eae869423f087afd60e21dae3248102da972035cb93274b3d6456d1d20fde59e214cda772f9
+  checksum: 10c0/7b8406e43a50574a06667868242679eaac7be59d354307aa92b969a88442f677cf55da638625a886bed8f4345246c7f784c68887eed0984849fc98e46afcd942
   languageName: node
   linkType: hard
 
@@ -1691,7 +1680,7 @@ __metadata:
     "@softwareventures/array": "npm:7.0.0"
     "@softwareventures/eslint-config": "npm:7.4.0"
     "@softwareventures/nullable": "npm:3.2.0"
-    "@softwareventures/precise-commits": "npm:4.0.2"
+    "@softwareventures/precise-commits": "npm:4.0.4"
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/semantic-release-config": "npm:4.1.0"
     "@softwareventures/tsconfig": "npm:7.1.0"
@@ -4447,19 +4436,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:8.1.0":
-  version: 8.1.0
-  resolution: "glob@npm:8.1.0"
-  dependencies:
-    fs.realpath: "npm:^1.0.0"
-    inflight: "npm:^1.0.4"
-    inherits: "npm:2"
-    minimatch: "npm:^5.0.1"
-    once: "npm:^1.3.0"
-  checksum: 10c0/cb0b5cab17a59c57299376abe5646c7070f8acb89df5595b492dba3bfb43d301a46c01e5695f01154e6553168207cb60d4eaf07d3be4bc3eb9b0457c5c561d0f
-  languageName: node
-  linkType: hard
-
 "global-directory@npm:^4.0.1":
   version: 4.0.1
   resolution: "global-directory@npm:4.0.1"
@@ -4783,13 +4759,6 @@ __metadata:
   dependencies:
     minimatch: "npm:^9.0.0"
   checksum: 10c0/6dd2ea369f3d32d90cb26ca6647bc6e112ed483433270ed89b8055dd708d00777c2cbc85b93b43f53e2100851277fd1539796a758ae4c64b84445d4f1da5fd8f
-  languageName: node
-  linkType: hard
-
-"ignore@npm:5.3.0":
-  version: 5.3.0
-  resolution: "ignore@npm:5.3.0"
-  checksum: 10c0/dc06bea5c23aae65d0725a957a0638b57e235ae4568dda51ca142053ed2c352de7e3bc93a69b2b32ac31966a1952e9a93c5ef2e2ab7c6b06aef9808f6b55b571
   languageName: node
   linkType: hard
 
@@ -6553,15 +6522,6 @@ __metadata:
   dependencies:
     brace-expansion: "npm:^1.1.7"
   checksum: 10c0/0262810a8fc2e72cca45d6fd86bd349eee435eb95ac6aa45c9ea2180e7ee875ef44c32b55b5973ceabe95ea12682f6e3725cbb63d7a2d1da3ae1163c8b210311
-  languageName: node
-  linkType: hard
-
-"minimatch@npm:^5.0.1":
-  version: 5.1.6
-  resolution: "minimatch@npm:5.1.6"
-  dependencies:
-    brace-expansion: "npm:^2.0.1"
-  checksum: 10c0/3defdfd230914f22a8da203747c42ee3c405c39d4d37ffda284dac5e45b7e1f6c49aa8be606509002898e73091ff2a3bbfc59c2c6c71d4660609f63aa92f98e3
   languageName: node
   linkType: hard
 
