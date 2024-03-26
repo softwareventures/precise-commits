@@ -50,7 +50,7 @@
     "@softwareventures/eslint-config": "7.4.0",
     "@softwareventures/precise-commits": "4.0.2",
     "@softwareventures/prettier-config": "4.0.0",
-    "@softwareventures/semantic-release-config": "4.0.0",
+    "@softwareventures/semantic-release-config": "4.1.0",
     "@softwareventures/tsconfig": "7.1.0",
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.12",
