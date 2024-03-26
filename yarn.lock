@@ -1736,7 +1736,6 @@ __metadata:
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/semantic-release-config": "npm:4.0.0"
     "@softwareventures/tsconfig": "npm:7.1.0"
-    "@types/find-up": "npm:2.1.1"
     "@types/glob": "npm:8.1.0"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:16.18.91"
@@ -1889,13 +1888,6 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/16c748ce01cb3b3ea5947950acd695569c0daa8da62cc7e0eb98b15c4d7f812f95c079fe2c853325509f8aa73cfd388390319ae4621c8dfb21eeacb63accdb25
-  languageName: node
-  linkType: hard
-
-"@types/find-up@npm:2.1.1":
-  version: 2.1.1
-  resolution: "@types/find-up@npm:2.1.1"
-  checksum: 10c0/3d715d25fc8c7860e30fa519e0de0c04686c4ca1568293b44db735a3574efa0e198ec185163b6a2855a42b03157bd1faa54bec238dc46bc147be3acc0efaca24
   languageName: node
   linkType: hard
 
