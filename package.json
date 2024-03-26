@@ -14,7 +14,7 @@
     "commit": "cz",
     "fix": "tsc --noEmit && prettier --write .",
     "lint": "tsc --noEmit && prettier --check .",
-    "prepare": "husky install && rimraf lib && tsc",
+    "prepare": "husky && rimraf lib && tsc",
     "test": "jest"
   },
   "main": "lib/index.js",
