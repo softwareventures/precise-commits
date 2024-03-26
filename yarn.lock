@@ -1588,6 +1588,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@softwareventures/array@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@softwareventures/array@npm:7.0.0"
+  dependencies:
+    "@softwareventures/nullable": "npm:^1.0.0 || ^2.0.0 || ^3.0.0"
+    "@softwareventures/ordered": "npm:^1.1.0 || ^2.0.0"
+    tslib: "npm:^2.0.0"
+  checksum: 10c0/302ef50d8f2e46e606ae44260902a4d5c6755ec674e714d7b6b3b46ad24c874e41d640a1a66f67d01093cf6f3f359267333d3aa22369c49973dcc0eb73d6534d
+  languageName: node
+  linkType: hard
+
 "@softwareventures/eslint-config@npm:7.4.0":
   version: 7.4.0
   resolution: "@softwareventures/eslint-config@npm:7.4.0"
@@ -1655,7 +1666,7 @@ __metadata:
     "@commitlint/cli": "npm:19.2.1"
     "@commitlint/config-conventional": "npm:19.1.0"
     "@commitlint/cz-commitlint": "npm:19.2.0"
-    "@softwareventures/array": "npm:6.1.0"
+    "@softwareventures/array": "npm:7.0.0"
     "@softwareventures/eslint-config": "npm:7.4.0"
     "@softwareventures/nullable": "npm:3.2.0"
     "@softwareventures/precise-commits": "npm:4.0.2"
