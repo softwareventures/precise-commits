@@ -1610,9 +1610,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/eslint-config@npm:7.4.0":
-  version: 7.4.0
-  resolution: "@softwareventures/eslint-config@npm:7.4.0"
+"@softwareventures/eslint-config@npm:7.4.1":
+  version: 7.4.1
+  resolution: "@softwareventures/eslint-config@npm:7.4.1"
   dependencies:
     tslib: "npm:^2.3.1"
   peerDependencies:
@@ -1625,7 +1625,7 @@ __metadata:
     eslint-plugin-prefer-arrow: ^1.2.3
     eslint-plugin-sonarjs: ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0
     typescript: ^3.8.3 || ^4.0.0 || ^5.0.0
-  checksum: 10c0/221716a0a4daa2fcaca9359dd71a4aafc1ba04a5cae6bfeff940a46a2d6a58b9b45f140854c9563e02c0ed64ac42c4955b83f9b6e232ae952ea63ac2f397b548
+  checksum: 10c0/a8322099d43cbd846307d64f60c950e830608f14dbb98565de896578a3809c3b56d6b48f7aeb9b1b82467d1efe4fb08d14588d412821fe2e4f708e1a1f12e0ef
   languageName: node
   linkType: hard
 
@@ -1678,7 +1678,7 @@ __metadata:
     "@commitlint/config-conventional": "npm:19.1.0"
     "@commitlint/cz-commitlint": "npm:19.2.0"
     "@softwareventures/array": "npm:7.0.0"
-    "@softwareventures/eslint-config": "npm:7.4.0"
+    "@softwareventures/eslint-config": "npm:7.4.1"
     "@softwareventures/nullable": "npm:3.2.0"
     "@softwareventures/precise-commits": "npm:4.0.4"
     "@softwareventures/prettier-config": "npm:4.0.0"
