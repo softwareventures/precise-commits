@@ -1,7 +1,19 @@
 import {isAbsolute, join, relative} from "path";
 
 import type {Observable} from "rxjs";
-import {concatAll, count, endWith, filter, from, map, mergeMap, mergeWith, of, scan} from "rxjs";
+import {
+    startWith,
+    concatAll,
+    count,
+    endWith,
+    filter,
+    from,
+    map,
+    mergeMap,
+    mergeWith,
+    of,
+    scan
+} from "rxjs";
 import {
     getModifiedFilenames,
     index,
@@ -259,6 +271,7 @@ export function main(
                 }
             },
             {state: "Initializing"}
-        )
+        ),
+        startWith({state: "Initializing"} as const)
     );
 }
