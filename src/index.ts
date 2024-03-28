@@ -24,7 +24,12 @@ export interface Callbacks {
     onInit(workingDirectory: string): void;
     onModifiedFilesDetected(modifiedFilenames: string[]): void;
     onBegunProcessingFile(filename: string, index: number, totalFiles: number): void;
-    onFinishedProcessingFile(filename: string, index: number, status: ProcessingStatus): void;
+    onFinishedProcessingFile(
+        filename: string,
+        index: number,
+        totalFiles: number,
+        status: ProcessingStatus
+    ): void;
     onError(err: Error): void;
     onComplete(totalFiles: number): void;
 }
@@ -116,7 +121,12 @@ export function main(
                  * analysis work.
                  */
                 if (modifiedFile.isAlreadyFormatted()) {
-                    return callbacks.onFinishedProcessingFile(filename, fileIndex, "NOT_UPDATED");
+                    return callbacks.onFinishedProcessingFile(
+                        filename,
+                        fileIndex,
+                        totalFiles,
+                        "NOT_UPDATED"
+                    );
                 }
                 /**
                  * Calculate what character ranges have been affected in the modified file.
@@ -129,6 +139,7 @@ export function main(
                         return callbacks.onFinishedProcessingFile(
                             filename,
                             fileIndex,
+                            totalFiles,
                             "NOT_UPDATED"
                         );
                     }
@@ -145,12 +156,14 @@ export function main(
                         return callbacks.onFinishedProcessingFile(
                             filename,
                             fileIndex,
+                            totalFiles,
                             "INVALID_FORMATTING"
                         );
                     } else {
                         return callbacks.onFinishedProcessingFile(
                             filename,
                             fileIndex,
+                            totalFiles,
                             "NOT_UPDATED"
                         );
                     }
@@ -160,14 +173,19 @@ export function main(
                  */
                 modifiedFile.formatCharacterRangesWithinContents();
                 if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
-                    return callbacks.onFinishedProcessingFile(filename, fileIndex, "NOT_UPDATED");
+                    return callbacks.onFinishedProcessingFile(
+                        filename,
+                        fileIndex,
+                        totalFiles,
+                        "NOT_UPDATED"
+                    );
                 }
                 /**
                  * Write the file back to disk and report.
                  */
                 modifiedFile.updateFileOnDisk();
             }
-            return callbacks.onFinishedProcessingFile(filename, fileIndex, "UPDATED");
+            return callbacks.onFinishedProcessingFile(filename, fileIndex, totalFiles, "UPDATED");
         });
         /**
          * Report that all files have finished processing.

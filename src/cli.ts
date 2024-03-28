@@ -5,7 +5,6 @@ import ora = require("ora");
 import mri = require("mri");
 import glob = require("glob");
 import {main} from ".";
-import {notNull} from "@softwareventures/nullable";
 import {hasProperty} from "unknown";
 import {concatMap, isArray} from "@softwareventures/array";
 
@@ -71,41 +70,32 @@ const options = {
     formatter
 };
 
-const primarySpinner = ora(` Running ${LIBRARY_NAME}...`);
-const modifiedFilesSpinner = ora(" Detecting modified files from git...");
-const spinnersByFilename = new Map<string, ora.Ora>();
+const spinner = ora(`Running ${LIBRARY_NAME}`);
 
 let shouldErrorOut = false;
 
 main(process.cwd(), options, {
     onInit(workingDirectory) {
-        primarySpinner.start();
-        modifiedFilesSpinner.start();
+        spinner.start();
     },
     onModifiedFilesDetected(modifiedFilenames) {
         if (!modifiedFilenames || !modifiedFilenames.length) {
             return;
         }
-        modifiedFilesSpinner.succeed(
-            ` ${LIBRARY_NAME}: ${modifiedFilenames.length} modified file(s) found`
-        );
+        spinner.succeed(` ${LIBRARY_NAME}: ${modifiedFilenames.length} modified file(s) found`);
     },
     onBegunProcessingFile(filename, index, totalFiles) {
-        spinnersByFilename.set(
-            filename,
-            ora()
-                .start()
-                .succeed(` [${index + 1}/${totalFiles}] Processing file: ${filename}`)
-        );
+        spinner.info(`[${index + 1}/${totalFiles}] Processing file: ${filename}`);
     },
-    onFinishedProcessingFile(filename, index, status) {
-        const spinner = spinnersByFilename.get(filename);
+    onFinishedProcessingFile(filename, index, totalFiles: number, status) {
         switch (status) {
             case "UPDATED":
-                notNull(spinner).succeed(`       --> Updated formatting in: ${filename}`);
+                spinner.succeed(`[${index + 1}/${totalFiles}] Updated formatting in: ${filename}`);
                 break;
             case "NOT_UPDATED":
-                notNull(spinner).info(`       --> No formatting changes required in: ${filename}`);
+                spinner.succeed(
+                    `[${index + 1}/${totalFiles}] No formatting changes required in: ${filename}`
+                );
                 break;
             case "INVALID_FORMATTING":
                 /**
@@ -114,31 +104,30 @@ main(process.cwd(), options, {
                 if (options.checkOnly) {
                     shouldErrorOut = true;
                 }
-                notNull(spinner).fail(`       --> Invalid formatting detected in: ${filename}`);
+                spinner.fail(
+                    `[${index + 1}/${totalFiles}] Invalid formatting detected in: ${filename}`
+                );
                 break;
         }
     },
     onError(err) {
-        modifiedFilesSpinner.fail(` ${LIBRARY_NAME}: An Error occurred\n`);
+        spinner.fail(`${LIBRARY_NAME}: An Error occurred\n`);
         console.error(err);
         console.log("\n");
-        primarySpinner.stop();
+        spinner.stop();
         return process.exit(1);
     },
     onComplete(totalFiles) {
         if (!totalFiles) {
-            modifiedFilesSpinner.info(` ${LIBRARY_NAME}: No matching modified files detected.
-        
-  --> If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file
-
-        `);
-            primarySpinner.stop();
-            return process.exit(shouldErrorOut ? 1 : 0);
-        }
-        if (options.checkOnly) {
-            primarySpinner.succeed(" Checks complete 🎉");
+            spinner.info(`${LIBRARY_NAME}: No matching modified files detected.`);
+            spinner.info(
+                "If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file"
+            );
+            spinner.stop();
+        } else if (options.checkOnly) {
+            spinner.succeed("Checks complete 🎉");
         } else {
-            primarySpinner.succeed(" Formatting complete 🎉");
+            spinner.succeed("Formatting complete 🎉");
         }
         return process.exit(shouldErrorOut ? 1 : 0);
     }
