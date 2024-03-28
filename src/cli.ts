@@ -4,7 +4,6 @@ import {normalize} from "path";
 import ora = require("ora");
 import mri = require("mri");
 import glob = require("glob");
-import {notNull} from "@softwareventures/nullable";
 import {hasProperty} from "unknown";
 import {concatMap, isArray} from "@softwareventures/array";
 import {pairwise} from "rxjs";
@@ -74,9 +73,7 @@ const options = {
     formatter
 };
 
-const primarySpinner = ora(` Running ${libraryName}...`);
-const modifiedFilesSpinner = ora(" Detecting modified files from git...");
-const fileSpinners: ora.Ora[] = [];
+const spinner = ora(`Running ${libraryName}`);
 
 let shouldErrorOut = false;
 
@@ -86,66 +83,59 @@ main(process.cwd(), options)
         next: ([previous, current]) => {
             if (current.state === "Running") {
                 if (previous.state === "Initializing") {
-                    primarySpinner.start();
-                    modifiedFilesSpinner.start();
+                    spinner.start(`Running ${libraryName}`);
                 }
 
-                modifiedFilesSpinner.text = ` ${libraryName}: ${current.files.length} modified file(s) found`;
-                if (current.gitSearchComplete) {
-                    modifiedFilesSpinner.succeed();
+                if (current.files.length > 0) {
+                    spinner.text = `${libraryName}: ${current.files.length} modified file(s) found`;
                 }
 
                 current.files.forEach((fileState, index) => {
-                    if (index > fileSpinners.length) {
-                        fileSpinners.push(
-                            ora().start(
-                                ` [${index + 1}/${current.files.length}] Processing file: ${
-                                    fileState.filename
-                                }`
-                            )
-                        );
+                    const previousFileState =
+                        previous.state === "Running" ? previous.files[index] : undefined;
+
+                    if (previousFileState == null) {
+                        spinner.info(`Processing file: ${fileState.filename}`);
                     }
 
-                    if (fileState.status === "Updated") {
-                        notNull(fileSpinners[index]).succeed(
-                            `       --> Updated formatting in: ${fileState.filename}`
-                        );
-                    } else if (fileState.status === "NotUpdated") {
-                        notNull(fileSpinners[index]).info(
-                            `       --> No formatting changes required in: ${fileState.filename}`
-                        );
-                    } else if (fileState.status === "InvalidFormatting") {
-                        // If --check-only is passed as a CLI argument, the script will error out.
-                        if (options.checkOnly) {
-                            shouldErrorOut = true;
-                        }
+                    if (previousFileState?.status !== fileState.status) {
+                        if (fileState.status === "Updated") {
+                            spinner.succeed(`Updated formatting in: ${fileState.filename}`);
+                        } else if (fileState.status === "NotUpdated") {
+                            spinner.succeed(
+                                `No formatting changes required in: ${fileState.filename}`
+                            );
+                        } else if (fileState.status === "InvalidFormatting") {
+                            // If --check-only is passed as a CLI argument, the script will error out.
+                            if (options.checkOnly) {
+                                shouldErrorOut = true;
+                            }
 
-                        notNull(fileSpinners[index]).fail(
-                            `       --> Invalid formatting detected in: ${fileState.filename}`
-                        );
+                            spinner.fail(`Invalid formatting detected in: ${fileState.filename}`);
+                        }
                     }
                 });
             } else if (current.state === "Finished") {
                 if (current.fileCount === 0) {
-                    modifiedFilesSpinner.info(` ${libraryName}: No matching modified files detected.
-
-  --> If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file
-
-            `);
-                    primarySpinner.stop();
+                    spinner.info("No matching modified files detected.");
+                    spinner.info(
+                        "If you feel that one or more files should be showing up here, be sure to first check what file extensions prettier supports, and whether or not you have included those files in a .prettierignore file"
+                    );
+                    spinner.stop();
                 } else if (options.checkOnly) {
-                    primarySpinner.succeed(" Checks complete 🎉");
+                    spinner.succeed("Checks complete 🎉");
                 } else {
-                    primarySpinner.succeed(" Formatting complete 🎉");
+                    spinner.succeed("Formatting complete 🎉");
                 }
                 return process.exit(shouldErrorOut ? 1 : 0);
             }
         },
         error: (error: unknown) => {
-            modifiedFilesSpinner.fail(` ${libraryName}: An Error occurred\n`);
+            spinner.fail("An Error occurred");
+            console.error("\n");
             console.error(error);
-            console.log("\n");
-            primarySpinner.stop();
+            console.error("\n");
+            spinner.stop();
             return process.exit(1);
         }
     });
