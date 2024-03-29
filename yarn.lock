@@ -1703,7 +1703,7 @@ __metadata:
     glob: "npm:10.3.10"
     husky: "npm:9.0.11"
     ignore: "npm:5.3.1"
-    inquirer: "npm:9.2.16"
+    inquirer: "npm:9.2.17"
     jest: "npm:29.7.0"
     mkdirp: "npm:3.0.1"
     mri: "npm:1.2.0"
@@ -4912,9 +4912,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inquirer@npm:9.2.16":
-  version: 9.2.16
-  resolution: "inquirer@npm:9.2.16"
+"inquirer@npm:9.2.17":
+  version: 9.2.17
+  resolution: "inquirer@npm:9.2.17"
   dependencies:
     "@ljharb/through": "npm:^2.3.13"
     ansi-escapes: "npm:^4.3.2"
@@ -4931,7 +4931,7 @@ __metadata:
     string-width: "npm:^4.2.3"
     strip-ansi: "npm:^6.0.1"
     wrap-ansi: "npm:^6.2.0"
-  checksum: 10c0/85b67a6c035e601f5f72803353ad8400a1eb738762137b092f06bc84fd480cb1faba5161e0b514a00935f73c9b46869af1d4f3cad08138f1c5d37388b01111dd
+  checksum: 10c0/713ec2fe2d6fd9943576bfa4dd724449095b014feacc57c6b675512bc255cd04fdd22df60e9f5d38df58651e8a0ac681f19d59a31e9d4d3c8c8a14b51e8287cc
   languageName: node
   linkType: hard
 
