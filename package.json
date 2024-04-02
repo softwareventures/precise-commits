@@ -54,7 +54,7 @@
     "@softwareventures/tsconfig": "7.1.1",
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.12",
-    "@types/node": "16.18.93",
+    "@types/node": "16.18.94",
     "@typescript-eslint/eslint-plugin": "7.5.0",
     "@typescript-eslint/parser": "7.5.0",
     "commitizen": "4.3.0",
