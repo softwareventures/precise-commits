@@ -1698,7 +1698,7 @@ __metadata:
     eslint-plugin-jsdoc: "npm:48.2.2"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-sonarjs: "npm:0.25.1"
-    execa: "npm:5.1.1"
+    execa: "npm:8.0.1"
     find-up: "npm:5.0.0"
     glob: "npm:10.3.10"
     husky: "npm:9.0.11"
@@ -3885,7 +3885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:^8.0.0, execa@npm:^8.0.1":
+"execa@npm:8.0.1, execa@npm:^8.0.0, execa@npm:^8.0.1":
   version: 8.0.1
   resolution: "execa@npm:8.0.1"
   dependencies:
