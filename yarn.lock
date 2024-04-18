@@ -1731,7 +1731,7 @@ __metadata:
     ts-jest: "npm:29.1.2"
     tslib: "npm:2.6.2"
     typescript: "npm:5.4.5"
-    unknown: "npm:0.2.5"
+    unknown: "npm:0.2.6"
   peerDependencies:
     prettier: ^1.8.0 || ^2.0.0 || ^3.0.0
   bin:
@@ -9086,6 +9086,13 @@ __metadata:
   version: 0.2.5
   resolution: "unknown@npm:0.2.5"
   checksum: 10c0/8313b382826aafea3363e9698032db31093435d572271faea03c7a2d527e47626f0464c4594d999b1c025d038b26d5f7315e36cb001ed1697c3c14771d0b5322
+  languageName: node
+  linkType: hard
+
+"unknown@npm:0.2.6":
+  version: 0.2.6
+  resolution: "unknown@npm:0.2.6"
+  checksum: 10c0/cc516e61cc3023d013390fb4603d2c285a1778095d0b86af369086be5ccfcada0a2900d6b23b38ff30b408091d2f169b095b68ed024508ad4b2e30993c2a7a24
   languageName: node
   linkType: hard
 
