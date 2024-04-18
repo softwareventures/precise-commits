@@ -38,7 +38,7 @@
     "ora": "5.4.1",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
-    "unknown": "0.2.5"
+    "unknown": "0.2.6"
   },
   "peerDependencies": {
     "prettier": "^1.8.0 || ^2.0.0 || ^3.0.0"
