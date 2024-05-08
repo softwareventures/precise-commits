@@ -111,7 +111,7 @@
       "json"
     ]
   },
-  "packageManager": "yarn@4.2.1",
+  "packageManager": "yarn@4.2.2",
   "publishConfig": {
     "access": "public"
   }
