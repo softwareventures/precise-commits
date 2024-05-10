@@ -72,7 +72,7 @@
     "mkdirp": "3.0.1",
     "pinst": "3.0.0",
     "prettier": "3.2.5",
-    "rimraf": "5.0.5",
+    "rimraf": "5.0.6",
     "semantic-release": "23.0.8",
     "ts-jest": "29.1.2",
     "typescript": "5.4.5"
