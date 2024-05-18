@@ -1703,14 +1703,14 @@ __metadata:
     "@softwareventures/precise-commits": "npm:4.0.12"
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/semantic-release-config": "npm:5.0.0"
-    "@softwareventures/tsconfig": "npm:7.1.1"
+    "@softwareventures/tsconfig": "npm:8.0.0"
     "@types/glob": "npm:8.1.0"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:16.18.97"
     "@typescript-eslint/eslint-plugin": "npm:7.8.0"
     "@typescript-eslint/parser": "npm:7.8.0"
     commitizen: "npm:4.3.0"
-    conventional-changelog-conventionalcommits: "npm:^7"
+    conventional-changelog-conventionalcommits: "npm:7.0.2"
     cz-conventional-changelog: "npm:3.3.0"
     eslint: "npm:8.57.0"
     eslint-config-prettier: "npm:9.1.0"
@@ -1768,12 +1768,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/tsconfig@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@softwareventures/tsconfig@npm:7.1.1"
+"@softwareventures/tsconfig@npm:8.0.0":
+  version: 8.0.0
+  resolution: "@softwareventures/tsconfig@npm:8.0.0"
   peerDependencies:
-    typescript: ^4.5.0 || ^5.0.0
-  checksum: 10c0/fbd3f1471f959d0edc19524710cc5b96ebfa1ed00ee2b98ce9afa12cabb877d2cf79309e4f854d12686abf68a02947a9e977a8a6a296ff545d73e4924f20c6bb
+    typescript: ^5.2.2
+  checksum: 10c0/0b409fad1df4acdd13a78c960efbebda7439dbea9866b876dc8cc37d82ebf47b5172e0c9b4c64a3250b3889c616636de1aef3215d835a341eb674fd96b0a831c
   languageName: node
   linkType: hard
 
@@ -3048,7 +3048,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:^7, conventional-changelog-conventionalcommits@npm:^7.0.2":
+"conventional-changelog-conventionalcommits@npm:7.0.2, conventional-changelog-conventionalcommits@npm:^7.0.2":
   version: 7.0.2
   resolution: "conventional-changelog-conventionalcommits@npm:7.0.2"
   dependencies:
