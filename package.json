@@ -71,7 +71,7 @@
     "mkdirp": "3.0.1",
     "pinst": "3.0.0",
     "prettier": "3.2.5",
-    "rimraf": "5.0.7",
+    "rimraf": "5.0.10",
     "semantic-release": "23.1.1",
     "semantic-release-pinst": "1.0.4",
     "ts-jest": "29.1.4",
