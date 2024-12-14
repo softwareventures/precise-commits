@@ -63,6 +63,7 @@
     "prettier": "2.8.8",
     "rimraf": "5.0.5",
     "semantic-release": "19.0.5",
+    "tempy": "1.0.1",
     "ts-jest": "29.1.1",
     "typescript": "5.3.3"
   },
@@ -76,8 +77,6 @@
     "extends": "@softwareventures/semantic-release-config"
   },
   "jest": {
-    "globalSetup": "<rootDir>/test/global-setup.ts",
-    "globalTeardown": "<rootDir>/test/global-teardown.ts",
     "watchPathIgnorePatterns": [
       "<rootDir>/tmp"
     ],
@@ -93,5 +92,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

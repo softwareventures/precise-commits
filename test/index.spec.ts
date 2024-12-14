@@ -15,6 +15,10 @@ describe(LIBRARY_NAME, () => {
             testBed = new TestBed();
         });
 
+        afterAll(async () => {
+            await testBed.teardown();
+        });
+
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 expect.assertions(1);
@@ -34,6 +38,10 @@ describe(LIBRARY_NAME, () => {
     describe("main() - checkOnly: true", () => {
         beforeAll(() => {
             testBed = new TestBed();
+        });
+
+        afterAll(async () => {
+            await testBed.teardown();
         });
 
         fixtures.forEach(fixture => {

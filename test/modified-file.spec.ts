@@ -13,6 +13,10 @@ describe("ModifiedFile", () => {
             testBed = new TestBed();
         });
 
+        afterAll(async () => {
+            await testBed.teardown();
+        });
+
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, () => {
                 testBed.prepareFixtureInTmpDirectory(fixture);
