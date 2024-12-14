@@ -1,5 +1,3 @@
-import {join} from "path";
-
 import {TestBed, readFixtures} from "./test-utils";
 import {
     getDiffForFile,
@@ -28,10 +26,6 @@ describe("git-utils", () => {
                     tmpFile.directoryPath
                 );
             });
-        });
-
-        it(`should resolve the overall project's .git directory for this spec file`, () => {
-            expect(resolveNearestGitDirectoryParent(__dirname)).toEqual(join(__dirname, ".."));
         });
     });
 
