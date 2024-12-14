@@ -51,7 +51,7 @@
     "@softwareventures/semantic-release-config": "5.0.0",
     "@softwareventures/tsconfig": "7.1.1",
     "@types/glob": "8.1.0",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.14",
     "@types/node": "16.18.105",
     "@typescript-eslint/eslint-plugin": "7.11.0",
     "@typescript-eslint/parser": "7.11.0",
