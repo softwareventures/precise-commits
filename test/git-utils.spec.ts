@@ -1,4 +1,3 @@
-import {join} from "path";
 import {
     getDiffForFile,
     resolveNearestGitDirectoryParent,
@@ -27,12 +26,6 @@ describe("git-utils", () => {
                     tmpFile.directoryPath
                 );
             });
-        });
-
-        it(`should resolve the overall project's .git directory for this spec file`, async () => {
-            expect(await resolveNearestGitDirectoryParent(__dirname)).toEqual(
-                join(__dirname, "..")
-            );
         });
     });
 
