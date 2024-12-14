@@ -31,6 +31,10 @@ describe("utils", () => {
             testBed = new TestBed();
         });
 
+        afterAll(async () => {
+            await testBed.teardown();
+        });
+
         fixtures.forEach(fixture => {
             it(fixture.fixtureName, async () => {
                 await testBed.prepareFixtureInTmpDirectory(fixture);
@@ -53,6 +57,10 @@ describe("utils", () => {
     describe("calculateCharacterRangesFromLineChanges()", () => {
         beforeAll(() => {
             testBed = new TestBed();
+        });
+
+        afterAll(async () => {
+            await testBed.teardown();
         });
 
         fixtures.forEach(fixture => {

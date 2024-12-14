@@ -1,9 +1,10 @@
 import {readFileSync, writeFileSync, readdirSync} from "fs";
 import {extname, join} from "path";
-import {randomBytes} from "crypto";
 import {writeFile} from "fs/promises";
 import mkdirp = require("mkdirp");
 import {mapNullable, notNull} from "@softwareventures/nullable";
+import * as tempy from "tempy";
+import {rimraf} from "rimraf";
 import {runCommand} from "../src/utils";
 import type {AdditionalOptions} from "../src";
 
@@ -45,13 +46,8 @@ interface TmpFile {
 }
 
 export class TestBed {
-    private static readonly TMP_DIRECTORY_PATH = join(process.cwd(), "tmp");
-    private testBedDirectoryPath: string | null = null;
+    private readonly testBedDirectoryPath: string = tempy.directory();
     private readonly fixtureToTmpFile = new Map<Fixture, TmpFile>();
-
-    public constructor() {
-        this.createUniqueDirectoryForTestBed();
-    }
 
     public getTmpFileForFixture(fixture: Fixture): TmpFile {
         return notNull(this.fixtureToTmpFile.get(fixture));
@@ -78,14 +74,8 @@ export class TestBed {
         this.applyCustomPrettierConfig(tmpFile, fixture.customPrettierConfig);
     }
 
-    private createUniqueDirectoryForTestBed(): void {
-        const dir = this.generateUniqueDirectoryName();
-        this.testBedDirectoryPath = join(TestBed.TMP_DIRECTORY_PATH, dir);
-        mkdirp.sync(this.testBedDirectoryPath);
-    }
-
-    private generateUniqueDirectoryName(): string {
-        return randomBytes(20).toString("hex");
+    public async teardown(): Promise<void> {
+        await rimraf(this.testBedDirectoryPath);
     }
 
     private async applyInitialAndStagedContentsOnDisk(tmpFile: TmpFile): Promise<void> {
