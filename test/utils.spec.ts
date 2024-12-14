@@ -1,4 +1,4 @@
-import {getDiffForFile, index, resolveNearestGitDirectoryParent} from "../src/git-utils";
+import {getDiffForFile, index, resolveGitWorkingTreePath} from "../src/git-utils";
 import {extractLineChangeData, calculateCharacterRangesFromLineChanges} from "../src/utils";
 import {TestBed, readFixtures} from "./test-utils";
 
@@ -39,9 +39,7 @@ describe("utils", () => {
             it(fixture.fixtureName, async () => {
                 await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
-                    tmpFile.directoryPath
-                );
+                const gitDirectoryParent = await resolveGitWorkingTreePath(tmpFile.directoryPath);
                 const diff = await getDiffForFile(
                     gitDirectoryParent,
                     tmpFile.path,
@@ -67,9 +65,7 @@ describe("utils", () => {
             it(fixture.fixtureName, async () => {
                 await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
-                    tmpFile.directoryPath
-                );
+                const gitDirectoryParent = await resolveGitWorkingTreePath(tmpFile.directoryPath);
                 const diff = await getDiffForFile(
                     gitDirectoryParent,
                     tmpFile.path,

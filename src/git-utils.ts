@@ -1,7 +1,6 @@
-import {dirname} from "path";
+import {normalize} from "path";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
-import findUp = require("find-up");
 import {runCommand} from "./utils";
 
 interface DiffIndexFile {
@@ -9,12 +8,10 @@ interface DiffIndexFile {
     filename: string;
 }
 
-export async function resolveNearestGitDirectoryParent(workingDirectory: string): Promise<string> {
-    const gitDirectoryPath = await findUp(".git", {cwd: workingDirectory, type: "directory"});
-    if (gitDirectoryPath == null) {
-        throw new Error("No .git directory found");
-    }
-    return dirname(gitDirectoryPath);
+export async function resolveGitWorkingTreePath(workingDirectory: string): Promise<string> {
+    return runCommand("git", ["rev-parse", "--show-toplevel"], workingDirectory)
+        .then(({stdout}) => stdout)
+        .then(normalize);
 }
 
 export const index = Symbol("index");

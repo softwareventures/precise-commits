@@ -1719,7 +1719,6 @@ __metadata:
     eslint-plugin-prefer-arrow: "npm:1.2.3"
     eslint-plugin-sonarjs: "npm:0.25.1"
     execa: "npm:5.1.1"
-    find-up: "npm:5.0.0"
     glob: "npm:10.3.10"
     husky: "npm:9.0.11"
     ignore: "npm:5.3.1"

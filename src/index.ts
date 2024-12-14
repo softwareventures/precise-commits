@@ -14,12 +14,7 @@ import {
     of,
     scan
 } from "rxjs";
-import {
-    getModifiedFilenames,
-    index,
-    resolveNearestGitDirectoryParent,
-    workingTree
-} from "./git-utils";
+import {getModifiedFilenames, index, resolveGitWorkingTreePath, workingTree} from "./git-utils";
 import {generateFilesWhitelistPredicate, noLineChangeDataError} from "./utils";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
 import {ModifiedFile} from "./modified-file";
@@ -81,19 +76,19 @@ export function main(
 
             const selectedFormatter = await preciseFormatterPrettier();
 
-            // Resolve the relevant .git directory's parent directory up front, as we will need this when
-            // executing various `git` commands.
-            const gitDirectoryParent = await resolveNearestGitDirectoryParent(workingDirectory);
+            // Resolve the working tree path up front, as we will need this
+            // when executing various `git` commands.
+            const workingTreePath = await resolveGitWorkingTreePath(workingDirectory);
 
             // Find files that we should process. A file is relevant if:
             //  * The file extension is supported by the given formatter.
             //  * The file is included in the optional `filesWhitelist` array, or no whitelist is specified.
             //  * The file is not ignored as a result of any supported "ignore" mechanism of the formatter.
             const relevantFiles = from(
-                getModifiedFilenames(gitDirectoryParent, options.base, options.head)
+                getModifiedFilenames(workingTreePath, options.base, options.head)
             ).pipe(
                 mergeMap(array => array),
-                map(path => join(gitDirectoryParent, path)),
+                map(path => join(workingTreePath, path)),
                 map(path => relative(workingDirectory, path)),
                 filter(path => !isAbsolute(path)),
                 filter(selectedFormatter.hasSupportedFileExtension),
@@ -117,7 +112,7 @@ export function main(
                     // Read the modified file contents and resolve the relevant formatter.
                     const modifiedFile = await ModifiedFile.read({
                         fullPath,
-                        gitDirectoryParent,
+                        gitDirectoryParent: workingTreePath,
                         base: options.base,
                         head: options.head ?? index,
                         selectedFormatter
@@ -181,7 +176,7 @@ export function main(
                     if (options.head == null) {
                         const workingTreeFile = await ModifiedFile.read({
                             fullPath,
-                            gitDirectoryParent,
+                            gitDirectoryParent: workingTreePath,
                             base: options.base,
                             head: workingTree,
                             selectedFormatter

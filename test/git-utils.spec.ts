@@ -1,6 +1,10 @@
+import {sep} from "path";
+import * as tempy from "tempy";
+import {mkdirp} from "mkdirp";
+import {runCommand} from "@softwareventures/precise-commits/lib/utils";
 import {
     getDiffForFile,
-    resolveNearestGitDirectoryParent,
+    resolveGitWorkingTreePath,
     getModifiedFilenames,
     index
 } from "../src/git-utils";
@@ -10,7 +14,7 @@ const fixtures = readFixtures();
 let testBed: TestBed;
 
 describe("git-utils", () => {
-    describe("resolveNearestGitDirectoryParent()", () => {
+    describe("resolveGitWorkingTreePath()", () => {
         beforeAll(() => {
             testBed = new TestBed();
         });
@@ -26,9 +30,19 @@ describe("git-utils", () => {
                 /**
                  * The tmpFile should resolve to its own .git directory
                  */
-                expect(await resolveNearestGitDirectoryParent(tmpFile.directoryPath)).toEqual(
+                expect(await resolveGitWorkingTreePath(tmpFile.directoryPath)).toEqual(
                     tmpFile.directoryPath
                 );
+            });
+        });
+
+        it(`should resolve the correct working tree path in a working tree created by git worktree`, async () => {
+            await tempy.directory.task(async worktreePath => {
+                await runCommand("git", ["worktree", "add", "-B", "worktree", worktreePath]);
+                const subdirPath = `${worktreePath}${sep}subdir`;
+                await mkdirp(subdirPath);
+                expect(await resolveGitWorkingTreePath(subdirPath)).toEqual(worktreePath);
+                await runCommand("git", ["worktree", "remove", worktreePath]);
             });
         });
     });
@@ -46,9 +60,7 @@ describe("git-utils", () => {
             it(fixture.fixtureName, async () => {
                 await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
-                    tmpFile.directoryPath
-                );
+                const gitDirectoryParent = await resolveGitWorkingTreePath(tmpFile.directoryPath);
                 const diff = await getDiffForFile(
                     gitDirectoryParent,
                     tmpFile.path,
@@ -73,9 +85,7 @@ describe("git-utils", () => {
             it(fixture.fixtureName, async () => {
                 await testBed.prepareFixtureInTmpDirectory(fixture);
                 const tmpFile = testBed.getTmpFileForFixture(fixture);
-                const gitDirectoryParent = await resolveNearestGitDirectoryParent(
-                    tmpFile.directoryPath
-                );
+                const gitDirectoryParent = await resolveGitWorkingTreePath(tmpFile.directoryPath);
                 const fileNames = await getModifiedFilenames(
                     gitDirectoryParent,
                     tmpFile.initialCommitSHA,
