@@ -1,12 +1,7 @@
 import {isAbsolute, join, relative} from "path";
 
 import type {Observable} from "rxjs";
-import {
-    getModifiedFilenames,
-    index,
-    resolveNearestGitDirectoryParent,
-    workingTree
-} from "./git-utils";
+import {getModifiedFilenames, index, resolveGitWorkingTreePath, workingTree} from "./git-utils";
 import {NO_LINE_CHANGE_DATA_ERROR, generateFilesWhitelistPredicate} from "./utils";
 import {ModifiedFile} from "./modified-file";
 import {preciseFormatterPrettier} from "./precise-formatters/prettier";
@@ -87,15 +82,15 @@ export function main(
 
         emit({event: "Init", workingDirectory});
 
-        // Resolve the relevant .git directory's parent directory up front, as we will need this when
-        // executing various `git` commands.
-        const gitDirectoryParent = resolveNearestGitDirectoryParent(workingDirectory);
+        // Resolve the working tree path up front, as we will need this
+        // when executing various `git` commands.
+        const workingTreePath = resolveGitWorkingTreePath(workingDirectory);
 
         // We fundamentally check whether or not the file extensions are supported by the given formatter,
         // whether or not they are included in the optional `filesWhitelist` array, and that the user
         // has not chosen to ignore them via any supported "ignore" mechanism of the formatter.
-        const modifiedFiles = getModifiedFilenames(gitDirectoryParent, options.base, options.head)
-            .map(path => join(gitDirectoryParent, path))
+        const modifiedFiles = getModifiedFilenames(workingTreePath, options.base, options.head)
+            .map(path => join(workingTreePath, path))
             .map(path => relative(workingDirectory, path))
             .filter(path => !isAbsolute(path))
             .filter(selectedFormatter.hasSupportedFileExtension)
@@ -114,7 +109,7 @@ export function main(
             // Read the modified file contents and resolve the relevant formatter.
             const modifiedFile = new ModifiedFile({
                 fullPath,
-                gitDirectoryParent,
+                gitDirectoryParent: workingTreePath,
                 base: options.base,
                 head: options.head ?? index,
                 selectedFormatter
@@ -182,7 +177,7 @@ export function main(
             if (options.head == null) {
                 const workingTreeFile = new ModifiedFile({
                     fullPath,
-                    gitDirectoryParent,
+                    gitDirectoryParent: workingTreePath,
                     base: options.base,
                     head: workingTree,
                     selectedFormatter

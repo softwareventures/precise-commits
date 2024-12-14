@@ -1,21 +1,17 @@
-import {sync as findUpSync} from "find-up";
-import {dirname} from "path";
-
-import {runCommandSync} from "./utils";
+import {normalize} from "path";
 import {hasProperty} from "unknown";
 import {notNull} from "@softwareventures/nullable";
+import {runCommandSync} from "./utils";
 
 interface DiffIndexFile {
     diffFilterChar: string;
     filename: string;
 }
 
-export function resolveNearestGitDirectoryParent(workingDirectory: string) {
-    const gitDirectoryPath = findUpSync(".git", {cwd: workingDirectory, type: "directory"});
-    if (!gitDirectoryPath) {
-        throw new Error("No .git directory found");
-    }
-    return dirname(gitDirectoryPath);
+export function resolveGitWorkingTreePath(workingDirectory: string): string {
+    return normalize(
+        runCommandSync("git", ["rev-parse", "--show-toplevel"], workingDirectory).stdout
+    );
 }
 
 export const index = Symbol("index");
