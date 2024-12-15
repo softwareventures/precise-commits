@@ -1701,7 +1701,7 @@ __metadata:
     "@softwareventures/precise-commits": "npm:4.0.18"
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/semantic-release-config": "npm:5.1.0"
-    "@softwareventures/tsconfig": "npm:7.1.1"
+    "@softwareventures/tsconfig": "npm:7.3.0"
     "@types/glob": "npm:8.1.0"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:16.18.122"
@@ -1766,12 +1766,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/tsconfig@npm:7.1.1":
-  version: 7.1.1
-  resolution: "@softwareventures/tsconfig@npm:7.1.1"
+"@softwareventures/tsconfig@npm:7.3.0":
+  version: 7.3.0
+  resolution: "@softwareventures/tsconfig@npm:7.3.0"
   peerDependencies:
     typescript: ^4.5.0 || ^5.0.0
-  checksum: 10c0/fbd3f1471f959d0edc19524710cc5b96ebfa1ed00ee2b98ce9afa12cabb877d2cf79309e4f854d12686abf68a02947a9e977a8a6a296ff545d73e4924f20c6bb
+  checksum: 10c0/bb9fe2847f52dfea00748e79c1b35a6c200b916ed7115c96af4c4a6d73cb151b82dfb19eeb6a3fa3d7e8802f9692af4d2be961b97f4ac15be87594681e09e03d
   languageName: node
   linkType: hard
 
