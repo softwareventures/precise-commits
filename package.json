@@ -45,7 +45,7 @@
     "@commitlint/cli": "19.6.0",
     "@commitlint/config-conventional": "19.6.0",
     "@commitlint/cz-commitlint": "19.5.0",
-    "@softwareventures/eslint-config": "7.6.0",
+    "@softwareventures/eslint-config": "7.9.0",
     "@softwareventures/precise-commits": "4.0.18",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "5.0.0",
