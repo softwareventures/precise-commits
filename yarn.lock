@@ -1735,7 +1735,7 @@ __metadata:
     semantic-release-pinst: "npm:1.0.4"
     tempy: "npm:1.0.1"
     ts-jest: "npm:29.2.5"
-    tslib: "npm:2.6.2"
+    tslib: "npm:2.8.1"
     typescript: "npm:5.4.5"
     unknown: "npm:0.2.6"
   peerDependencies:
