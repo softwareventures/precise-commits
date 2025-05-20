@@ -1706,7 +1706,7 @@ __metadata:
     "@softwareventures/tsconfig": "npm:7.3.0"
     "@types/glob": "npm:8.1.0"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:16.18.122"
+    "@types/node": "npm:16.18.126"
     "@typescript-eslint/eslint-plugin": "npm:7.18.0"
     "@typescript-eslint/parser": "npm:7.18.0"
     commitizen: "npm:4.3.1"
@@ -1921,10 +1921,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.18.122":
-  version: 16.18.122
-  resolution: "@types/node@npm:16.18.122"
-  checksum: 10c0/1ff9f559b0b33a041cd41899a550af4bffb09e7f21ed8bff9a19f3b8c41411eefac85da126e31286239a355d2de07bd4504b24532f4ab898bf58d409eeddfcd8
+"@types/node@npm:16.18.126":
+  version: 16.18.126
+  resolution: "@types/node@npm:16.18.126"
+  checksum: 10c0/5c137eb141d33de32b16ff26047ff6d449432b58d0d25f7cced2040c97727d81fe1099a7581eb336d14a6840f5b09e363bdd43d7a6995e8e81eb47aa51e413fc
   languageName: node
   linkType: hard
 
