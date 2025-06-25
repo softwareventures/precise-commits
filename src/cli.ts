@@ -49,6 +49,8 @@ if (hasProperty(config, "base") || hasProperty(config, "head")) {
     }
 
     if (hasProperty(config, "head") && config.head != null) {
+        // FIXME: Tech debt
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         head = String(config.head);
     } else {
         /**
@@ -57,12 +59,16 @@ if (hasProperty(config, "base") || hasProperty(config, "head")) {
         head = "HEAD";
     }
 
+    // FIXME: Tech debt
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     base = String(config.base);
 }
 
 const checkOnly = hasProperty(config, "check-only") ? Boolean(config["check-only"]) : false;
 const formatter = hasProperty(config, "formatter")
-    ? String(config.formatter ?? "prettier")
+    ? // FIXME: Tech debt
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      String(config.formatter ?? "prettier")
     : "prettier";
 
 const options = {
