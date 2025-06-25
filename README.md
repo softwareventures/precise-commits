@@ -221,36 +221,36 @@ script:
 As was hinted at above, the `precise-commits` CLI supports a few different
 configuration options:
 
--   `--whitelist`: **[String, Default: `"*"`]**
-    -   Whitelist is a glob pattern
-        ([the glob syntax from the glob module is used](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer)).
-    -   It is used to inform what files are considered when resolving modified
-        files (by default all are considered).
-    -   Don't forget the quotes around the globs! The quotes make sure that
-        `precise-commits` expands the globs rather than your shell.
+- `--whitelist`: **[String, Default: `"*"`]**
+    - Whitelist is a glob pattern
+      ([the glob syntax from the glob module is used](https://github.com/isaacs/node-glob/blob/master/README.md#glob-primer)).
+    - It is used to inform what files are considered when resolving modified
+      files (by default all are considered).
+    - Don't forget the quotes around the globs! The quotes make sure that
+      `precise-commits` expands the globs rather than your shell.
 
 <br>
 
--   `--formatter`: **[String, Default: `"prettier"`]**
-    -   Currently only prettier is supported
-    -   If you are interested in adding support for a different formatter, all
-        you need to do is provide an object which
-        [implements this interface](https://github.com/nrwl/precise-commits/blob/master/src/precise-formatter.ts).
+- `--formatter`: **[String, Default: `"prettier"`]**
+    - Currently only prettier is supported
+    - If you are interested in adding support for a different formatter, all you
+      need to do is provide an object which
+      [implements this interface](https://github.com/nrwl/precise-commits/blob/master/src/precise-formatter.ts).
 
 <br>
 
--   `--check-only`: **[Boolean, Default: `false`]**
-    -   Only check the code formatting is consistent with the resolved config
+- `--check-only`: **[Boolean, Default: `false`]**
+    - Only check the code formatting is consistent with the resolved config
 
 <br>
 
--   `--base`: **[String, NO DEFAULT]**
-    -   Base commit SHA to be used in conjunction with the `--head` flag
+- `--base`: **[String, NO DEFAULT]**
+    - Base commit SHA to be used in conjunction with the `--head` flag
 
 <br>
 
--   `--head`: **[String, CONDITIONAL DEFAULT]**
-    -   Later commit SHA (e.g. the `HEAD` of a PR branch) to be used in
-        conjunction with the `--base` flag
-    -   NOTE on conditional default: If no value is provided for `--head`, but a
-        value is given for `--base`, it will default to checking "HEAD"
+- `--head`: **[String, CONDITIONAL DEFAULT]**
+    - Later commit SHA (e.g. the `HEAD` of a PR branch) to be used in
+      conjunction with the `--base` flag
+    - NOTE on conditional default: If no value is provided for `--head`, but a
+      value is given for `--base`, it will default to checking "HEAD"
