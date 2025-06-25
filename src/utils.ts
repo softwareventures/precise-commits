@@ -1,4 +1,4 @@
-import * as execa from "execa";
+import execa = require("execa");
 import {notNull} from "@softwareventures/nullable";
 import type {ExecaReturnValue} from "execa";
 

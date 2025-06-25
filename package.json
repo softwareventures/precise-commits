@@ -49,7 +49,7 @@
     "@softwareventures/precise-commits": "4.0.19",
     "@softwareventures/prettier-config": "4.0.0",
     "@softwareventures/semantic-release-config": "5.1.0",
-    "@softwareventures/tsconfig": "7.3.0",
+    "@softwareventures/tsconfig": "8.1.1",
     "@types/glob": "8.1.0",
     "@types/jest": "29.5.14",
     "@types/node": "16.18.126",

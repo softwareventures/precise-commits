@@ -1,5 +1,5 @@
 {
-  "extends": "@softwareventures/tsconfig/commonjs",
+  "extends": "@softwareventures/tsconfig",
   "compilerOptions": {
     "outDir": "./lib",
     "types": ["node"]
