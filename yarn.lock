@@ -1620,17 +1620,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/array@npm:7.0.0":
-  version: 7.0.0
-  resolution: "@softwareventures/array@npm:7.0.0"
-  dependencies:
-    "@softwareventures/nullable": "npm:^1.0.0 || ^2.0.0 || ^3.0.0"
-    "@softwareventures/ordered": "npm:^1.1.0 || ^2.0.0"
-    tslib: "npm:^2.0.0"
-  checksum: 10c0/302ef50d8f2e46e606ae44260902a4d5c6755ec674e714d7b6b3b46ad24c874e41d640a1a66f67d01093cf6f3f359267333d3aa22369c49973dcc0eb73d6534d
-  languageName: node
-  linkType: hard
-
 "@softwareventures/array@npm:7.0.1":
   version: 7.0.1
   resolution: "@softwareventures/array@npm:7.0.1"
@@ -1679,11 +1668,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/precise-commits@npm:4.0.21":
-  version: 4.0.21
-  resolution: "@softwareventures/precise-commits@npm:4.0.21"
+"@softwareventures/precise-commits@npm:4.0.22":
+  version: 4.0.22
+  resolution: "@softwareventures/precise-commits@npm:4.0.22"
   dependencies:
-    "@softwareventures/array": "npm:7.0.0"
+    "@softwareventures/array": "npm:7.0.1"
     "@softwareventures/nullable": "npm:3.2.0"
     execa: "npm:5.1.1"
     glob: "npm:10.4.5"
@@ -1697,7 +1686,7 @@ __metadata:
     prettier: ^1.8.0 || ^2.0.0 || ^3.0.0
   bin:
     precise-commits: lib/cli.js
-  checksum: 10c0/aa2a17d671ab68b30c44ed6e317398a31e4b2950d137710198ef4d25eb3dedfe144d0e99dc1b2c1ecfc7773f36cc41db9d2e36717eae1c1eaefcd5a8e6752c13
+  checksum: 10c0/fec02738efec6aba52e27814b998dcce351618b4867dd2d88544696257d624ffbdfd0b8b887ebcdad0bc6bb24b66f6f95e6797c7ed274355e6667bf5e7ffd7ff
   languageName: node
   linkType: hard
 
@@ -1711,7 +1700,7 @@ __metadata:
     "@softwareventures/array": "npm:7.0.1"
     "@softwareventures/eslint-config": "npm:9.2.0"
     "@softwareventures/nullable": "npm:3.2.0"
-    "@softwareventures/precise-commits": "npm:4.0.21"
+    "@softwareventures/precise-commits": "npm:4.0.22"
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/semantic-release-config": "npm:5.1.0"
     "@softwareventures/tsconfig": "npm:8.1.1"
