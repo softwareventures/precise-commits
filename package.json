@@ -59,7 +59,7 @@
     "conventional-changelog-conventionalcommits": "7.0.2",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "8.57.1",
-    "eslint-config-prettier": "9.1.0",
+    "eslint-config-prettier": "9.1.2",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsdoc": "48.11.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
