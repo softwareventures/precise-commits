@@ -75,7 +75,7 @@
     "semantic-release-pinst": "1.0.4",
     "tempy": "1.0.1",
     "ts-jest": "29.4.0",
-    "typescript": "5.4.5"
+    "typescript": "5.9.2"
   },
   "eslintConfig": {
     "root": true,
