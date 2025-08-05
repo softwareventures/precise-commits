@@ -1702,7 +1702,7 @@ __metadata:
     "@softwareventures/nullable": "npm:3.2.0"
     "@softwareventures/precise-commits": "npm:4.0.22"
     "@softwareventures/prettier-config": "npm:4.0.0"
-    "@softwareventures/semantic-release-config": "npm:5.1.0"
+    "@softwareventures/semantic-release-config": "npm:5.1.1"
     "@softwareventures/tsconfig": "npm:8.1.1"
     "@types/jest": "npm:29.5.14"
     "@types/node": "npm:16.18.126"
@@ -1753,9 +1753,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/semantic-release-config@npm:5.1.0":
-  version: 5.1.0
-  resolution: "@softwareventures/semantic-release-config@npm:5.1.0"
+"@softwareventures/semantic-release-config@npm:5.1.1":
+  version: 5.1.1
+  resolution: "@softwareventures/semantic-release-config@npm:5.1.1"
   dependencies:
     tslib: "npm:2.8.1"
   peerDependencies:
@@ -1763,7 +1763,7 @@ __metadata:
     pinst: ">= 2.1.6"
     semantic-release: ^17.0.7 || ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0 || ^23.0.0
     semantic-release-pinst: ^1.0.0
-  checksum: 10c0/a04a5b902a77a5ca2f4a464dfd7cc7e7f911c069c720ea1b3652417b894ad1aec3bae81035acf5aec7a5b4b906cb8d00ef466ea7a068f6ac18251fbf29f5b376
+  checksum: 10c0/1b14c3db31af3a62ceb9f184cb99903a4d012426c76f87f58e270887f8eee073228a4b410ee74ce58e9fdbac4dd00d172d82939984f0f51d7fd0849ac82ab5ff
   languageName: node
   linkType: hard
 
