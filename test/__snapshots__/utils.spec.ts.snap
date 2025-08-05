@@ -54,6 +54,33 @@ exports[`utils calculateCharacterRangesFromLineChanges() brand-new-jsx-file 3`] 
 ]
 `;
 
+exports[`utils calculateCharacterRangesFromLineChanges() broken 1`] = `
+[
+  {
+    "rangeEnd": 214,
+    "rangeStart": 124,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() broken 2`] = `
+[
+  {
+    "rangeEnd": 217,
+    "rangeStart": 126,
+  },
+]
+`;
+
+exports[`utils calculateCharacterRangesFromLineChanges() broken 3`] = `
+[
+  {
+    "rangeEnd": 214,
+    "rangeStart": 124,
+  },
+]
+`;
+
 exports[`utils calculateCharacterRangesFromLineChanges() changed-line-in-closure 1`] = `
 [
   {
@@ -348,6 +375,23 @@ exports[`utils extractLineChangeData() brand-new-jsx-file 1`] = `
     },
   ],
   "removals": [],
+}
+`;
+
+exports[`utils extractLineChangeData() broken 1`] = `
+{
+  "additions": [
+    {
+      "noOfLines": 1,
+      "start": 3,
+    },
+  ],
+  "removals": [
+    {
+      "noOfLines": 1,
+      "start": 3,
+    },
+  ],
 }
 `;
 

@@ -44,6 +44,16 @@ index 0000000..ae72777
 \\ No newline at end of file"
 `;
 
+exports[`git-utils getDiffForFile() broken 1`] = `
+"diff --git a/broken.ts b/broken.ts
+index c3ce682..fb3933a 100644
+--- a/broken.ts
++++ b/broken.ts
+@@ -3 +3 @@ export class ProductInventoryDataProvider implements DataSource<ProductInventory
+-        T extends {customerId: number; categoryOverview?: CategorySummaryDto}
++        T extends {customerId: number; categoryOverview?: CategorySummaryDto | undefined}"
+`;
+
 exports[`git-utils getDiffForFile() changed-line-in-closure 1`] = `
 "diff --git a/changed-line-in-closure.ts b/changed-line-in-closure.ts
 index 6ad59aa..c61b8fb 100644
