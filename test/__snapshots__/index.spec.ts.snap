@@ -34,6 +34,16 @@ exports[`@softwareventures/precise-commits main() brand-new-jsx-file 1`] = `
 "
 `;
 
+exports[`@softwareventures/precise-commits main() broken 1`] = `
+"export class ProductInventoryDataProvider implements DataSource<ProductInventoryItem> {
+    private fetchRelatedCategories<
+        T extends {customerId: number; categoryOverview?: CategorySummaryDto | undefined}
+    >(products: T[]): Promise<T[]> {
+        return sequentialMapAll(batchedIds, singleRequest).then(() => products);
+    }
+}"
+`;
+
 exports[`@softwareventures/precise-commits main() changed-line-in-closure 1`] = `
 "import {Egg} from "egg";
 import {waitFor} from 'wait-for'

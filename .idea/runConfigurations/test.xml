@@ -7,7 +7,10 @@
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">
         <package-json value="$PROJECT_DIR$/package.json" />
-        <command value="install" />
+        <command value="run" />
+        <scripts>
+          <script value="prepack" />
+        </scripts>
         <node-interpreter value="project" />
         <envs />
       </option>

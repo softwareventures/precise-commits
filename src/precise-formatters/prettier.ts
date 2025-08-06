@@ -54,7 +54,7 @@ export async function preciseFormatterPrettier(): Promise<PreciseFormatter<Prett
                             filepath: filePath,
                             rangeStart: characterRange.rangeStart,
                             rangeEnd: characterRange.rangeEnd
-                        })
+                        }).catch(() => false)
                     ),
                     every(valid => valid)
                 )
@@ -81,7 +81,7 @@ export async function preciseFormatterPrettier(): Promise<PreciseFormatter<Prett
                             filepath: filePath,
                             rangeStart,
                             rangeEnd
-                        })
+                        }).catch(() => fileContents)
                     ),
                 Promise.resolve(fileContents)
             ),
