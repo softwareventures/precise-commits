@@ -35,7 +35,10 @@ export interface PreciseFormatter<TFormatterConfig> {
         fileContents: string,
         config: TFormatterConfig | null,
         characterRanges: CharacterRange[]
-    ) => Promise<string>;
+    ) => Promise<{
+        readonly fileContents: string;
+        readonly errors: ReadonlyArray<{readonly characterRange: CharacterRange, readonly error: unknown}>;
+    }>;
     /**
      * Function which creates a callback function which will be
      * used as a predicate when filtering the modified files returned

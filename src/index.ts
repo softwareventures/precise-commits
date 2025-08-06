@@ -162,7 +162,10 @@ export function main(
                     }
 
                     // "FORMAT MODE"
-                    await modifiedFile.formatCharacterRangesWithinContents();
+                    for (const error of await modifiedFile.formatCharacterRangesWithinContents()) {
+                        // TODO emit an event for each error
+                    }
+
                     if (!modifiedFile.shouldContentsBeUpdatedOnDisk()) {
                         return {
                             event: "FileProcessed",
@@ -183,7 +186,9 @@ export function main(
                         });
                         const {err} = await workingTreeFile.calculateModifiedCharacterRanges();
                         if (err == null) {
-                            await workingTreeFile.formatCharacterRangesWithinContents();
+                            for (const error of await workingTreeFile.formatCharacterRangesWithinContents()) {
+                                // TODO emit an event for each error
+                            }
                             if (workingTreeFile.shouldContentsBeUpdatedOnDisk()) {
                                 await workingTreeFile.updateFileOnDisk();
                             }

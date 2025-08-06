@@ -75,15 +75,30 @@ export async function preciseFormatterPrettier(): Promise<PreciseFormatter<Prett
             // we've already made.
             characterRanges.reduceRight(
                 async (fileContents, {rangeStart, rangeEnd}) =>
-                    fileContents.then(async fileContents =>
+                    fileContents.then(async ({fileContents, errors}) =>
                         format(fileContents, {
                             ...config,
                             filepath: filePath,
                             rangeStart,
                             rangeEnd
-                        }).catch(() => fileContents)
+                        }).then(fileContents => ({
+                            fileContents,
+                            errors
+                        }), (error: unknown) => ({
+                            fileContents,
+                            errors: [...errors, {
+                                characterRange: {
+                                    rangeStart,
+                                    rangeEnd
+                                },
+                                error
+                            }]
+                        }))
                     ),
-                Promise.resolve(fileContents)
+                Promise.resolve({
+                    fileContents,
+                    errors: [] as ReadonlyArray<{readonly characterRange: CharacterRange, readonly error: unknown}>
+                } as const)
             ),
         /**
          * Generate a predicate function which will return true if the filename
