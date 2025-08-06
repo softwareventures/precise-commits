@@ -61,9 +61,8 @@ export async function preciseFormatterPrettier(): Promise<PreciseFormatter<Prett
             );
         },
         /**
-         * Run prettier on each character range pair given, and apply the
-         * difference as a patch to the original contents using an implementation
-         * of the Myer's diff algorithm.
+         * Run prettier on each character range pair given and apply each
+         * change to the original contents.
          */
         formatRanges: async (
             filePath: string,
