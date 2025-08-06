@@ -1,4 +1,5 @@
 {
   "extends": ["github>softwareventures/renovate-config:app"],
-  "includeForks": true
+  "includeForks": true,
+  "baseBranches": ["main", "alpha", "beta", "next", "next-major", "3.x"]
 }
