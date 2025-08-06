@@ -1,7 +1,7 @@
 import {sep} from "path";
 import * as tempy from "tempy";
 import {mkdirp} from "mkdirp";
-import {runCommand} from "@softwareventures/precise-commits/lib/utils";
+import {runCommand} from "../src/utils";
 import {
     getDiffForFile,
     resolveGitWorkingTreePath,
