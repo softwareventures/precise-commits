@@ -148,7 +148,7 @@ export class ModifiedFile {
                     "--add",
                     "--replace",
                     "--cacheinfo",
-                    `100644,${hash},${this.pathInGit}`
+                    `${mode},${hash},${this.pathInGit}`
                 ],
                 {cwd: this.gitDirectoryParent}
             );
