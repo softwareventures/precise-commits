@@ -37,12 +37,24 @@ describe("git-utils", () => {
         });
 
         it(`should resolve the correct working tree path in a working tree created by git worktree`, async () => {
-            await tempy.directory.task(async worktreePath => {
-                await runCommand("git", ["worktree", "add", "-B", "worktree", worktreePath]);
-                const subdirPath = `${worktreePath}${sep}subdir`;
-                await mkdirp(subdirPath);
-                expect(await resolveGitWorkingTreePath(subdirPath)).toEqual(worktreePath);
-                await runCommand("git", ["worktree", "remove", worktreePath]);
+            await tempy.directory.task(async repositoryPath => {
+                await runCommand("git", ["init"], repositoryPath);
+                await runCommand(
+                    "git",
+                    ["commit", "--allow-empty", "-m", "initial commit"],
+                    repositoryPath
+                );
+                await tempy.directory.task(async worktreePath => {
+                    await runCommand(
+                        "git",
+                        ["worktree", "add", "-B", "worktree", worktreePath],
+                        repositoryPath
+                    );
+                    const subdirPath = `${worktreePath}${sep}subdir`;
+                    await mkdirp(subdirPath);
+                    expect(await resolveGitWorkingTreePath(subdirPath)).toEqual(worktreePath);
+                    await runCommand("git", ["worktree", "remove", worktreePath], repositoryPath);
+                });
             });
         });
     });
