@@ -1646,9 +1646,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/eslint-config@npm:9.2.2":
-  version: 9.2.2
-  resolution: "@softwareventures/eslint-config@npm:9.2.2"
+"@softwareventures/eslint-config@npm:9.2.3":
+  version: 9.2.3
+  resolution: "@softwareventures/eslint-config@npm:9.2.3"
   dependencies:
     tslib: "npm:^2.3.1"
   peerDependencies:
@@ -1657,11 +1657,11 @@ __metadata:
     eslint: ^8.0.0
     eslint-config-prettier: ^8.3.0 || ^9.0.0 || ^10.0.0
     eslint-plugin-import: ^2.25.2
-    eslint-plugin-jsdoc: ^37.0.3 || ^38.0.0 || ^39.0.0 || ^40.0.0 || ^41.0.0 || ^42.0.0 || ^43.0.0 || ^44.0.0 || ^45.0.0 || ^46.0.0 || ^47.0.0 || ^48.0.0 || ^49.0.0 || ^50.0.0 || ^51.0.0 || ^52.0.0
+    eslint-plugin-jsdoc: ^37.0.3 || ^38.0.0 || ^39.0.0 || ^40.0.0 || ^41.0.0 || ^42.0.0 || ^43.0.0 || ^44.0.0 || ^45.0.0 || ^46.0.0 || ^47.0.0 || ^48.0.0 || ^49.0.0 || ^50.0.0 || ^51.0.0 || ^52.0.0 || ^54.0.0 || ^55.0.0 || ^56.0.0 || ^57.0.0 || ^58.0.0 || ^59.0.0 || ^60.0.0
     eslint-plugin-prefer-arrow: ^1.2.3
     eslint-plugin-sonarjs: ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0 || ^0.22.0 || ^0.23.0 || ^0.24.0 || ^0.25.0 || ^1.0.0 || ^2.0.0 || ^3.0.0
     typescript: ^4.8.4 || ^5.0.0
-  checksum: 10c0/d1ecac0c22a9a0d1a0a44aaba0a45d3a978df1de50841ce57db35427ea07aa9f7e3a66599dbd9116b9019cc516c7ce104841d5982fe3ecacc207de56831514e4
+  checksum: 10c0/9e30a24f3e12aeb2cd041985d02d07c576449bc1b5fbb511e765c0f28f251468e641032b863c6ef31951b16b8f989317e4340ed5cb833e07426bfef7067d304a
   languageName: node
   linkType: hard
 
@@ -1713,7 +1713,7 @@ __metadata:
     "@commitlint/config-conventional": "npm:19.8.1"
     "@commitlint/cz-commitlint": "npm:19.8.1"
     "@softwareventures/array": "npm:7.0.1"
-    "@softwareventures/eslint-config": "npm:9.2.2"
+    "@softwareventures/eslint-config": "npm:9.2.3"
     "@softwareventures/nullable": "npm:3.2.0"
     "@softwareventures/precise-commits": "npm:4.0.23"
     "@softwareventures/prettier-config": "npm:4.0.0"
