@@ -1,6 +1,4 @@
-import execa = require("execa");
 import {notNull} from "@softwareventures/nullable";
-import type {ExecaReturnValue} from "execa";
 
 export interface LineChanges {
     start: number;
@@ -100,14 +98,6 @@ export function calculateCharacterRangesFromLineChanges(
         lineIndex = added.start + added.noOfLines - 1;
         return {rangeStart, rangeEnd};
     });
-}
-
-export async function runCommand(
-    command: string,
-    args: readonly string[],
-    workingDirectory = process.cwd()
-): Promise<ExecaReturnValue> {
-    return execa(command, args, {cwd: workingDirectory});
 }
 
 export function generateFilesWhitelistPredicate(

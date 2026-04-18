@@ -1,10 +1,9 @@
 import {relative, sep, posix} from "path";
 import {readFile, writeFile} from "fs/promises";
 import {notNull} from "@softwareventures/nullable";
-import execa = require("execa");
 import type {CharacterRange} from "./utils";
 import {calculateCharacterRangesFromLineChanges, extractLineChangeData} from "./utils";
-import {getDiffForFile, index, workingTree} from "./git-utils";
+import {getDiffForFile, git, index, workingTree} from "./git-utils";
 import type {PreciseFormatter} from "./precise-formatter";
 import {assertInstanceOf} from "./unknown";
 
@@ -69,14 +68,16 @@ export class ModifiedFile<TFormatterConfig> {
                 ? await readFile(fullPath, "utf8")
                 : head === index
                   ? (
-                        await execa("git", ["show", `:0:${pathInGit}`], {
-                            cwd: gitDirectoryParent,
+                        await git({
+                            arguments: ["show", `:0:${pathInGit}`],
+                            workingDirectory: gitDirectoryParent,
                             stripFinalNewline: false
                         })
                     ).stdout
                   : (
-                        await execa("git", ["show", `${head}:${pathInGit}`], {
-                            cwd: gitDirectoryParent,
+                        await git({
+                            arguments: ["show", `${head}:${pathInGit}`],
+                            workingDirectory: gitDirectoryParent,
                             stripFinalNewline: false
                         })
                     ).stdout;
@@ -140,30 +141,31 @@ export class ModifiedFile<TFormatterConfig> {
     public async updateFileOnDisk(): Promise<void> {
         if (this.head === index) {
             const hash = (
-                await execa("git", ["hash-object", "-w", "--path", this.fullPath, "--stdin"], {
-                    cwd: this.gitDirectoryParent,
+                await git({
+                    arguments: ["hash-object", "-w", "--path", this.fullPath, "--stdin"],
+                    workingDirectory: this.gitDirectoryParent,
                     input: notNull(this.formattedFileContents)
                 })
             ).stdout;
             const mode = (
-                await execa("git", ["ls-files", "--stage", "--", this.fullPath], {
-                    cwd: this.gitDirectoryParent
+                await git({
+                    arguments: ["ls-files", "--stage", "--", this.fullPath],
+                    workingDirectory: this.gitDirectoryParent
                 })
             ).stdout.split(" ")?.[0];
             if (mode == null) {
                 throw new Error("Can't find file in git index");
             }
-            await execa(
-                "git",
-                [
+            await git({
+                arguments: [
                     "update-index",
                     "--add",
                     "--replace",
                     "--cacheinfo",
                     `${mode},${hash},${this.pathInGit}`
                 ],
-                {cwd: this.gitDirectoryParent}
-            );
+                workingDirectory: this.gitDirectoryParent
+            });
         } else {
             await writeFile(this.fullPath, notNull(this.formattedFileContents));
         }

@@ -5,8 +5,8 @@ import mkdirp = require("mkdirp");
 import {mapNullable, notNull} from "@softwareventures/nullable";
 import * as tempy from "tempy";
 import {rimraf} from "rimraf";
-import {runCommand} from "../src/utils";
 import type {AdditionalOptions} from "../src";
+import {git} from "../src/git-utils";
 
 export interface Fixture {
     fixtureName: string;
@@ -63,7 +63,7 @@ export class TestBed {
          * Initialise a .git directory for the fixture
          */
         mkdirp.sync(tmpFile.directoryPath);
-        await runCommand("git", ["init"], tmpFile.directoryPath);
+        await git({arguments: ["init"], workingDirectory: tmpFile.directoryPath});
         /**
          * Apply the two different file contents to the TmpFile
          */
@@ -88,14 +88,16 @@ export class TestBed {
         }
         await this.stageGivenChangesToTmpFileOnDisk(tmpFile);
         if (tmpFile.committed) {
-            await runCommand(
-                "git",
-                ["commit", "-m", `committing updates to ${tmpFile.path}]`],
-                tmpFile.directoryPath
-            );
+            await git({
+                arguments: ["commit", "-m", `committing updates to ${tmpFile.path}]`],
+                workingDirectory: tmpFile.directoryPath
+            });
             // eslint-disable-next-line require-atomic-updates
             tmpFile.updatedCommitSHA = (
-                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
+                await git({
+                    arguments: ["rev-parse", "HEAD"],
+                    workingDirectory: tmpFile.directoryPath
+                })
             ).stdout.trim();
         }
     }
@@ -132,23 +134,25 @@ export class TestBed {
 
     private async createAndCommitTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
         writeFileSync(tmpFile.path, notNull(tmpFile.initialContents));
-        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
-        await runCommand(
-            "git",
-            ["commit", "-m", `adding initial contents for ${tmpFile.path}`],
-            tmpFile.directoryPath
-        );
+        await git({arguments: ["add", tmpFile.path], workingDirectory: tmpFile.directoryPath});
+        await git({
+            arguments: ["commit", "-m", `adding initial contents for ${tmpFile.path}`],
+            workingDirectory: tmpFile.directoryPath
+        });
         if (tmpFile.committed) {
             // eslint-disable-next-line require-atomic-updates
             tmpFile.initialCommitSHA = (
-                await runCommand("git", ["rev-parse", "HEAD"], tmpFile.directoryPath)
+                await git({
+                    arguments: ["rev-parse", "HEAD"],
+                    workingDirectory: tmpFile.directoryPath
+                })
             ).stdout.trim();
         }
     }
 
     private async stageGivenChangesToTmpFileOnDisk(tmpFile: TmpFile): Promise<void> {
         await writeFile(tmpFile.path, tmpFile.stagedContents);
-        await runCommand("git", ["add", tmpFile.path], tmpFile.directoryPath);
+        await git({arguments: ["add", tmpFile.path], workingDirectory: tmpFile.directoryPath});
     }
 }
 

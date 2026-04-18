@@ -1,12 +1,12 @@
 import {sep} from "path";
 import * as tempy from "tempy";
 import {mkdirp} from "mkdirp";
-import {runCommand} from "../src/utils";
 import {
     getDiffForFile,
     resolveGitWorkingTreePath,
     getModifiedFilenames,
-    index
+    index,
+    git
 } from "../src/git-utils";
 import {TestBed, readFixtures} from "./test-utils";
 
@@ -38,22 +38,23 @@ describe("git-utils", () => {
 
         it(`should resolve the correct working tree path in a working tree created by git worktree`, async () => {
             await tempy.directory.task(async repositoryPath => {
-                await runCommand("git", ["init"], repositoryPath);
-                await runCommand(
-                    "git",
-                    ["commit", "--allow-empty", "-m", "initial commit"],
-                    repositoryPath
-                );
+                await git({arguments: ["init"], workingDirectory: repositoryPath});
+                await git({
+                    arguments: ["commit", "--allow-empty", "-m", "initial commit"],
+                    workingDirectory: repositoryPath
+                });
                 await tempy.directory.task(async worktreePath => {
-                    await runCommand(
-                        "git",
-                        ["worktree", "add", "-B", "worktree", worktreePath],
-                        repositoryPath
-                    );
+                    await git({
+                        arguments: ["worktree", "add", "-B", "worktree", worktreePath],
+                        workingDirectory: repositoryPath
+                    });
                     const subdirPath = `${worktreePath}${sep}subdir`;
                     await mkdirp(subdirPath);
                     expect(await resolveGitWorkingTreePath(subdirPath)).toEqual(worktreePath);
-                    await runCommand("git", ["worktree", "remove", worktreePath], repositoryPath);
+                    await git({
+                        arguments: ["worktree", "remove", worktreePath],
+                        workingDirectory: repositoryPath
+                    });
                 });
             });
         });
