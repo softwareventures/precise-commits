@@ -3,7 +3,6 @@ on: [push, pull_request]
 env:
   CI: true
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  NPM_TOKEN: ${{secrets.NPM_TOKEN}}
   DEPLOY_NODE_VERSION: 25.x
 jobs:
   build-and-test:
@@ -13,15 +12,12 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x]
     steps:
-      - name: Find yarn cache
-        id: find-yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: git checkout
         uses: actions/checkout@v4
-      - name: Cache yarn dependencies
+      - name: yarn cache
         uses: actions/cache@v4
         with:
-          path: ${{steps.find-yarn-cache.outputs.dir}}
+          path: ~/.yarn/berry/cache
           key: ${{runner.os}}-node${{matrix.node-version}}-yarn-${{hashFiles('**/yarn.lock')}}
           restore-keys: ${{runner.os}}-node${{matrix.node-version}}-yarn-
       - name: Set up Node.js v${{matrix.node-version}}
@@ -41,15 +37,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-test
     steps:
-      - name: Find yarn cache
-        id: find-yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: git checkout
         uses: actions/checkout@v4
-      - name: Cache yarn dependencies
+      - name: yarn cache
         uses: actions/cache@v4
         with:
-          path: ${{steps.find-yarn-cache.outputs.dir}}
+          path: ~/.yarn/berry/cache
           key: ${{runner.os}}-node${{env.DEPLOY_NODE_VERSION}}-yarn-${{hashFiles('**/yarn.lock')}}
           restore-keys: ${{runner.os}}-node${{env.DEPLOY_NODE_VERSION}}-yarn-
       - name: Set up Node.js
