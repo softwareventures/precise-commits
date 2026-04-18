@@ -28,7 +28,7 @@ export async function git(options: GitOptions): Promise<ExecaReturnValue> {
             if (
                 retry < 14 &&
                 result.exitCode === 128 &&
-                /^fatal: Unable to create '.*\/\.git\/index\.lock': File exists\.$/u.exec(
+                /^fatal: Unable to create '.*\/\.git\/index\.lock': File exists\./u.exec(
                     result.stderr
                 ) != null
             ) {
