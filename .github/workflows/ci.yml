@@ -24,14 +24,14 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{matrix.node-version}}
-      - run: yarn
+      - run: corepack yarn
       - name: Configure git credentials
         uses: OleksiyRudenko/gha-git-credentials@v2.1
         with:
           global: true
           token: "${{secrets.GITHUB_TOKEN}}"
-      - run: yarn test
-      - run: yarn lint
+      - run: corepack yarn test
+      - run: corepack yarn lint
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -49,5 +49,5 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{env.DEPLOY_NODE_VERSION}}
-      - run: yarn
-      - run: yarn semantic-release
+      - run: corepack yarn
+      - run: corepack yarn semantic-release
