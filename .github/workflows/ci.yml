@@ -4,6 +4,8 @@ env:
   CI: true
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   DEPLOY_NODE_VERSION: 25.x
+permissions:
+  contents: read
 jobs:
   build-and-test:
     name: Build and Test
@@ -36,6 +38,13 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     needs: build-and-test
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
       - name: git checkout
         uses: actions/checkout@v6
@@ -49,5 +58,15 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{env.DEPLOY_NODE_VERSION}}
+      - run: |
+          npm install -g \
+            @semantic-release/commit-analyzer@13.0.1 \
+            @semantic-release/release-notes-generator@14.1.0 \
+            @semantic-release/npm@13.1.5 \
+            @semantic-release/github@12.0.6 \
+            @softwareventures/semantic-release-config@9.0.0 \
+            conventional-changelog-conventionalcommits@9.3.0 \
+            semantic-release@25.0.3 \
+            semantic-release-pinst@1.1.0
       - run: corepack yarn
-      - run: corepack yarn semantic-release
+      - run: semantic-release
