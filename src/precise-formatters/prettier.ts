@@ -11,8 +11,6 @@ import type {CharacterRange} from "../utils";
 export async function preciseFormatterPrettier(): Promise<PreciseFormatter<PrettierOptions>> {
     // getSupportInfo() returns a Promise in prettier 3.x but a value in earlier versions.
     // We use await here to support prettier 3.x.
-    // This is a lint error when compiling against prettier 2.x, so suppress the lint error.
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     const supportInfo = await getSupportInfo();
     const supportedFileExtensions = concatMap(
         supportInfo.languages,
