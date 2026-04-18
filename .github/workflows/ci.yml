@@ -13,7 +13,7 @@ jobs:
         node-version: [18.x, 20.x, 21.x, 22.x, 23.x, 24.x, 25.x]
     steps:
       - name: git checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: yarn cache
         uses: actions/cache@v4
         with:
@@ -38,7 +38,7 @@ jobs:
     needs: build-and-test
     steps:
       - name: git checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: yarn cache
         uses: actions/cache@v4
         with:
