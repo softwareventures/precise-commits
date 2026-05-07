@@ -1268,14 +1268,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@softwareventures/precise-commits@npm:4.0.25":
-  version: 4.0.25
-  resolution: "@softwareventures/precise-commits@npm:4.0.25"
+"@softwareventures/precise-commits@npm:4.0.26":
+  version: 4.0.26
+  resolution: "@softwareventures/precise-commits@npm:4.0.26"
   dependencies:
     "@softwareventures/array": "npm:7.0.1"
     "@softwareventures/nullable": "npm:3.2.0"
     execa: "npm:5.1.1"
-    glob: "npm:10.4.5"
+    glob: "npm:10.5.0"
     ignore: "npm:5.3.2"
     mri: "npm:1.2.0"
     ora: "npm:5.4.1"
@@ -1286,7 +1286,7 @@ __metadata:
     prettier: ^1.8.0 || ^2.0.0 || ^3.0.0
   bin:
     precise-commits: lib/cli.js
-  checksum: 10c0/74e6f74209408cdcf1f1e06b0dbeef07bfa4bdbad72193f5a26bf99310a7a9de8c0cf0bb32315aab53ca0c1d27dc8607cda160b24207a08e4d92eb0eab10ae41
+  checksum: 10c0/2a1a8954fad44b65d2036171bb00fa10a933f98a3133d85317989c21bb5b8c9c09ef81a5f29bb8f8f3a1bc40435f1a52cb00253db12a6e4c32bbda041450f5ee
   languageName: node
   linkType: hard
 
@@ -1301,7 +1301,7 @@ __metadata:
     "@softwareventures/array": "npm:7.0.1"
     "@softwareventures/eslint-config": "npm:10.0.0"
     "@softwareventures/nullable": "npm:3.2.0"
-    "@softwareventures/precise-commits": "npm:4.0.25"
+    "@softwareventures/precise-commits": "npm:4.0.26"
     "@softwareventures/prettier-config": "npm:4.0.0"
     "@softwareventures/tsconfig": "npm:8.1.2"
     "@types/jest": "npm:29.5.14"
@@ -3658,22 +3658,6 @@ __metadata:
   dependencies:
     is-glob: "npm:^4.0.3"
   checksum: 10c0/317034d88654730230b3f43bb7ad4f7c90257a426e872ea0bf157473ac61c99bf5d205fad8f0185f989be8d2fa6d3c7dce1645d99d545b6ea9089c39f838e7f8
-  languageName: node
-  linkType: hard
-
-"glob@npm:10.4.5":
-  version: 10.4.5
-  resolution: "glob@npm:10.4.5"
-  dependencies:
-    foreground-child: "npm:^3.1.0"
-    jackspeak: "npm:^3.1.2"
-    minimatch: "npm:^9.0.4"
-    minipass: "npm:^7.1.2"
-    package-json-from-dist: "npm:^1.0.0"
-    path-scurry: "npm:^1.11.1"
-  bin:
-    glob: dist/esm/bin.mjs
-  checksum: 10c0/19a9759ea77b8e3ca0a43c2f07ecddc2ad46216b786bb8f993c445aee80d345925a21e5280c7b7c6c59e860a0154b84e4b2b60321fea92cd3c56b4a7489f160e
   languageName: node
   linkType: hard
 
