@@ -1315,7 +1315,7 @@ __metadata:
     eslint-plugin-import: "npm:2.32.0"
     eslint-plugin-jsdoc: "npm:62.9.0"
     eslint-plugin-prefer-arrow: "npm:1.2.3"
-    eslint-plugin-sonarjs: "npm:4.1.0"
+    eslint-plugin-sonarjs: "npm:4.2.0"
     execa: "npm:5.1.1"
     glob: "npm:10.5.0"
     husky: "npm:9.1.7"
@@ -3060,26 +3060,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sonarjs@npm:4.1.0":
-  version: 4.1.0
-  resolution: "eslint-plugin-sonarjs@npm:4.1.0"
+"eslint-plugin-sonarjs@npm:4.2.0":
+  version: 4.2.0
+  resolution: "eslint-plugin-sonarjs@npm:4.2.0"
   dependencies:
     "@eslint-community/regexpp": "npm:^4.12.2"
     builtin-modules: "npm:^3.3.0"
     bytes: "npm:^3.1.2"
     functional-red-black-tree: "npm:^1.0.1"
-    globals: "npm:^17.6.0"
+    globals: "npm:^17.7.0"
     jsx-ast-utils-x: "npm:^0.1.0"
     lodash.merge: "npm:^4.6.2"
     minimatch: "npm:^10.2.5"
     scslre: "npm:^0.3.0"
-    semver: "npm:^7.8.4"
+    semver: "npm:^7.8.5"
     ts-api-utils: "npm:^2.5.0"
-    typescript: "npm:>=5"
+    typescript: "npm:>=5 <6.1.0"
     yaml: "npm:^2.9.0"
   peerDependencies:
     eslint: ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: 10c0/48609dadd87b43c361df85203c57e56f8dc830ea9c3f7585bb167119757c5cdda0f27806421b09579fcf2dbd08e135189a0c2ab44a01128b3dbcfad51b546b52
+  checksum: 10c0/2c4b00d42520fbefe64eed221901caa5986f231aed6713c10de8a7b37009dcc6103f1ae4eb2921e6b1e0fc178e15ec145934e1136500ccc8cc1f45bc0f7554ff
   languageName: node
   linkType: hard
 
@@ -3732,7 +3732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^17.6.0":
+"globals@npm:^17.7.0":
   version: 17.7.0
   resolution: "globals@npm:17.7.0"
   checksum: 10c0/e83f791acf537b85fa1632ac48a45432a1999a61acd9f955b5c2145f66d6b5000a7945029874b6184fa2dfac8d33af03885a5a7ffa457866f1bcf0b40d0c1291
@@ -6284,7 +6284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.7.3, semver@npm:^7.7.4, semver@npm:^7.8.0, semver@npm:^7.8.4":
+"semver@npm:^7.3.5, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.7.3, semver@npm:^7.7.4, semver@npm:^7.8.0, semver@npm:^7.8.5":
   version: 7.8.5
   resolution: "semver@npm:7.8.5"
   bin:
@@ -6976,13 +6976,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:>=5":
-  version: 5.9.2
-  resolution: "typescript@npm:5.9.2"
+"typescript@npm:>=5 <6.1.0":
+  version: 6.0.3
+  resolution: "typescript@npm:6.0.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/cd635d50f02d6cf98ed42de2f76289701c1ec587a363369255f01ed15aaf22be0813226bff3c53e99d971f9b540e0b3cc7583dbe05faded49b1b0bed2f638a18
+  checksum: 10c0/4a25ff5045b984370f48f196b3a0120779b1b343d40b9a68d114ea5e5fff099809b2bb777576991a63a5cd59cf7bffd96ff6fe10afcefbcb8bd6fb96ad4b6606
   languageName: node
   linkType: hard
 
@@ -6996,13 +6996,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A>=5#optional!builtin<compat/typescript>":
-  version: 5.9.2
-  resolution: "typescript@patch:typescript@npm%3A5.9.2#optional!builtin<compat/typescript>::version=5.9.2&hash=5786d5"
+"typescript@patch:typescript@npm%3A>=5 <6.1.0#optional!builtin<compat/typescript>":
+  version: 6.0.3
+  resolution: "typescript@patch:typescript@npm%3A6.0.3#optional!builtin<compat/typescript>::version=6.0.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/34d2a8e23eb8e0d1875072064d5e1d9c102e0bdce56a10a25c0b917b8aa9001a9cf5c225df12497e99da107dc379360bc138163c66b55b95f5b105b50578067e
+  checksum: 10c0/2f25c74e65663c248fa1ade2b8459d9ce5372ff9dad07067310f132966ebec1d93f6c42f0baf77a6b6a7a91460463f708e6887013aaade22111037457c6b25df
   languageName: node
   linkType: hard
 
